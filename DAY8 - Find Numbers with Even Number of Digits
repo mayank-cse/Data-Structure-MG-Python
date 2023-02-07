@@ -40,7 +40,10 @@ class Solution:
             num*= -1
         
         while(num!=0):
-            count = num
+            num=num//10
+            count=count +1
+            # num = (int)num=
+            # print(num)
         return count
     def findNumbers(self, nums: List[int]) -> int:
         count = 0
