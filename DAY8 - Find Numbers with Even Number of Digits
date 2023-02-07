@@ -31,7 +31,7 @@ Acceptance Rate
 77.0%
 *************************************************
 APPROACH - count the number of digits using loop
-T.C. - O(n^2)
+T.C. - O(N^2)
 class Solution:
     def digitCount(self, num) -> int:
         count = 0
@@ -50,6 +50,29 @@ class Solution:
         for i,ele in enumerate(nums):
             digits = self.digitCount(ele)
             # print(ele, digits)
+            if digits%2 == 0:
+                count+=1
+            
+        return count
+***********************************
+APPROACH - math.log10()+1 function
+T.N. = O(N)
+import math
+
+class Solution:
+    def digitCount(self, num) -> int:
+        count = 0
+        # print(num)
+        if(num<0):
+            num*= -1
+        
+        count = math.log10(num)+1
+        return math.trunc(count)
+    def findNumbers(self, nums: List[int]) -> int:
+        count = 0
+        for i,ele in enumerate(nums):
+            digits = self.digitCount(ele)
+            print(ele, digits)
             if digits%2 == 0:
                 count+=1
             
