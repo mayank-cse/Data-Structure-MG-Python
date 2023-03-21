@@ -1,0 +1,72 @@
+Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+Example 1:
+Input: head = [1,2,3,4,5], n = 2
+Output: [1,2,3,5]
+
+Example 2:
+Input: head = [1], n = 1
+Output: []
+
+Example 3:
+Input: head = [1,2], n = 1
+Output: [1]
+ 
+Constraints:
+The number of nodes in the list is sz.
+1 <= sz <= 30
+0 <= Node.val <= 100
+1 <= n <= sz
+
+Follow up: Could you do this in one pass?
+**************************************************
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        temp = head
+        # print(temp.val)
+        count = 0
+        while(temp):
+            print(temp.val)
+            temp = temp.next
+            count+=1
+        n = count - n
+        print(n, count)
+        temp = head
+
+        if n==0:
+            return temp.next
+        for i in range(0, n-1):
+            temp = temp.next
+
+        print(temp.val)
+        if temp.next!=None and temp.next.next!=None:
+            temp.next = temp.next.next
+        else:
+            temp.next = None
+        temp = temp.next
+        while(temp):
+            print(temp.val)
+            temp = temp.next
+        return head
+        
+*************************************************
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        fast = slow = head
+        for i in range(n):
+            fast = fast.next
+        print(n)
+        if not fast: return head.next
+        print(slow.val, fast.val)
+        while fast.next:
+            fast, slow = fast.next, slow.next
+            print(slow.val, fast.val)
+        slow.next = slow.next.next
+        print(slow.val, fast.val)
+        return head
+
