@@ -44,3 +44,34 @@ class Solution:
             matrix[rows] = [0]*len(matrix[0])
 
         return None
+******************************
+Optimal - S.C. = O(1)
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        rows = len(matrix)
+        cols = len(matrix[0])
+        m1 = [matrix[0][0]]
+        for i in range(rows):
+            for j in range(cols):
+                if matrix[i][j] == 0:
+                    if j == 0:
+                        m1 = -9
+                        matrix[i][0] = -9
+                        continue 
+                    matrix[0][j] = -9
+                    
+                    matrix[i][0] = -9
+        
+        for col in range(len(matrix[0])):
+            if matrix[0][col]==-9 and col !=0:
+                for row in matrix:
+                    row[col] = 0
+        for i in range(len(matrix)):
+            if matrix[i][0]==-9:
+                matrix[i] = [0]*len(matrix[0])
+        if m1 == -9:
+            for i in range(len(matrix)):
+                matrix[i][0] = 0
