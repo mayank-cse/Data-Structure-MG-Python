@@ -1,0 +1,59 @@
+Given an integer numRows, return the first numRows of Pascal's triangle.
+In Pascal's triangle, each number is the sum of the two numbers directly above it as shown:
+
+Example 1:
+Input: numRows = 5
+Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+
+Example 2:
+Input: numRows = 1
+Output: [[1]]
+
+Constraints:
+1 <= numRows <= 30
+*******************************
+class Solution:
+    def gen(self, numRows,ans):
+        if numRows == 1: return [1]
+        if numRows == 2: return [1,1]
+
+        output = ans[numRows-2]
+        # for j in range(numRows-2):
+        new = []
+        for i in range(len(output)-1):
+            left = output[i]
+            right = output[i+1]
+            print(left,right)
+            new.append(left + right)
+        new = [1] + new + [1]
+        output = new
+        return output
+
+    def generate(self, numRows: int) -> List[List[int]]:
+        ans = []
+        for i in range(1,numRows+1):
+            ans.append(self.gen(i,ans))
+        return ans
+
+        # return self.generate(1) + reduce + self.generate(1)
+        
+ *******************************
+ ****any row = ans*(row-col)/col****
+ ****ans row,col digit is = NCR = (row-1)C(col-1)****
+ *******************************
+ class Solution:
+    def generate(self, n: int) -> List[List[int]]:
+        if n==1: return [[1]]
+        if n==2: return [[1], [1,1]]
+        ans = 1
+        row = 0
+        final = [[1],[1,1]]
+        for row in range(3,n+1):
+            ans = 1
+            output = []
+            for col in range(1,row-1):
+                ans = int(ans*(row-col)/col)
+                output = output+[ans]
+            output = [1] + output + [1]
+            final.append(output)
+        return final
