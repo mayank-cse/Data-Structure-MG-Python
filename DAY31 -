@@ -1,0 +1,88 @@
+https://www.youtube.com/watch?v=5nMGY4VUoRY&list=PLgUwDviBIf0rPG3Ictpu74YWBQ1CaBkm2&index=4&ab_channel=takeUforward
+
+Repeat and Missing Number Array
+Programming
+Arrays
+Medium
+24.4% Success
+
+673
+
+47
+
+Bookmark
+Asked In:
+There are certain problems which are asked in the interview to also check how you take care of overflows in your problem.
+
+This is one of those problems.
+
+Please take extra care to make sure that you are type-casting your ints to long properly and at all places. Try to verify if your solution works if number of elements is as large as 105
+
+Food for thought :
+
+Even though it might not be required in this problem, in some cases, you might be required to order the operations cleverly so that the numbers do not overflow.
+For example, if you need to calculate n! / k! where n! is factorial(n), one approach is to calculate factorial(n), factorial(k) and then divide them.
+Another approach is to only multiple numbers from k + 1 ... n to calculate the result.
+Obviously approach 1 is more susceptible to overflows.
+You are given a read only array of n integers from 1 to n.
+
+Each integer appears exactly once except A which appears twice and B which is missing.
+
+Return A and B.
+
+Note: Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+Note that in your output A should precede B.
+
+Example:
+
+Input:[3 1 2 5 3] 
+
+Output:[3, 4] 
+
+A = 3, B = 4
+Show similar questions
+Pick from both sides!
+56 Minutes Very Easy
+Asked in:
+Max Min
+17 Minutes Easy
+Asked in:
+Balance Array
+62 Minutes Easy
+Asked in:
+Note:You only need to implement the given function. Do not read input, instead use the arguments to the function. Do not print the output, instead return values as specified. Still have a question? Checkout Sample Codes for more details.
+*********************************************************
+O(N^2)
+from collections import Counter
+class Solution:
+    # @param A : tuple of integers
+    # @return a list of integers
+    def repeatedNumber(self, A):
+        x,y = 0,0
+        d = Counter(A)
+        for i in A:
+            if(d[i]>1):
+                x = i
+        for i in range(1,len(A)+1):
+            if d[i] == 0:
+                y = i
+        
+        return [x,y]
+************************************************************
+class Solution:
+    # @param A : tuple of integers
+    # @return a list of integers
+    def repeatedNumber(self, A):
+        n = len(A)
+        # print(A)
+        diff = int(sum(A) - int((n*(n+1))/2)) #X-Y
+        sq = [pow(x,2) for x in A]
+        # print(sq)
+        diffSq = int(sum(sq) - int((n*(n+1)*(2*n+1))/6)) #X^2 - Y^2 = (X-Y)(X+Y)
+        Sum = int(diffSq/diff)
+        # print(Sum, diff, diffSq)
+        X = int((diff + Sum)/2)
+        Y = int(Sum - X)
+        # print(Y)
+        return [X,Y]
