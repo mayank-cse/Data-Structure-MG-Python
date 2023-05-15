@@ -45,3 +45,15 @@ class Solution:
         denominator,ans = ans,1
         print(numerator, denominator)
         return int(numerator/denominator)
+**************************************************
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # No. of possible paths to choose from is (m-1) + (n-2) = m+n-2
+        n = m+n-2
+        r = m-1
+        #combination is nCr = n!/r!*(n-r)!
+        ans = 1
+        for i in range(1,r+1):
+            ans = ans*(n-r+i)/i
+
+        return int(ans)
