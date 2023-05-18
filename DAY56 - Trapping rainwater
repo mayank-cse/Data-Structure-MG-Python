@@ -1,0 +1,48 @@
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+Example 1:
+Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+
+Example 2:
+Input: height = [4,2,0,3,2,5]
+Output: 9
+
+Constraints:
+n == height.length
+1 <= n <= 2 * 104
+0 <= height[i] <= 105
+************************************************
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        
+        maxFirst = 0
+        maxSecond = 0
+        i = 0
+        waterTrapped = 0
+        while i<len(height)-1:
+            maxFirst = height[i]
+            sumMid = 0
+            count = 0
+            j = i+1
+            maxSecond,maxCount,maxSumMid = height[j],0,0
+            while height[j]<height[i]:
+                # print(i,j)
+                sumMid += height[j]
+                count += 1
+                j+=1
+                if j>=len(height):
+                    break 
+            if j>=len(height):
+                rev = height[i::]
+                waterTrapped += self.trap(rev[::-1])
+                print(self.trap(rev[::-1]))
+                break
+            maxSecond = height[j]
+            #find volume i.e. 2D area in the problem
+            vol = min(maxFirst, maxSecond)*count
+            waterTrapped += (vol - sumMid)
+            i = i+(j-i)
+            print(maxFirst,maxSecond,count, vol, waterTrapped,i,j)
+        return waterTrapped
