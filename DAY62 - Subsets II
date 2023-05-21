@@ -1,0 +1,44 @@
+Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+Example 1:
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+Example 2:
+Input: nums = [0]
+Output: [[],[0]]
+
+Constraints:
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+************************************************
+Generate All -> Set -> list
+class Solution:
+    def helper(self,nums,ind,subsets,output):
+        if ind>=len(nums):
+            print(subsets)
+            output.append(subsets)
+            return
+        #pick the element
+        self.helper(nums,ind+1,subsets+[nums[ind]],output)
+        #don't pick
+        self.helper(nums,ind+1, subsets, output)
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        output = []
+        self.helper(nums,0,[], output)
+        return output
+************************************************
+Modify the recursion call
+class Solution:
+    def helper(self, nums,start,subset, output):
+        output.append(subset)
+        for i in range(start, len(nums)):
+            if i!=start and nums[i-1] == nums[i]:
+                continue
+            self.helper(nums, i+1, subset+[nums[i]], output)
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        output = []
+        self.helper(nums, 0, [], output)
+        return output
