@@ -1,0 +1,37 @@
+Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+Example 1:
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+
+Example 2:
+Input: s = "a"
+Output: [["a"]]
+
+Constraints:
+1 <= s.length <= 16
+s contains only lowercase English letters.
+********************************************************
+class Solution:
+    def checkPalindrome(self, s ):
+        print("check palindrome", s)
+        rev = s[::-1]
+        for i in range(len(s)):
+            if rev[i]!=s[i]:
+                return False
+        return True
+    def helper(self, s, ind, combinations, output):
+        #base case
+        if ind==len(s):
+            print(combinations)
+            output.append(combinations)
+            return
+        for i in range(ind, len(s)):
+            if self.checkPalindrome(s[ind:i+1]):
+                self.helper(s,i+1,combinations+[s[ind:i+1]],output)
+                # combinations.pop()
+            
+    def partition(self, s: str) -> List[List[str]]:
+        output = []
+        self.helper(s,0, [], output)
+        return output
