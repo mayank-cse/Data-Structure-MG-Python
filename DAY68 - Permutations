@@ -22,5 +22,37 @@ class Solution:
         ans = list(permutations(nums))
         return ans
 *********************************************
-
-  
+class Solution:
+    def helper(self, nums, visited, permutation, output):
+        # print(nums, visited, permutation,output)
+        if len(permutation) == len(nums):
+            print(permutation)
+            output.append(permutation)
+            return
+        for i in range(len(nums)):
+            if visited[i]==0:
+                visited[i] = 1
+                self.helper(nums, visited, permutation+[nums[i]],output)
+                visited[i] = 0
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        output = []
+        self.helper(nums,[0]*len(nums), [], output)
+        return output
+*********************************************
+class Solution:
+    def helper(self, nums, ind, permutation, output):
+        if ind==len(nums):
+            #base case
+            print(permutation)
+            output.append(permutation)
+            return
+        for i in range(ind, len(nums)):
+            #swap nums[i] and nums[ind]
+            nums[i],nums[ind] = nums[ind],nums[i]
+            self.helper(nums,ind+1, permutation + [nums[ind]], output)
+            nums[i],nums[ind] = nums[ind], nums[i]
+            
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        output = []
+        self.helper(nums, 0, [], output)
+        return output
