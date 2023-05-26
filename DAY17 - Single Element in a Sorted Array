@@ -123,3 +123,20 @@ class Solution:
     def singleNonDuplicate(self, nums: List[int]) -> int:
         #first index is even and second is odd - if before the single element
         return self.binarySearch(nums,0,len(nums)-1)
+***********************************************************
+class Solution:
+    def binarySearch(self, nums, start, end):
+        if start>end:
+            return nums[start]
+        mid = start+(end-start)//2
+        # print(start, end,mid)
+        if nums[mid] == nums[mid^1]:
+            #it is not the the target
+            return self.binarySearch(nums,mid+1,end)
+        else:
+            return self.binarySearch(nums,start,mid-1)
+        return nums[start]
+
+    def singleNonDuplicate(self, nums: List[int]) -> int:
+        #first index is even and second is odd - if before the single element
+        return self.binarySearch(nums,0,len(nums)-2)
