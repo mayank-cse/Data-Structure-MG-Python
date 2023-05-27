@@ -1,0 +1,80 @@
+Given two sorted arrays arr1 and arr2 of size N and M respectively and an element K. The task is to find the element that would be at the kth position of the final sorted array.
+
+Example 1:
+Input:
+arr1[] = {2, 3, 6, 7, 9}
+arr2[] = {1, 4, 8, 10}
+k = 5
+Output:
+6
+Explanation:
+The final sorted array would be -
+1, 2, 3, 4, 6, 7, 8, 9, 10
+The 5th element of this array is 6.
+
+Example 2:
+Input:
+arr1[] = {100, 112, 256, 349, 770}
+arr2[] = {72, 86, 113, 119, 265, 445, 892}
+k = 7
+Output:
+256
+Explanation:
+Final sorted array is - 72, 86, 100, 112,
+113, 119, 256, 265, 349, 445, 770, 892
+7th element of this array is 256.
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function kthElement() which takes the arrays arr1[], arr2[], its size N and M respectively and an integer K as inputs and returns the element at the Kth position.
+
+Expected Time Complexity: O(Log(N) + Log(M))
+Expected Auxiliary Space: O(Log (N))
+
+Constraints:
+1 <= N, M <= 106
+0 <= arr1i, arr2i < INT_MAX
+1 <= K <= N+M
+*************
+85 4 19
+1 2 2 4 5 6 9 11 11 12 20 20 25 25 26 29 30 30 31 34 35 36 36 37 41 41 43 43 44 45 45 46 47 47 47 48 49 49 50 51 52 52 52 54 56 56 56 56 57 57 57 59 60 61 62 64 65 65 67 68 68 69 71 72 73 74 76 76 81 82 83 86 87 89 91 91 91 92 94 95 95 96 97 97 98
+9 53 59 87
+*************
+99 6 7
+1 1 1 2 3 3 5 5 7 8 8 8 8 9 9 11 11 11 12 13 15 19 21 22 24 24 24 26 27 27 29 29 29 30 30 31 31 34 34 38 38 40 41 42 43 45 45 45 45 46 47 47 48 49 49 51 51 52 52 54 56 56 57 58 58 59 59 59 60 61 62 63 66 70 72 73 73 76 79 79 79 80 82 83 83 84 84 85 86 86 87 87 88 89 90 90 93 94 95
+38 42 43 50 51 57
+****************************************************
+class Solution:
+    def kthElement(self,  arr1, arr2, n, m, k):
+        arr = arr1+ arr2
+        arr.sort()
+        return arr[k-1]
+****************************************************
+#User function Template for python3
+import sys
+class Solution:
+    def binarySearch(self,arr1, arr2, n, m, k, start, end):
+        if start>end:
+            return 0
+        cut1 = (start+(end-start)//2)
+        cut2 = k-cut1
+        # print(start,end,cut1)
+        l1 = -999999 if cut1==0 else arr1[cut1-1]
+        l2 = -999999 if cut2==0 else arr2[cut2-1]
+        r1 = 9999999 if cut1==n else arr1[cut1]
+        r2 = 9999999 if cut2==m else arr2[cut2]
+        # print(l1,l2,r1,r2)
+        
+        if l1>r2:
+            return self.binarySearch(arr1,arr2,n,m,k,start,cut1-1)
+        elif l2>r1:
+            return self.binarySearch(arr1,arr2,n,m,k,cut1+1,end)
+        else:    
+            return max(l1,l2)
+            
+    def kthElement(self,  arr1, arr2, n, m, k):
+        # range of number of elements that we can take from arr1 - [0,n]
+        if n<m:
+            return self.binarySearch(arr1,arr2,n,m,k,max(0,k-len(arr2)),min(len(arr1), k))
+        else:
+            return self.binarySearch(arr2,arr1,m,n,k,max(0,k-len(arr1)),min(len(arr2), k))
+             
