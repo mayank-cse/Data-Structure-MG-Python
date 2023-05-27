@@ -1,0 +1,44 @@
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+class Queue :
+
+    #Define data members and __init__()
+
+    def __init__(self):
+        self._arr = []
+        self._front = 0
+        self._last = 0
+
+
+    '''----------------- Public Functions of Queue -----------------'''
+
+   
+    def isEmpty(self) :
+        #Implement the isEmpty() function
+        if self._last - self._front == 0:
+            return 1
+        else:
+            return 0
+
+    def enqueue(self, data) :
+        #Implement the enqueue(element) function
+        self._arr.append(data)
+        self._last += 1
+
+
+    def dequeue(self) :
+        #Implement the dequeue() function
+        if self._last - self._front == 0:
+            return -1
+        self._front+=1
+        return self._arr[self._front-1]
+
+
+    def front(self) :
+        #Implement the front() function
+        if self._last-self._front==0:
+            return -1
+        return self._arr[self._front]
