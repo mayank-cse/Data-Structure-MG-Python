@@ -1,0 +1,48 @@
+You have to sort a stack with a loop and only using stack operations like push(), pop(), top(), is_empty().
+
+Sample Input 1:
+1
+5
+5 -2 9 -7 3
+Sample Output 1:
+9 5 3 -2 -7
+Explanation Of Sample Input 1:
+9 Is the largest element, hence it’s present at the top. Similarly 5>3, 3>-2 and -7 being the smallest element is present at the last. 
+Sample Input 2:
+1
+5
+-3 14 18 -5 30
+Sample Output 2:
+30 18 14 -3 -5
+Explanation Of Sample Input 2:
+30 is the largest element, hence it’s present at the top. Similarly, 18>14, 14>-3 and -5 being the smallest element is present at the last. 
+
+**************************************************
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+def insert(stack, ele):
+    if not stack or stack[-1]<ele:
+        stack.append(ele)
+        return
+    p = stack.pop()
+    insert(stack, ele)
+    stack.append(p)
+    return
+def helper(stack):
+    if not stack:
+        return
+    p = stack.pop()
+    helper(stack)
+    insert(stack, p)
+    return
+def sortStack(stack):
+    # given data structure is a python list 
+    # as list have all the similar operations available so use them
+    # Write your code here
+    if not stack:
+        return 
+    helper(stack)
+    return stack
