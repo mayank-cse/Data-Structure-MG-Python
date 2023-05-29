@@ -1,0 +1,139 @@
+You are given an m x n grid where each cell can have one of three values:
+
+0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+Example 1:
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+
+Example 2:
+Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+Output: -1
+Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+
+Example 3:
+Input: grid = [[0,2]]
+Output: 0
+Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
+
+Constraints:
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 10
+grid[i][j] is 0, 1, or 2.
+***************************************************
+class Solution:
+    def neighbours(self, grid, row, col, queue):
+        #left
+        if col-1>=0:
+            if grid[row][col-1] == 1:
+                grid[row][col-1] = 2
+                queue.append((row,col-1))
+        #right
+        if col+1<len(grid[0]):
+            if grid[row][col+1] == 1:
+                grid[row][col+1] = 2
+                queue.append((row,col+1))
+        #up
+        if row-1>=0 and grid[row-1][col] == 1:
+            grid[row-1][col] = 2
+            queue.append((row-1,col))
+        #down
+        if row+1<len(grid):
+            if grid[row+1][col] == 1:
+                grid[row+1][col] = 2
+                queue.append((row+1,col))
+        return
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        print(1)
+        queue = deque()
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j]==2:
+                    # rotten orange
+                    queue.append((i,j))
+        time = 0
+        queue.append((-1,-1))
+        # print(queue)
+        while len(queue)>0:
+            if queue[0][0] == -1 and queue[0][1]==-1:
+                time+=1
+                queue.popleft()
+                if queue:
+                    queue.append((-1,-1))
+                # continue
+            else:
+                self.neighbours(grid, queue[0][0], queue[0][1], queue)
+                queue.popleft()
+            # print(queue, time)
+
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j]==1:
+                    return -1
+        return time-1
+*************************************************
+class Solution:
+    def neighbours(self, grid, row, col, queue):
+        count = 0
+        #left
+        if col-1>=0:
+            if grid[row][col-1] == 1:
+                grid[row][col-1] = 2
+                queue.append((row,col-1))
+                count +=1
+        #right
+        if col+1<len(grid[0]):
+            if grid[row][col+1] == 1:
+                grid[row][col+1] = 2
+                queue.append((row,col+1))
+                count +=1
+        #up
+        if row-1>=0 and grid[row-1][col] == 1:
+            grid[row-1][col] = 2
+            queue.append((row-1,col))
+            count +=1
+        #down
+        if row+1<len(grid):
+            if grid[row+1][col] == 1:
+                grid[row+1][col] = 2
+                queue.append((row+1,col))
+                count +=1
+        return count
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        print(1)
+        queue = deque()
+        FreshOranges = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j]==2:
+                    # rotten orange
+                    queue.append((i,j))
+                if grid[i][j] == 1:
+                    FreshOranges+=1
+
+        time = 0
+        count = 0
+        queue.append((-1,-1))
+        # print(queue)
+        while len(queue)>0:
+            if queue[0][0] == -1 and queue[0][1]==-1:
+                time+=1
+                queue.popleft()
+                if queue:
+                    queue.append((-1,-1))
+                # continue
+            else:
+                count+=self.neighbours(grid, queue[0][0], queue[0][1], queue)
+                queue.popleft()
+            # print(queue, time)
+        print(count, FreshOranges)
+        if count!=FreshOranges:
+            return -1
+        return time-1
+        
