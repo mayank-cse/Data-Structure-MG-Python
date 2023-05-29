@@ -61,3 +61,81 @@ class LRUCache:
 # obj = LRUCache(capacity)
 # param_1 = obj.get(key)
 # obj.put(key,value)
+*********************************************************
+class DoubleLinkedNode():
+    def __init__(self):
+        self.key = 0
+        self.value = 0
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.size = 0
+        self.capacity = capacity
+        self.cache = dict()
+        self.head = DoubleLinkedNode()
+        self.tail = DoubleLinkedNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            # remove from linkedlist
+            prev = node.prev
+            new = node.next
+
+            prev.next = new
+            new.prev = prev
+            # add into linked list
+            second = self.head.next
+            node.next = second
+            second.prev = node
+            node.prev = self.head
+            self.head.next = node
+
+            return node.value
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        node = self.cache.get(key)
+        if node:
+            node.value = value
+            # remove from linkedlist
+            prev = node.prev
+            new = node.next
+
+            prev.next = new
+            new.prev = prev
+            # add into linked list
+            second = self.head.next
+            node.next = second
+            second.prev = node
+            node.prev = self.head
+            self.head.next = node
+        else:
+            self.size += 1
+            node = DoubleLinkedNode()
+            node.key = key
+            node.value = value
+            self.cache[key] = node
+            # add into linked list
+            second = self.head.next
+            node.next = second
+            second.prev = node
+            node.prev = self.head
+            self.head.next = node
+
+            if self.size > self.capacity:
+                self.size -= 1
+                del self.cache[self.tail.prev.key]
+                self.tail.prev = self.tail.prev.prev
+                self.tail.prev.next = self.tail
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
