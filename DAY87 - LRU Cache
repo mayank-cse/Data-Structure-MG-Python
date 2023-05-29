@@ -139,3 +139,69 @@ class LRUCache:
 # obj = LRUCache(capacity)
 # param_1 = obj.get(key)
 # obj.put(key,value)
+***************************************************
+class ListNode:
+    def __init__(self):
+        self.key = None
+        self.value = None
+        self.next = None
+        self.prev = None
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.head = ListNode()
+        self.tail = ListNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        self.capacity = capacity
+        self.cache = {}
+    
+    def remove(self, curr):
+        tempPrev = curr.prev
+        tempNext = curr.next
+        tempPrev.next = tempNext
+        tempNext.prev = tempPrev
+
+    def insert(self, k, val, head):
+        curr = head
+        tempNext = curr.next
+        newNode = ListNode()
+        curr.next = newNode
+        newNode.next = tempNext
+        tempNext.prev = newNode
+        newNode.prev = curr
+        newNode.key = k
+        newNode.value = val
+
+        return newNode
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            #we need to put it at first
+            curr = self.cache[key]
+            val = curr.value
+            self.remove(curr)
+            self.cache[key] = self.insert(key, val, self.head)
+            return val
+        else:
+            return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            curr = self.cache[key]
+            self.remove(curr)
+            self.cache[key] = self.insert(key, value, self.head)
+            
+        else:
+            if len(self.cache)>=self.capacity:
+                # print(self.cache,self.tail.prev.key)
+                del self.cache[self.tail.prev.key]
+                self.remove(self.tail.prev)
+            self.cache[key] = self.insert(key, value, self.head)
+            # print(self.cache)
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
