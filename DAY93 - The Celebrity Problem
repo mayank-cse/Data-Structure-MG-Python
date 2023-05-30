@@ -1,0 +1,130 @@
+The celebrity problem goes like this: you go to a party of N people, and you have to find out the celebrity over there.
+According to the problem, the definition of celebrity is -- A celebrity is a person who is known to everyone in a party, but he does not knows anyone over there.
+
+You will be given a square matrix 
+�
+[
+]
+[
+]
+M[][] with dimensions N X N. The matrix 
+�
+[
+]
+[
+]
+M[][] represents the people in the party. If an element of row 
+�
+i and column 
+�
+j is set to 1, then it means that the 
+�
+th
+i 
+th
+  person knows the 
+�
+th
+j 
+th
+  person. Please note that, here the 
+�
+[
+�
+]
+[
+�
+]
+M[i][i] will always be 0.
+
+Rule: A celebrity is known to everyone, but he does not know anyone at the party.
+
+Input Format: You will be given a matrix M, where the elements in the matrix represent whether a person is known to another person or not. If the person is known to another person then, 
+�
+[
+�
+]
+[
+�
+]
+=
+1
+M[i][j]=1, else it is equal to 0.
+
+Task: Your task is to find out the celebrity at the party. Print the id of the celebrity, if present. If there is no celebrity at the party, then print -1.
+
+Example
+Example 1: Input:
+
+N = 3
+M[][] = 
+{{0 1 0},
+{0 0 0}, 
+{0 1 0}}
+Output:
+
+1
+Explanation: The person with id = 1 does not know anyone, hence there are all 0's marked in its row, whereas, all the other people know the person 1. Please note, there is 1 marked at 
+
+M[0][1]=M[2][1].
+
+Example 2: Input:
+
+N = 2
+M[][] = 
+{{0 1},
+{1 0}}
+Output:
+
+-1
+Explanation: Both of the person know each other in the party, so there is no celebrity in the party.
+
+Constraints
+The constraints for the problem is given below :- Constraints:
+
+2
+<
+=
+�
+<
+=
+************************************************
+AMAZING RESOURCE
+https://www.scaler.com/topics/celebrity-problem/
+*************************************************
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+'''
+    This is signature of helper function 'knows'.
+    You should not implement it, or speculate about its implementation.
+
+    def knows(int A, int B); 
+    Function 'knows(A, B)' will returns "true" if the person having
+    id 'A' knows the person having id 'B' in the party, "false" otherwise.
+'''
+
+def findCelebrity(n, knows):
+    stack = []
+    for i in range(n):
+        stack.append(i)
+    while len(stack)>1:
+        a = stack.pop()
+        b = stack.pop()
+        if knows(a,b):
+            stack.append(b)
+        else:
+            stack.append(a)
+    if(len(stack) == 0):
+        return -1
+		
+    celeb = stack.pop()
+    for i in range(n):
+        if i!=celeb:
+            if not knows(i, celeb) or knows(celeb,i):
+                return -1
+    # Write your code here.    
+    return celeb
+    pass
