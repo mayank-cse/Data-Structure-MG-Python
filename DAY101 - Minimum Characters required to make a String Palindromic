@@ -1,0 +1,101 @@
+Given a string A. The only operation allowed is to insert characters at the beginning of the string.
+Find how many minimum characters are needed to be inserted to make the string a palindrome string.
+
+Problem Constraints
+1 <= |A| <= 106
+
+Input Format
+The only argument given is string A.
+
+Output Format
+Return the minimum characters that are needed to be inserted to make the string a palindrome string.
+
+Example Input
+Input 1:
+A = "ABC"
+Input 2:
+A = "AACECAAAA"
+
+Example Output
+Output 1:
+2
+Output 2:
+2
+
+Example Explanation
+Explanation 1:
+Insert 'B' at beginning, string becomes: "BABC".
+Insert 'C' at beginning, string becomes: "CBABC".
+Explanation 2:
+Insert 'A' at beginning, string becomes: "AAACECAAAA".
+Insert 'A' at beginning, string becomes: "AAAACECAAAA".
+********************************************
+T.C. = O(n*n*m*(m+n)*n)
+class Solution:
+    def isPalindrome(self, A):
+        right = len(A)-1
+        left = 0
+        while left<right:
+            if A[left]==A[right]:
+                right-=1
+                left+=1
+            else:
+                return False
+        return True
+    # @param A : string
+    # @return an integer
+    def solve(self, A):
+        for i in range(len(A)):
+            if A[:i+1][::-1] not in A:
+                if self.isPalindrome(A[:i]):
+                    return len(A)-i
+                else: 
+                    return len(A)-1
+        return 0
+******************************************
+T.C. - O(n*n*n)
+class Solution:
+    def isPalindrome(self, A):
+        right = len(A)-1
+        left = 0
+        while left<right:
+            if A[left]==A[right]:
+                right-=1
+                left+=1
+            else:
+                return False
+        return True
+    def solve(self, A):
+          for i in range(len(A),0,-1):
+              if self.isPalindrome(A[:i]):
+                  return len(A)-i
+          return 0 
+**************************************
+KMP ALOGORITHM - LPS
+T.C. - O(2N)
+class Solution:
+    # @param A : string
+    # @return an integer
+    def solve(self, A):
+        n = len(A)
+        k = n
+        string = A + "#" + A[::-1]
+        lps = [0]
+        left = 0
+        right = 1
+        while right<len(string):
+            if string[left] == string[right]:
+                lps.append(left+1)
+                left+=1
+                right+=1
+            else:
+                if left == 0:
+                    right+=1
+                    lps.append(0)
+                else:
+                    left = lps[left-1]
+        # print(A, string)
+        print(lps)
+        # print(len(A) - lps[len(string)-1])
+        return len(A) - lps[len(string)-1]
+        
