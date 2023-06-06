@@ -1,0 +1,15 @@
+Ceil from BST
+***************************************
+def findCeil(root, x):
+    # Write your code here.
+    curr = root
+    ceil = -1
+    while curr:
+        if curr.data == x:
+            return curr.data
+        if curr.data>x:
+            ceil = curr.data
+            curr = curr.left
+        else:
+            curr = curr.right
+    return ceil
