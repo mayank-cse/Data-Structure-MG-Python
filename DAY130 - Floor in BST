@@ -1,0 +1,16 @@
+find floor in BST for number x
+************************************
+def floorInBST(root, X):
+    # Write your Code here.
+    ans = [None]
+    def helper(root, x):
+        if not root:
+            return
+        if root.data<=x:
+            ans[0] = root.data
+            helper(root.right,x)
+        else:
+            helper(root.left, x)
+        return
+    helper(root,X)
+    return ans[0]
