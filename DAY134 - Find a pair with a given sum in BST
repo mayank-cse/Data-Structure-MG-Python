@@ -76,3 +76,51 @@ class Solution:
         return False
     def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
         return self.helper(root, root, k)
+***************************************************
+https://youtu.be/gwxA6MjcOdI
+TWO POINTER APPROACH in BST using 2 stack
+**********
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def __init__(self):
+        self.stackLow = []
+        self.stackHigh = []
+    def leftAppend(self,root):
+        while root:
+            self.stackLow.append(root)
+            root = root.left
+    def rightAppend(self, root):
+        while root:
+            self.stackHigh.append(root)
+            root = root.right
+
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        #append all the left of root in stackLow
+        self.leftAppend(root)
+        #append all the right of root in stackHigh
+        self.rightAppend(root)
+        low = self.stackLow[-1]
+        high = self.stackHigh[-1]
+        while low.val<high.val:
+            # print(self.stackLow, self.stackHigh)
+            currentSum = low.val+high.val
+            if currentSum==k:
+                return True
+            if currentSum<k:
+                #append left of low.right
+                self.leftAppend(low.right)
+                #move left pointer
+                low = self.stackLow.pop()
+            if currentSum>k:
+                #append right of left of high
+                self.rightAppend(high.left)
+                #move right pointer
+                high = self.stackHigh.pop()
+        return False
+
+
