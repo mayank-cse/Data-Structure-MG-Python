@@ -1,0 +1,35 @@
+from os import *
+from sys import *
+from collections import *
+from math import *
+from sortedcontainers import SortedList
+def mergeKSortedArrays(kArrays, k:int):
+	# Write your code here.
+	# kArrays is a list of 'k' lists.
+	# Return a list.
+	ans = SortedList()
+	for lst in kArrays:
+		ans += lst
+	return ans
+	pass
+
+**************************************
+PRIORITY QUEUE - add initital elements in queue(minHeap) of all the arrays and then add further elements
+T.C. - O(nLog(k))
+import heapq
+def mergeKSortedArrays(kArrays, k:int):
+	# Write your code here.
+	# kArrays is a list of 'k' lists.
+	# Return a list.
+	res =[]
+	minHeap = []
+	for i in range(len(kArrays)):
+		heapq.heappush(minHeap, (kArrays[i][0],i,0))
+	# print(res, minHeap)
+
+	while minHeap:
+		val, indr, indc = heapq.heappop(minHeap)
+		res.append(val)
+		if indc+1<len(kArrays[indr]):
+			heapq.heappush(minHeap, (kArrays[indr][indc+1],indr,indc+1))
+	return res
