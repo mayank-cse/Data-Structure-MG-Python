@@ -92,3 +92,60 @@ class MedianFinder:
 # obj = MedianFinder()
 # obj.addNum(num)
 # param_2 = obj.findMedian()
+********************************************
+import heapq
+class MedianFinder:
+
+    def __init__(self):
+        self.maxHeap = [] #left side - gives maximum minimum ele
+        self.minHeap = [] #right side - gives minimum maximum ele
+
+    def addNum(self, num: int) -> None:
+        if len(self.maxHeap)==0 or num <= -1*self.maxHeap[0]:
+            heapq.heappush(self.maxHeap, -num)
+        else:
+            heapq.heappush(self.minHeap, num)
+        
+        if len(self.maxHeap)<len(self.minHeap):
+            top = heapq.heappop(self.minHeap)
+            heapq.heappush(self.maxHeap, -top)
+        if len(self.maxHeap)>len(self.minHeap)+1:
+            top = -1*heapq.heappop(self.maxHeap)
+            heapq.heappush(self.minHeap, top)
+
+    def findMedian(self) -> float:
+        if len(self.maxHeap)==len(self.minHeap):
+            return ((-1*self.maxHeap[0])+(self.minHeap[0]))/2
+        else:
+            return -1*self.maxHeap[0]
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+**********************************************
+import heapq
+class MedianFinder:
+
+    def __init__(self):
+        self.maxHeap = [] #left side - gives maximum minimum ele
+        self.minHeap = [] #right side - gives minimum maximum ele
+
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.maxHeap, -num)
+        heapq.heappush(self.minHeap, -1*heapq.heappop(self.maxHeap))
+        if len(self.minHeap)>len(self.maxHeap):
+            heapq.heappush(self.maxHeap, -heapq.heappop(self.minHeap))
+
+    def findMedian(self) -> float:
+        if len(self.maxHeap)==len(self.minHeap):
+            return ((-1*self.maxHeap[0])+(self.minHeap[0]))/2
+        else:
+            return -1*self.maxHeap[0]
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
