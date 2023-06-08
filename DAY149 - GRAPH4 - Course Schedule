@@ -48,6 +48,7 @@ class Solution:
             return False
         return True
 ***************************************************
+Kahn's Algorithm
 # Intuition
 <!-- Describe your first thoughts on how to solve this problem. -->
 *   **Detect a cycle**, if there is a cycle then it's never gonna reach solution and thus false. Find **Deadlock**
