@@ -33,6 +33,7 @@ Constraints:
 2 ≤ V ≤ 104
 1 ≤ E ≤ (N*(N-1))/2
 ************************************************
+BFS APPROACH
 class Solution: 
     #Function to return list containing vertices in Topological order.
     def topoSort(self, V, adj):
@@ -56,3 +57,27 @@ class Solution:
                 if indegree[ele]==0:
                     queue.append(ele)
         return visited
+************************************************
+DFS APPROACH - Intuition when the DFS is complete store it in a stack - automatically last element is getting first in stack
+class Solution:
+    #Function to return list containing vertices in Topological order.
+    def topoSort(self, V, adj):
+        # Code here
+        visited = {}
+        def dfs(V, adj, ele, visited, stack):
+            # print(ele,visited, ans)
+            if ele in visited and visited[ele]==1:
+                return
+            if ele in visited and visited[ele]==0:
+                return
+            visited[ele] = 1
+            for el in adj[ele]:
+                dfs(V, adj, el, visited,stack)
+            visited[ele] = 0
+            stack.append(ele)
+            return
+        stack = []
+        for i in range(V):
+            dfs(V,adj,i,visited, stack)
+        # print(stack)
+        return stack[::-1]
