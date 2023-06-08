@@ -1,0 +1,140 @@
+There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+Return true if you can finish all courses. Otherwise, return false.
+
+Example 1:
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0. So it is possible.
+
+Example 2:
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
+ 
+Constraints:
+1 <= numCourses <= 2000
+0 <= prerequisites.length <= 5000
+prerequisites[i].length == 2
+0 <= ai, bi < numCourses
+All the pairs prerequisites[i] are unique.
+***************************************************
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for i in range(numCourses)]
+        for u,v in prerequisites:
+            adj[v].append(u)
+        deg = [0 for i in range(numCourses) ]
+        for i in range(numCourses):
+            for ele in adj[i]:
+                deg[ele] +=1
+        queue = []
+        for i in range(numCourses):
+            if deg[i] == 0:
+                queue.append(i)
+        print(adj, deg, queue)
+        visited = {}
+        while queue:
+            temp = queue.pop(0)
+            visited[temp]=1
+            for ele in adj[temp]:
+                deg[ele] -=1
+                if deg[ele] == 0:
+                    queue.append(ele)
+                
+        if len(visited)!=numCourses:
+            return False
+        return True
+***************************************************
+# Intuition
+<!-- Describe your first thoughts on how to solve this problem. -->
+*   **Detect a cycle**, if there is a cycle then it's never gonna reach solution and thus false. Find **Deadlock**
+# Approach
+<!-- Describe your approach to solving the problem. -->
+* First create the Adjascency List
+* Then find degree of each node, on how many nodes are the dependent
+* Append Nodes in queue that are not dependent
+* Maintain visited to get the final base condition
+# Complexity
+- Time complexity:
+<!-- Add your time complexity here, e.g. $$O(n)$$ -->
+    O(V + E)
+- Space complexity:
+<!-- Add your space complexity here, e.g. $$O(n)$$ -->
+    O(V)
+# Code
+```
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for i in range(numCourses)]
+        for u,v in prerequisites:
+            adj[v].append(u)
+        deg = [0 for i in range(numCourses) ]
+        for i in range(numCourses):
+            for ele in adj[i]:
+                deg[ele] +=1
+        queue = []
+        for i in range(numCourses):
+            if deg[i] == 0:
+                queue.append(i)
+        # print(adj, deg, queue)
+        visited = {}
+        while queue:
+            temp = queue.pop(0)
+            visited[temp]=1
+            for ele in adj[temp]:
+                deg[ele] -=1
+                if deg[ele] == 0:
+                    queue.append(ele)
+                
+        if len(visited)!=numCourses:
+            return False
+        return True
+```        
+*****************************************************
+DFS Brute Forceclass Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for i in range(numCourses)]
+        for u,v in prerequisites:
+            adj[v].append(u)
+        # visited = {}
+        def hasCycle(course, visited, adj):
+            if course in visited and visited[course]==0:
+                return False
+            if course in visited and visited[course] == 1:
+                return True
+            visited[course] = 1
+            for ele in adj[course]:
+                if hasCycle(ele, visited, adj):
+                    return True
+            visited[course] = 0
+            return False
+        for i in range(numCourses):
+            if hasCycle(i, {}, adj):
+                return False
+        return True
+********************************************************
+GENERAL VISITED - if not a cycle once, won't be later
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for i in range(numCourses)]
+        for u,v in prerequisites:
+            adj[v].append(u)
+        visited = {}
+        def hasCycle(course, visited, adj):
+            if course in visited and visited[course]==0:
+                return False
+            if course in visited and visited[course] == 1:
+                return True
+            visited[course] = 1
+            for ele in adj[course]:
+                if hasCycle(ele, visited, adj):
+                    return True
+            visited[course] = 0
+            return False
+        for i in range(numCourses):
+            if hasCycle(i, visited, adj):
+                return False
+        return True
