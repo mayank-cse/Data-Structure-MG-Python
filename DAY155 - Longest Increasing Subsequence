@@ -1,0 +1,72 @@
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+Example 1:
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+
+Example 2:
+Input: nums = [0,1,0,3,2,3]
+Output: 4
+
+Example 3:
+Input: nums = [7,7,7,7,7,7,7]
+Output: 1
+
+Constraints:
+1 <= nums.length <= 2500
+-104 <= nums[i] <= 104
+
+Follow up: Can you come up with an algorithm that runs in O(n log(n)) time complexity?
+********************************************
+class Solution:
+    def __init__(self):
+        self.maxCount = 0
+    def helper(self, nums, idx, prev, count, dp):
+        #choose curr element
+        if idx>=len(nums):
+            if count>self.maxCount:
+                self.maxCount = count
+            return 0
+        if dp[idx][prev] != 0:
+            return dp[idx][prev]   
+        length = 0+self.helper(nums, idx+1, prev, count, dp)
+        if prev == -1 or nums[idx]>nums[prev]:
+            length= max(length,1+self.helper(nums,idx+1, idx,count+1, dp))
+         
+        dp[idx][prev] = length
+        return dp[idx][prev]
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        #choosing or not 
+        # for i in range(len(nums)):
+        dp = [[0 for _ in range(len(nums))] for _ in range(len(nums)+1)]
+        return self.helper(nums,0,-1,0, dp)
+**********************************************
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        dp=[0]*(len(nums))
+        dp[0]=1
+        for i in range(1,len(nums)):
+            maxi=0
+            for j in range(0,i):
+                if(nums[i]>nums[j]):
+                    maxi=max(maxi,dp[j])
+            dp[i]=1+maxi
+            
+        return max(dp)
+********************************************
+bisect_left - gives the position for the element to be inserted to keept the list sorted
+class Solution:
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        lis = []
+        for x in nums:
+            print(x, lis)
+            if not lis or lis[-1] < x: lis.append(x)
+            else: lis[bisect_left(lis, x)] = x
+            print(lis)
+        return len(lis)
+*******************************************
+Rule 1 - Express in terms of index
+Rule 2 - Explore Possibility
+Rule 3 - Take the best among them
+        
