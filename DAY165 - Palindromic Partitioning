@@ -1,0 +1,47 @@
+Given a string str, a partitioning of the string is a palindrome partitioning if every sub-string of the partition is a palindrome. Determine the fewest cuts needed for palindrome partitioning of the given string.
+
+Example 1:
+Input: str = "ababbbabbababa"
+Output: 3
+Explaination: After 3 partitioning substrings 
+are "a", "babbbab", "b", "ababa".
+
+Example 2:
+Input: str = "aaabba"
+Output: 1
+Explaination: The substrings after 1
+partitioning are "aa" and "abba".
+
+Your Task:
+You do not need to read input or print anything, Your task is to complete the function palindromicPartition() which takes the string str as the input parameter and returns the minimum number of partitions required.
+
+Expected Time Complexity: O(n*n) [n is the length of the string str]
+Expected Auxiliary Space: O(n*n)
+
+Constraints:
+1 ≤ length of str ≤ 500
+*****************************************
+#User function Template for python3
+
+class Solution:
+    
+    def palindromeCheck(self, string):
+        return string == string[::-1]
+    def palindromicPartition(self, string):
+        # print(string)
+        dp = {}
+        def helper(string):
+            if len(string)==0:
+                return 0
+            if string in dp:
+                return dp[string]
+            temp = ""
+            ans = 1e9
+            for i in range(len(string)):
+                # print(temp)
+                temp+=string[i]
+                if self.palindromeCheck(temp):
+                    ans = min(ans,1+helper(string[i+1:]))
+            dp[string] = ans
+            return ans
+        return helper(string)-1
