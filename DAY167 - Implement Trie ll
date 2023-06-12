@@ -1,0 +1,59 @@
+from os import *
+from sys import *
+from collections import *
+from math import *
+class TrieNode:
+    def __init__(self):
+        self.children = [None]*26
+        self.endsWith = 0
+        self.prefCount = 0
+class Trie:
+    def __init__(self):
+        # Write your code here.
+        self.root = TrieNode()
+        pass
+
+    def insert(self, word):
+        # Write your code here.
+        newRoot = self.root
+        for ch in word:
+            alhpabetIndex = ord(ch) - ord('a')
+            if newRoot.children[alhpabetIndex] == None:
+                newRoot.children[alhpabetIndex] = TrieNode()
+            newRoot = newRoot.children[alhpabetIndex]
+            newRoot.prefCount +=1
+        newRoot.endsWith +=1
+        pass
+
+    def countWordsEqualTo(self, word):
+        newRoot = self.root
+        ans = 0
+        for ch in word:
+            alphabetIndex = ord(ch) - ord('a')
+            if newRoot.children[alphabetIndex] == None:
+                return ans
+            newRoot = newRoot.children[alphabetIndex]
+        return newRoot.endsWith
+
+    def countWordsStartingWith(self, word):
+        newRoot = self.root
+        for ch in word:
+            alphabetIndex = ord(ch)-ord('a')
+            if newRoot.children[alphabetIndex] == None:
+                return 0
+            newRoot = newRoot.children[alphabetIndex]
+        return newRoot.prefCount
+        return 0
+
+    def erase(self, word):
+        # Write your code here.
+        newRoot = self.root
+        # if self.countWordsEqualTo(word) == 0:
+        #     return
+        for ch in word:
+            alphabetIndex = ord(ch) - ord('a')
+            newRoot = newRoot.children[alphabetIndex]
+            newRoot.prefCount -=1
+        newRoot.endsWith -= 1
+    
+        pass
