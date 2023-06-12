@@ -1,0 +1,53 @@
+https://www.codingninjas.com/codestudio/problems/complete-string_2687860?utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_tries_videos&leftPanelTab=0
+***************************************
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+from typing import *
+class TrieNode:
+    def __init__(self):
+        self.children = [None]*26
+        self.flag = False
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    def insert(self, word):
+        newRoot = self.root
+        for ch in word:
+            alphabetIndex = ord(ch)-ord('a')
+            if newRoot.children[alphabetIndex] == None:
+                newRoot.children[alphabetIndex] = TrieNode()
+            newRoot = newRoot.children[alphabetIndex]
+        newRoot.flag = True
+    def search(self, word):
+        newRoot = self.root
+        for ch in word:
+            alphabetIndex = ord(ch) - ord('a')
+            newRoot = newRoot.children[alphabetIndex]
+            if newRoot.flag == False:
+                return False
+            
+        return True
+def completeString(n: int, a: List[str])-> str:
+    trie = Trie()
+    for word in a:
+        trie.insert(word)
+    maxString = ""
+    maxSlen = 0
+    for word in a:
+        x = trie.search(word)
+        # print(word,x)
+        if not x:
+            continue
+        if len(word) == maxSlen:
+            if word<maxString:
+                maxString = word
+        if len(word)>maxSlen:
+            maxString = word
+            maxSlen = len(word)
+    if len(maxString) == 0:
+        return None
+    return maxString
+    pass
