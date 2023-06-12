@@ -1,0 +1,113 @@
+Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
+
+Example 1:
+Input: nums = [3,10,5,25,2,8]
+Output: 28
+Explanation: The maximum result is 5 XOR 25 = 28.
+
+Example 2:
+Input: nums = [14,70,53,83,49,91,36,80,92,51,66,70]
+Output: 127
+
+Constraints:
+1 <= nums.length <= 2 * 105
+0 <= nums[i] <= 231 - 1
+************************************************
+class TrieNode:
+    def __init__(self):
+        self.children = [None, None]
+        self.num = -1
+class Solution:
+    def __init__(self):
+        self.root = TrieNode()
+    def insert(self, num):
+        newRoot = self.root
+        for i in range(31,-1,-1):
+            bit = 1 if num & (1<<i) else 0
+            if newRoot.children[bit] == None:
+                newRoot.children[bit] = TrieNode()
+            newRoot = newRoot.children[bit]
+        newRoot.val = num
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        for num in nums:
+            self.insert(num)
+        res = 0
+        for num in nums:
+            newRoot = self.root
+            for i in range(31,-1,-1):
+                bit = 1 if num & (1<<i) else 0
+                if bit == 1:
+                    if newRoot.children[0]!=None:
+                        newRoot = newRoot.children[0]
+                    else:
+                        newRoot = newRoot.children[1]
+                else:
+                    if newRoot.children[1]!=None:
+                        newRoot = newRoot.children[1]
+                    else:
+                        newRoot = newRoot.children[0]
+            res = max(res, newRoot.val^num)
+        return res
+************************************************
+class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        
+        # Len 32 is a excessive for many numbers (so we fix it below)
+        padded = [ '{0:032b}'.format(num) for num in nums ]
+        # Remove 2 from len as bin(num) gives 0b11001 for 25 (extra 2 chars - 0b)
+        maxLen = len(bin(max(nums))) - 2
+        # Can also do `[[(x >> i) & 1 for i in range(L)][::-1] for x in nums]
+        padded = [num[-maxLen:] for num in padded] # Remove extra leading 0s. 
+
+        ans = -float('inf')
+        
+        trie = { }
+
+        # The trie height will be 32 
+        # So time taken to reach end of try will be O(32)
+        # And we have total 
+        for num in padded:
+            head = trie
+            xor = 0
+            compliment_node = trie
+
+            # Bitwise Trie: Insert bits of number starting from MSB to LSB.              
+            for bit in num:
+                # Insert new bit in head so we can move to it below  
+                if not bit in head:
+                    head[bit] = {}
+
+                # Find the compliment of current bit
+                compliment = '1' if bit == '0' else '0'
+
+                # If the compliment exits in the tire then exor of this bit will be 1 
+                # Ex current bit being inserted is 1 and previously a bit 0 was inserted at this point 
+                # then thier xor will be 1 at this bit 
+                # We follow a greedy approach here since we start from MSB and try to take a path 
+                # for compliment node that differese as much as possible starting from MSB
+                if compliment in compliment_node:
+                    # Move compliment left and set first bit as 1  (from current XOR)
+                    xor = xor << 1 | 1 
+                    compliment_node = compliment_node[compliment]
+
+                # But if the compliment does not exist in trie then we wil have to follow the same 
+                # bit as the one being inserted. This will happen when we are inserting first number 
+                # or when 2 numbers with same prefix are being added. 
+                # Eg: 00101 (5) and 00011 (3). For first 2 bit there will be no compliment in trie
+                else: 
+                    xor = xor << 1
+                    compliment_node = compliment_node[bit]
+                
+                # Move head ahead 
+                head = head[bit]
+            
+            # Finally save max value 
+            # This works because by the time we add all the numbers our trie traversal will find max XOR 
+            # Since we have leading 0s for smaller numbers. So when they are 0 our compliment_node will 
+            # try to take a path that leads through 1s if a bigger number was added before 
+            ans = max(ans, xor)
+
+        return ans
+
+
+        
