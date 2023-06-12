@@ -1,0 +1,33 @@
+https://www.codingninjas.com/codestudio/problems/count-distinct-substrings_985292?utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_tries_videos&leftPanelTab=0
+********************************************
+class TrieNode:
+    def __init__(self):
+        self.children = [None]*26
+        self.flag = False
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    def insert(self, word):
+        newRoot = self.root
+        count = 0
+        for ch in word:
+            alphabetIndex = ord(ch)-ord('a')
+            if newRoot.children[alphabetIndex] == None:
+                newRoot.children[alphabetIndex] = TrieNode()
+                count = 1
+            newRoot = newRoot.children[alphabetIndex]
+        if newRoot.flag == True:
+            return 0
+        newRoot.flag = True
+        return count
+def countDistinctSubstrings(string):
+    # Write your code here
+    count = 1
+    trie = Trie()
+    for i in range(len(string)):
+        s = ""
+        for j in range(i, len(string)):
+            # print("001")
+            s += string[j]
+            count += trie.insert(s)
+    return count
