@@ -42,3 +42,23 @@ class Solution:
         output = []
         self.helper(nums, 0, [], output)
         return output
+***********************************************
+BFS approach using queue | Easy | No Recursion | Fast
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        #level order traversal
+        output = []
+        # index, arr -> queue
+        queue = [(-1,[])]
+        while queue:
+            ind, comb = queue.pop(0)
+            output.append(comb)
+            i = ind+1
+            while i<len(nums):
+                temp = i
+                while i+1<len(nums) and nums[i]==nums[i+1]:
+                    i+=1
+                queue.append((temp, comb + [nums[temp]]))
+                i+=1
+        return output
