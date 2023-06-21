@@ -1,0 +1,70 @@
+Problem Statement: Print Root to Node Path In A Binary Tree. Write a program to print path from root to a given node in a binary tree.
+
+Problem Description: 
+We are given a binary tree T and a node V. We need to print a path from the root of the tree to the node.
+
+Note:
+No two nodes in the tree have the same data value.
+It is assured that the node V is present and a path always exists.
+
+Examples:
+Disclaimer: Don’t jump directly to the solution, try it out yourself first.
+
+Pre-req: Traversal Techniques & Recursion
+Solution :
+
+Intuition: 
+First of all, we need to find the node V in our tree for which we need to find the path. We can use any depth-first traversal technique (preorder, inorder, postorder) in order to find the required node.
+If we look at the diagram below, we see that whenever we find the required node, its path is well present in our recursion call stack. We just need to figure out how we can use the recursive calls to print the required path.
+
+Approach: 
+We will use an external list to store our path. This list will be passed by reference to our recursive function. Moreover, we can set the return value of our function as boolean, this will help us to know whether node V was found in a subtree or not.
+
+The algorithm steps can be stated as follows:
+
+We pass the function with our root node, the path list and node V.
+For the base case, if root is pointing to NULL, we return false as clearly node V can’t be found.
+Now we first push the node to our path list.
+Then we check whether the current node is the target node or not, if it is then no further execution is needed and we return to the parent function.
+If not, then we recursively call its left and right child to find the target node V. If any one of them returns true, it means we have found node V at lower levels and return true from the current function.
+If the value is not found at the current node and neither in any of the recursive calls, it means that the value is not present in the current sub-tree, therefore we pop out the current node from the path list and return false.
+Dry Run: In case you want to watch the dry run for this approach, please watch the video attached below.
+*****************************************
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+from typing import List
+
+
+class TreeNode:   
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+
+def pathInATree(root: TreeNode, x: int) -> List[int]:
+    # Write your code here.
+    def helper(root,x,flag,paths):
+        if root is None:
+            return
+        
+        if root.data == x:
+            paths.append(x)
+            flag[0] = 1
+            return 
+        if flag[0]==0:
+            helper(root.left,x,flag,paths)
+        if flag[0]==0:
+            helper(root.right,x,flag, paths)
+        if flag[0]==1:
+            paths.append(root.data)
+        return
+        
+    paths = []
+    helper(root,x,[0], paths)
+    return paths[::-1]
+        
+    pass
