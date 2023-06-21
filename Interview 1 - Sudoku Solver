@@ -1,0 +1,39 @@
+def isValid(ele, row,col, board):
+  #checking row col
+  for i in range(1,len(board)):
+    if board[i][col] == ele:
+      return False
+    if board[row][i] == ele:
+      return False
+   #checking box
+  for i in range(row//3*3, row//3*3+3):
+    for j in range(col//3*3, col//3*3+3):
+      if board[i][j]==ele:
+        return False
+  return True
+
+def helper(board, row, col):
+    print(row, col)
+    if col==len(board[0]):
+      helper(board, row+1, 0)
+    if row == len(board):
+      return True
+    if board[row][col] !=".":
+      if helper(board, row, col+1):
+        return True
+      else:
+        return False
+    for i in range(1,10): #1 - 9
+      if isValid(i,row,col, board):
+          board[row][col]=str(i)
+          if helper(board, row, col+1):
+            return True
+          board[row][col]= "."
+    return False 
+def sudoku_solve(board):
+  # your code goes here
+  #cond 1 = in a row there should not be any repetition
+  # cond 2 =  in a col no repetition
+  #cond 3 = in a box no repetition
+  
+  return helper(board, 0,0)
