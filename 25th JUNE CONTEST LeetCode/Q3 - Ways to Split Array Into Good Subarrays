@@ -1,0 +1,56 @@
+You are given a binary array nums.
+
+A subarray of an array is good if it contains exactly one element with the value 1.
+
+Return an integer denoting the number of ways to split the array nums into good subarrays. As the number may be too large, return it modulo 109 + 7.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+ 
+
+Example 1:
+
+Input: nums = [0,1,0,0,1]
+Output: 3
+Explanation: There are 3 ways to split nums into good subarrays:
+- [0,1] [0,0,1]
+- [0,1,0] [0,1]
+- [0,1,0,0] [1]
+Example 2:
+
+Input: nums = [0,1,0]
+Output: 1
+Explanation: There is 1 way to split nums into good subarrays:
+- [0,1,0]
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+0 <= nums[i] <= 1
+********************************************
+class Solution:
+    def numberOfGoodSubarraySplits(self, nums: List[int]) -> int:
+        mod = 1e9 + 7
+        # dp = [[-1]*2 for _ in range(len(nums))]
+        @cache
+        def helper(ind,hasOne):
+            if ind==len(nums):
+                return (1 if hasOne else 0)
+            ans = 0
+            # if dp[ind][hasOne] != -1:
+            #     return dp[ind][hasOne]
+            if nums[ind]==0:
+                if hasOne == 0:
+                    #we have one option to include the zero
+                    ans+= helper(ind+1, 0)
+                else:
+                    ans+=  helper(ind+1, 1) + helper(ind+1,0)
+            else:
+                if hasOne == 0:
+                    ans+=  helper(ind+1, 1)
+                else:
+                    ans+=  helper(ind+1, 1)
+            # dp[ind][hasOne] = ans
+            return int(ans %mod)
+        return int(helper(0,0)%mod)
