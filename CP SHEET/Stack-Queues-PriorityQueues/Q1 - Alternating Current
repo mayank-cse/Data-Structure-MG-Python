@@ -1,0 +1,16 @@
+https://codeforces.com/contest/343/problem/B
+********************
+string = input()
+stack = [string[0]]
+i = 1
+while i < len(string):
+    if len(stack)>0 and string[i] == stack[-1]:
+        top = stack.pop()
+        while i<len(string) and string[i] == top:
+            i+=1
+        continue
+    stack.append(string[i])
+    i+=1
+print("Yes" if len(stack)==0 else "No")
+    
+        
