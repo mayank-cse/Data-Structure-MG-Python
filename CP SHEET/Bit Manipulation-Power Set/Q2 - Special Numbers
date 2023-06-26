@@ -1,0 +1,65 @@
+https://codeforces.com/problemset/problem/1594/B
+*************************
+To solve this problem, we can observe that the special numbers for each n form a binary representation where each bit corresponds to a power of n. The bit is set to 1 if that power is used to form the special number.
+
+Algorithm:
+
+Initialize a variable result to 0, which will store the k-th special number modulo 10^9 + 7.
+
+Iterate over the binary representation of k from the least significant bit to the most significant bit.
+
+a. If the current bit is set (equal to 1), calculate the corresponding power of n by raising n to the power of the current position of the bit.
+
+b. Add the calculated power to result.
+
+c. Take modulo 10^9 + 7 of result to keep it within the required range.
+
+Print result as the k-th special number modulo 10^9 + 7.
+
+Here's the implementation of the solution in Python:
+
+python
+Copy code
+
+t = int(input())
+
+MOD = int(1e9) + 7
+
+for _ in range(t):
+    n, k = map(int, input().split())
+
+    result = 0
+    pow_n = 1
+
+    while k > 0:
+        if k & 1:  # Check if the least significant bit is set
+            result = (result + pow_n) % MOD
+
+        pow_n = (pow_n * n) % MOD
+        k >>= 1  # Right-shift `k` by 1 bit to move to the next position
+
+    print(result)
+This solution calculates the k-th special number modulo 10^9 + 7 for each test case. It iterates over the binary representation of k and adds the corresponding powers of n to the result. Finally, it takes the modulo to ensure the result is within the required range.
+
+Hope this helps! Let me know if you have any further questions.
+
+
+
+
+
+User
+k >>= 1 is this right shift or left shift
+ChatGPT
+Apologies for the confusion in my previous response. k >>= 1 performs a right shift on the variable k, not a left shift.
+
+The >>= operator is a compound assignment operator in Python that combines the right shift (>>) operator and the assignment (=) operator. It shifts the bits of k to the right by one position and assigns the result back to k.
+
+In the context of the solution, k >>= 1 is used to move to the next position of the binary representation of k. It effectively divides k by 2, discarding the least significant bit.
+
+For example, if k is initially 9 in binary (1001), k >>= 1 would shift the bits to the right, resulting in 4 in binary (100).
+
+So, k >>= 1 performs a right shift on k and updates its value.
+
+
+
+
