@@ -1,0 +1,24 @@
+https://codeforces.com/problemset/problem/1613/C
+**********************************
+t = int(input())
+for _ in range(t):
+    n,h = list(map(int, input().split()))
+    hits = list(map(int, input().split()))
+    def isAccepted(num):
+        countDamage = 0
+        for i in range(1,len(hits)):
+            countDamage += min(mid, hits[i]-hits[i-1])
+        countDamage += mid
+        if countDamage >= h:
+            return True
+        else:
+            return False
+    left = 1
+    right = h
+    while left<=right:
+        mid = left + (right-left)//2
+        if isAccepted(mid):
+            right = mid-1
+        else:
+            left = mid+1
+    print(left)
