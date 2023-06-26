@@ -1,0 +1,46 @@
+https://codeforces.com/contest/371/problem/C
+********
+Recipe = input()
+nb,ns,nc = list(map(int, input().split())) 
+pb,ps,pc = list(map(int,input().split()))
+r = int(input())
+b,s,c = 0,0,0
+for ele in Recipe:
+    if ele == "B":
+        b+=1
+    if ele == "S":
+        s+=1
+    if ele == "C":
+        c+=1
+
+def isValid(num):
+    #how many burgers we still require to make num burgers
+    nb_ = num*b - nb
+    ns_ = num*s - ns
+    nc_ = num*c - nc
+    if nb_ <0:
+        nb_ = 0
+    if ns_ <0:
+        ns_ = 0
+    if nc_ <0:
+        nc_ = 0
+    if nb_*pb + ns_*ps + nc_*pc <= r:
+        return True
+    else:
+        return False
+    
+# jo output chahiye usmein traverse kro
+left = 0
+right = 1000000000101
+while left<=right:
+    mid = left + (right-left)//2
+    if isValid(mid):
+        #shift to right
+        left = mid+1
+    else:
+        right = mid - 1
+    # print(left,right,mid)
+    
+# print(isValid(3))
+print(right)
+    
