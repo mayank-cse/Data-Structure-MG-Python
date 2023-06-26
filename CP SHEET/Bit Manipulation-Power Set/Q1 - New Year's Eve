@@ -1,0 +1,25 @@
+https://codeforces.com/problemset/problem/912/B
+*****************************************
+def largest_xor_sum(n, k):
+    max_xor = 0
+    msb = 0
+ 
+    # Find the position of the most significant bit
+    for i in range(63, -1, -1):
+        if (n >> i) & 1:
+            msb = i
+            break
+ 
+    # If k is 1, return n as the maximum xor-sum
+    if k == 1:
+        return n
+ 
+    # If k is greater than or equal to 2, set max_xor to 2^(msb+1) - 1
+    max_xor = (1 << (msb + 1)) - 1
+    return max_xor
+ 
+# Read input values
+n, k = map(int, input().split())
+ 
+# Call the function and print the result
+print(largest_xor_sum(n, k))
