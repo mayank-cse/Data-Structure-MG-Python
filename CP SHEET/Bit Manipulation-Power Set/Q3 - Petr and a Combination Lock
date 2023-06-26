@@ -1,0 +1,15 @@
+https://codeforces.com/problemset/problem/1097/B
+**********************************
+n = int(input())
+moves = []
+for _ in range(n):
+    moves.append(int(input()))
+def helper(ind, currSum):
+    if ind == len(moves) and currSum%360 == 0 :
+        return True
+    if ind == len(moves) and currSum != 0:
+        return False
+    if helper(ind+1, currSum + moves[ind]):
+        return True
+    return helper(ind+1, currSum - moves[ind])
+print("YES" if helper(0,0) else "NO")
