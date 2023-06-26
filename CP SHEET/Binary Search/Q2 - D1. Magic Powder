@@ -1,0 +1,25 @@
+https://codeforces.com/contest/670/problem/D1
+***************************************
+n,k = list(map(int, input().split())) 
+ingredientReqd = list(map(int,input().split()))
+ingredientHas = list(map(int,input().split()))
+
+def isValid(num):
+    reqd = [ingredientReqd[i]*num - ingredientHas[i] for i in range(len(ingredientHas))]
+    for i in range((len(reqd))):
+        if reqd[i] <0:
+            reqd[i] = 0
+    if sum(reqd) <= k:
+        return True
+    else:
+        return False
+        
+left = 0
+right = 1000000
+while left<=right:
+    mid = left + (right-left)//2
+    if isValid(mid):
+        left = mid+1
+    else:
+        right = mid-1
+print(right)
