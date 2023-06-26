@@ -1,0 +1,58 @@
+You are given a 0-indexed integer array costs where costs[i] is the cost of hiring the ith worker.
+
+You are also given two integers k and candidates. We want to hire exactly k workers according to the following rules:
+
+You will run k sessions and hire exactly one worker in each session.
+In each hiring session, choose the worker with the lowest cost from either the first candidates workers or the last candidates workers. Break the tie by the smallest index.
+For example, if costs = [3,2,7,7,1,2] and candidates = 2, then in the first hiring session, we will choose the 4th worker because they have the lowest cost [3,2,7,7,1,2].
+In the second hiring session, we will choose 1st worker because they have the same lowest cost as 4th worker but they have the smallest index [3,2,7,7,2]. Please note that the indexing may be changed in the process.
+If there are fewer than candidates workers remaining, choose the worker with the lowest cost among them. Break the tie by the smallest index.
+A worker can only be chosen once.
+Return the total cost to hire exactly k workers.
+*******************************
+Initialize the total cost to 0.
+Start the hiring sessions.
+In each session:
+Determine the range of workers to consider based on the "candidates" value.
+Choose the worker with the lowest cost within this range.
+If multiple workers have the same lowest cost, select the one with the smallest index.
+Update the total cost by adding the cost of the selected worker.
+Remove the selected worker from the available worker pool.
+Adjust the range of workers based on the number of remaining workers and the "candidates" value.
+Repeat the hiring sessions until the required number of workers, "k," is hired.
+Return the final total cost.
+The purpose of the "candidates" parameter is to define the range of workers available for selection in each hiring session. It helps in determining which workers should be considered when choosing the one with the lowest cost.
+*******************************
+import heapq
+class Solution:
+    def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
+        q = costs[:candidates]
+        r = costs[max(candidates, len(costs)-candidates):]
+        minHeap1 = []
+        minHeap2 = []
+        for ele in q:
+            heapq.heappush(minHeap1, ele)
+        for ele in r:
+            heapq.heappush(minHeap2, ele)
+        cost = 0
+        templeft = candidates
+        tempRight = max(candidates, len(costs)-candidates)-1
+        while k!=0 and len(minHeap1)>0 and len(minHeap2)>0:
+            # print(minHeap1, minHeap2)
+            if minHeap1[0]<=minHeap2[0]:
+                cost+= heapq.heappop(minHeap1)
+                if templeft<=tempRight:
+                    heapq.heappush(minHeap1, costs[templeft])
+                    templeft+=1
+            else:
+                cost+= heapq.heappop(minHeap2)
+                if tempRight>=templeft:
+                    heapq.heappush(minHeap2, costs[tempRight])
+                    tempRight-=1
+            k-=1
+        # print(minHeap1, minHeap2,k)
+        if k!=0 and len(minHeap1) == 0:
+            cost += sum(heapq.nsmallest(k, minHeap2))
+        if k!=0 and len(minHeap2) == 0:
+            cost += sum(heapq.nsmallest(k, minHeap1))
+        return cost
