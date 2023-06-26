@@ -1,0 +1,34 @@
+https://codeforces.com/contest/287/problem/B
+*************************
+n,k = list(map(int, input().split()))
+# 2 to k is the splitters type, one for each available
+# n pipes
+# o/p minimum number of splitters reqd
+#recursively we can check if all the splitters sum up to exactly n output
+# take the maximum, again take the maximum of left out value
+if n==1:
+    print(0)
+else:
+    maxSum = (k*(k-1))//2
+    if (n-1)<=maxSum:
+        target = maxSum - n + 1
+        left = 2
+        right = k
+        # print(maxSum, n, target)
+        flag = 0
+        while left<=right:
+            mid = left+(right-left)//2
+            sumMid = (mid*(mid-1))//2
+            # print(left, right, mid, sumMid)
+            if sumMid == target:
+                print(k-mid)
+                flag = 1
+                break
+            elif sumMid > target:
+                right = mid-1
+            elif sumMid<target:
+                left = mid+1
+        if flag == 0:
+            print(k-right)
+    else:
+        print(-1)
