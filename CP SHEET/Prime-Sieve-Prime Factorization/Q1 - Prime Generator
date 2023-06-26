@@ -1,0 +1,48 @@
+**********************Brute
+t = int(input())
+for _ in range(t):
+    m,n = list(map(int, input().split()))
+    def isPrime(num):
+        for i in range(2,num//2+1):
+            if num%i == 0:
+                return False
+        return True
+    for i in range(m, n+1):
+        if i!=1 and isPrime(i):
+            print(i)
+    print()
+*********************Better - till SQRT()
+import math
+t = int(input())
+for _ in range(t):
+    m,n = list(map(int, input().split()))
+    def isPrime(num):
+        for i in range(2,int(math.sqrt(num)+1)):
+            if num%i == 0:
+                return False
+        return True
+    for i in range(m, n+1):
+        if i!=1 and isPrime(i):
+            print(i)
+    print()
+**********************    
+import math
+t = int(input())
+for _ in range(t):
+    m,n = list(map(int, input().split()))
+    prime = [True for _ in range(n-m+1)]
+    def isPrime(num):
+        for i in range(2,int(math.sqrt(num)+1)):
+            if num%i == 0:
+                return False
+        i = num
+        while i<=n:
+            prime[i-m] = False
+            i = i+num
+        return True
+    for i in range(m, n+1):
+        # print(i,prime[i-m])
+        if i!=0 and i!=1 and prime[i-m] and isPrime(i):
+            print(i)
+    
+    print()
