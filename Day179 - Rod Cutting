@@ -1,0 +1,30 @@
+from sys import stdin
+import sys
+
+def cutRod(price, n):
+    temp = price
+    if len(temp)==0:
+        return 0
+    prices = [(p,i+1) for i,p in enumerate(price)]
+    prices.sort(key = lambda x : x[0]/x[1])
+    p,cut = prices[-1]
+    count = (n//cut)
+    rem = n%cut
+    ans = count*p + cutRod(temp[:rem],rem)
+    return ans
+
+# Taking input using fast I/O.
+def takeInput():
+    n = int(input())
+
+    price = list(map(int, input().strip().split(" ")))
+
+    return price, n
+
+
+# Main.
+t = int(input())
+while t:
+    price, n = takeInput()
+    print(cutRod(price, n))
+    t = t-1
