@@ -1,0 +1,36 @@
+https://codeforces.com/contest/5/problem/C
+***********************************
+string = input()
+stack = []
+count = 0
+maxVal = float('-inf')
+for char in range(len(string)):
+    if len(stack)==0:
+        maxVal = char
+        count = 1
+        stack.append((string[char], char))
+    elif stack[-1][0] == "(" and string[char] == ")":
+        _, ind = stack.pop()
+    else:
+        if stack:
+            _, ind = stack[-1]
+            if char - ind-1 > maxVal:
+                maxVal = char-ind-1
+                count = 1
+            elif char - ind - 1 == maxVal:
+                count +=1
+        stack.append((string[char],char))
+# print(stack)
+if len(stack)==0:
+    maxVal = len(string)
+    count = 1
+elif stack[-1][1] != len(string)-1:
+    temp = len(string)-stack[-1][1]-1
+    # print(temp)
+    if temp > maxVal:
+        maxVal = temp
+        count = 1
+    elif temp == maxVal:
+        count +=1
+print(maxVal, count if maxVal != 0 else  1)
+        
