@@ -1,0 +1,43 @@
+https://codeforces.com/problemset/problem/1006/F
+*******************************************RECURSIVE 
+n,m,k = list(map(int, input().split()))
+grid = []
+for _ in range(n):
+    grid.append(list(map(int, input().split())))
+def helper(row, col, ans):
+    if row == n-1 and col == m-1:
+        
+        if ans == k:
+            return 1
+        else:
+            return 0
+    
+    x,y = 0,0
+    if row+1<n:
+        x = helper(row+1,col,ans^grid[row+1][col])
+    if col+1<m:
+        y = helper(row, col+1,ans^grid[row][col+1])
+    return x+y
+print(helper(0,0,grid[0][0]))
+***************************************DP
+n,m,k = list(map(int, input().split()))
+grid = []
+for _ in range(n):
+    grid.append(list(map(int, input().split())))
+dp = {}
+def helper(row, col, ans):
+    if row == n-1 and col == m-1:
+        if ans == k:
+            return 1
+        else:
+            return 0
+    if (row,col,ans) in dp:
+        return dp[(row,col,ans)]
+    x,y = 0,0
+    if row+1<n:
+        x = helper(row+1,col,ans^grid[row+1][col])
+    if col+1<m:
+        y = helper(row, col+1,ans^grid[row][col+1])
+    dp[(row,col,ans)] = x+y
+    return x+y
+print(helper(0,0,grid[0][0]))
