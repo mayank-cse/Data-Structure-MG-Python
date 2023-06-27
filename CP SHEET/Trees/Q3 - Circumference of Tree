@@ -1,0 +1,50 @@
+https://codeforces.com/gym/102694/problem/A
+soln = https://ideone.com/qRYWg4
+Basically, what you have to do is select any arbitary node, say 1, then do a dfs and find the farthest node from 1. Then again u have to do a dfs from that node and find the farthest node from that point. In this way, you will get the diameter of the tree.
+
+Here’s my code for reference : code 7
+
+Also, your code is not visible. So if you still face difficulty just run your code on ideone and paste a link here.
+
+I hope that helps, thank you :slight_smile:
+
+*********************************
+from collections import defaultdict
+
+def calculate_diameter(n, edges):
+    graph = defaultdict(list)  # Adjacency list representation of the tree
+
+    # Create the tree
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+
+    node = [0]
+    maxDepth = [0]
+    def dfs(source, depth,visited):
+        visited[source] = 1
+        if depth>maxDepth[0]:
+            maxDepth[0] = depth
+            node[0] = source
+        for child in graph[source]:
+            if visited[child] !=1:
+                dfs(child, depth+1, visited)
+        
+    # diameter = 0
+    visited = [0]*(n+1)
+    dfs(1, 0, visited)  # Start DFS from the root node
+    visited = [0]*(n+1)
+    dfs(node[0], 0,visited)
+    
+    return maxDepth[0]
+
+# Read input
+n = int(input())
+edges = []
+for _ in range(n - 1):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+
+# Calculate and print the diameter
+diameter = calculate_diameter(n, edges)
+print(diameter*3)
