@@ -1,0 +1,27 @@
+https://codeforces.com/contest/158/problem/C 
+**************************************
+n = int(input())
+ans = []
+for _ in range(n):
+    inp = input()
+    # print(ans)
+    if inp == "pwd":
+        temp = '/'.join(ans) 
+        if temp=="":
+            print('/')
+        else:
+            print(temp+'/' if temp[0]=='/' else '/'+temp+'/')
+    else:
+        command, inp = inp.split(" ")
+        if command == 'cd':
+            if inp[0] == "/":
+                ans = []
+            for string in inp.split('/'):
+                if string == "..":
+                    if len(ans)>0:
+                        ans.pop()
+                elif string == '':
+                    continue
+                else:
+                    ans.append(string)
+    
