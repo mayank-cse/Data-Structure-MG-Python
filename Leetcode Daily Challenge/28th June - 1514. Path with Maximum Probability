@@ -1,0 +1,63 @@
+https://leetcode.com/problems/path-with-maximum-probability/
+*********************************************DFS
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        #first create adj matrix
+        adj = [[] for _ in range(n)]
+        for i in range(len(edges)):
+            u,v = edges[i]
+            prob = succProb[i]
+            adj[u].append((v, prob))
+            adj[v].append((u,prob))
+        # print(adj)
+        visited = ['0' for _ in range(n)]
+        # dp = {}
+        def helper(start,end, visited):
+            if start == end:
+                return 1
+            if start>=n:
+                return 0
+            
+            # if (start, ''.join(visited)) in dp:
+            #     return dp[(start, ''.join(visited))]
+            ans = 0
+            for neighbr,prob in adj[start]:
+                if visited[neighbr]=="0":
+                    visited[neighbr] = "1"
+                    ans = max(ans,prob*helper(neighbr,end, visited))
+                    visited[neighbr] = "0"
+            # dp[(start, ''.join(visited))] = ans
+            return ans
+        return helper(start, end, visited)
+*************************************BFS - special not with visited
+import heapq
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        #first create adj matrix
+        adj = [[] for _ in range(n)]
+        for i in range(len(edges)):
+            u,v = edges[i]
+            prob = succProb[i]
+            adj[u].append((v, prob))
+            adj[v].append((u,prob))
+        
+        prob = {i:-1 for i in range(n)}
+        prob[start] = 1
+        queue = [(-prob[start], start)]
+        maxProfit = 0
+        while queue:
+            probability, start = heapq.heappop(queue)
+            probability = -1*probability
+            if start == end:
+                if probability>maxProfit:
+                    maxProfit = probability
+                # continue
+            for neighbr, p in adj[start]:
+                if probability*p>prob[neighbr]:
+                    prob[neighbr] = probability*p
+                    heapq.heappush(queue,(-prob[neighbr],neighbr))
+            
+        return maxProfit
+            
+        
+
