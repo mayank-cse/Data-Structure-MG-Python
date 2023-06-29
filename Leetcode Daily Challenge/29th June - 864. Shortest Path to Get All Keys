@@ -1,0 +1,92 @@
+********************************DFS - Please note we just to need to find all the keys in shorted time - not in the same route
+class Solution:
+    def shortestPathAllKeys(self, grid: List[str]) -> int:
+        keys = {}
+        visited = {}
+        startRow, startCol = 0,0
+        count = 0
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if grid[row][col] == '@':
+                    startRow= row
+                    startCol = col
+                if grid[row][col]>='a' and grid[row][col]<='z':
+                    count+=1 
+        print(startRow, startCol, count)
+        m = len(grid)
+        n = len(grid[0])
+        def helper(row,col, count):
+            print(row,col, keys, count, visited)
+            if row>=m:
+                return 1e9
+            if col>=n:
+                return 1e9
+            flag = 0
+            if grid[row][col] == "#":
+                return 1e9
+              if grid[row][col]>='A' and grid[row][col]<='Z' and grid[row][col].lower() not in keys:
+                return 1e9
+            if grid[row][col]>='a' and grid[row][col]<='z':
+                count -=1
+                keys[grid[row][col]] = 1
+                flag = 1
+            if count == 0:
+                return 1
+            visited[(row,col)] = 1
+            ans = 1e5
+            # 4 direction calls
+            # down
+            if row+1<m and (row+1,col) not in visited:
+                ans = min(ans,1+helper(row+1, col, count))
+            # right
+            if col+1<n and (row,col+1) not in visited:
+                ans = min(ans,1+helper(row, col+1, count))
+            # up
+            if row-1>=0 and (row-1,col) not in visited:
+                ans = min(ans,1+helper(row-1, col, count))
+            # left
+            if col-1>=0 and (row,col-1) not in visited:
+                ans = min(ans,1+helper(row, col-1, count))
+            del visited[(row,col)]
+            if flag == 1:
+                del keys[grid[row][col]]
+                count+=1
+            return ans
+        temp = helper(startRow,startCol, count)-1
+        return (temp if temp!=1e5-1 else -1)
+*************************************
+class Solution:
+    def shortestPathAllKeys(self, grid: List[str]) -> int:
+        m=len(grid)
+        n=len(grid[0])
+        arr=deque([])
+        numOfKeys=0
+        keys={'a':0,'b':1,'c':2,'d':3,'e':4,'f':5}
+        locks={'A':0,'B':1,'C':2,'D':3,'E':4,'F':5}
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='@':
+                    arr.append((i,j,0,0))
+                elif grid[i][j] in keys:
+                    numOfKeys+=1
+
+        visited=set()
+        while arr:
+            size=len(arr)
+            for _ in range(size):
+                i,j,found,steps=arr.popleft()
+                curr=grid[i][j]
+                if curr in locks and not (found>>locks[curr]) & 1 or curr=='#':
+                    continue
+
+                if curr in keys:
+                    found |=1<<keys[curr]
+                    if found==(1<<numOfKeys)-1:
+                        return steps
+
+                for x,y in [(i+1,j),(i,j+1),(i-1,j),(i,j-1)]:
+                    if 0<=x<m and 0<=y<n and (x,y,found) not in visited:
+                        visited.add((x,y,found))
+                        arr.append((x,y,found,steps+1))
+
+        return -1                                            
