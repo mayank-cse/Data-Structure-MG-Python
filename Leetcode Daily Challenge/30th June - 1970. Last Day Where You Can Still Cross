@@ -1,0 +1,110 @@
+*********************************My soln. not working :(
+class Solution:
+    def latestDayToCross(self, nrow: int, ncol: int, cells: List[List[int]]) -> int:
+        days = 0
+        grid = [[0 for col in range(ncol)] for row in range(nrow)]
+        def helper(row,col, visited, grid):
+            if row == nrow-1:
+                return True
+            if grid[row][col]==1:
+                return False
+            for x,y in [(1,0),(0,1),(-1,0),(0,-1)]:
+                if row+x<nrow and col+y<ncol and row+x>=0 and col+y>=0 and grid[row+x][col+y] != 1 and visited[row+x][col+y]!=1:
+                    visited[row+x][col+y] = 1
+                    if helper(row+x, col+y, visited, grid):
+                        return True
+                    visited[row+x][col+y] = -1
+            return False
+        count = 0
+        col = 0 
+        i = 0
+        start = 0
+        end = len(cells)-1
+        ans = 0
+        while start<=end and col<ncol:
+            mid = start+(end-start)//2
+            grid = [[0 for col in range(ncol)] for row in range(nrow)]
+            # print(mid)
+            for i in range(mid+1):
+                x,y = cells[i]
+                x-=1
+                y-=1
+                grid[x][y] = 1
+            # print(grid)
+            flag = 0
+            for col in range(ncol):
+                if helper(0,col,[[0 for col in range(ncol)] for row in range(nrow)], grid):
+                    ans = mid
+                    start = mid+1
+                    flag = 1
+                    i = col
+                    break
+            if flag == 0:
+                end = mid-1
+        return ans+1
+
+
+
+
+
+        # start = 0
+        # end = ncol-1
+        # while i < len(cells) and start<=end:
+        #     x,y = cells[i]
+        #     x-=1
+        #     y-=1
+        #     grid[x][y] = 1
+        #     col = start + (end-start)//2
+        #     print(col)
+        #     if helper(0,col,[[-1 for col in range(ncol)] for row in range(nrow)], grid):
+        #         i+=1
+        #     else:
+        #         start = col+1
+        # return i
+
+************************************************Binary Search + DFS
+class Solution:
+    def __init__(self):
+        self.row = 0
+        self.col = 0
+        self.cells = []
+        self.directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+
+    def latestDayToCross(self, row, col, cells):
+        self.row = row
+        self.col = col
+        self.cells = cells
+        
+        left = 1
+        right = len(cells)
+        while left < right:
+            mid = right - (right - left) // 2
+            if self.canCross(mid):
+                left = mid
+            else:
+                right = mid - 1
+        return left
+    
+    def canCross(self, day):
+        grid = [[0] * self.col for _ in range(self.row)]
+        for i in range(day):
+            grid[self.cells[i][0] - 1][self.cells[i][1] - 1] = 1
+        
+        for i in range(self.col):
+            if grid[0][i] == 0 and self.dfs(grid, 0, i):
+                return True
+        return False
+    
+    def dfs(self, grid, r, c):
+        if r < 0 or r >= self.row or c < 0 or c >= self.col or grid[r][c] != 0:
+            return False
+        
+        if r == self.row - 1:
+            return True
+        grid[r][c] = -1
+        for direction in self.directions:
+            i = r + direction[0]
+            j = c + direction[1]
+            if self.dfs(grid, i, j):
+                return True
+        return False
