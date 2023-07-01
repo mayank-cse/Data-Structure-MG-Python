@@ -1,0 +1,57 @@
+**********************************36/38 passed
+class Solution:
+    def distributeCookies(self, cookies: List[int], k: int) -> int:
+        # ans = [float('inf')]
+        children = [0 for _ in range(k)]
+        # @cache
+        dp = {}
+        def helper(ind):
+            if ind == len(cookies):
+                return max(children)
+            ans = 1e9
+            if (ind, str(children)) in dp:
+                return dp[(ind, str(children))]
+            for i in range(k):
+                children[i] += cookies[ind]
+                ans = min(ans,helper(ind+1))
+                children[i]-= cookies[ind]
+            dp[(ind, str(children))] = ans
+            return ans
+        return helper(0)
+**************************************38/38 passed still TLE HOW???
+class Solution:
+    def distributeCookies(self, cookies: List[int], k: int) -> int:
+        self.ans = float('inf')
+        def helper(ind, children):
+            if ind == len(cookies):
+                self.ans = min(self.ans,max(children))
+                return
+            if max(children)>=self.ans:
+                return
+            for i in range(k):
+                children[i] += cookies[ind]
+                helper(ind+1, children)
+                children[i]-= cookies[ind]
+            return
+        children = [0 for _ in range(k)]
+        helper(0,children)
+        return self.anS
+******************************************
+class Solution:
+    def distributeCookies(self, cookies: List[int], k: int) -> int:
+        # ans = [float('inf')]
+        children = [0 for _ in range(k)]
+        # @cache
+        dp = {}
+        def helper(ind):
+            if ind == len(cookies):
+                return max(children)
+            ans = 1e9
+            for i in range(k):
+                children[i] += cookies[ind]
+                if ans>max(children):
+                    ans = min(ans,helper(ind+1))
+                children[i]-= cookies[ind]
+            return ans
+        return helper(0)
+        
