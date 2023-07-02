@@ -1,0 +1,50 @@
+**********************************As the constraints were low, we could use the brute force recursive approach
+class Solution:
+    def maximumRequests(self, n: int, requests: List[List[int]]) -> int:
+        #options not take, take
+        count = [0 for _ in range(n)]
+        self.ans = float('-inf')
+        def helper(ind, reqTaken):
+            if ind == len(requests):
+                flag = 0
+                for i in range(n):
+                    if count[i] != 0:
+                        flag = 1
+                        break
+                if flag == 0:
+                    self.ans = max(self.ans,reqTaken)
+                return 
+            # Not Taken
+            helper(ind+1, reqTaken)
+            count[requests[ind][0]] += 1
+            count[requests[ind][1]] -= 1
+            helper(ind+1,reqTaken+1)
+            count[requests[ind][0]] -= 1
+            count[requests[ind][1]] += 1
+            return
+        helper(0,0)
+        return self.ans
+*************************************        
+class Solution:
+    def maximumRequests(self, n: int, requests: List[List[int]]) -> int:
+        #options not take, take
+        count = [0 for _ in range(n)]
+        def helper(ind, reqTaken):
+            if ind == len(requests):
+                flag = 0
+                for i in range(n):
+                    if count[i] != 0:
+                        flag = 1
+                        break
+                if flag == 0:
+                    return reqTaken
+                return float('-inf')
+            # Not Taken
+            notTake = helper(ind+1, reqTaken)
+            count[requests[ind][0]] += 1
+            count[requests[ind][1]] -= 1
+            take = helper(ind+1,reqTaken+1)
+            count[requests[ind][0]] -= 1
+            count[requests[ind][1]] += 1
+            return max(notTake, take)
+        return helper(0,0)
