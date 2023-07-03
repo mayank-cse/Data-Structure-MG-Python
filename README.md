@@ -6,12 +6,12 @@ This repository contains my solutions to LeetCode daily problems and Codeforces 
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#to-try-this-sample">Introduction</a></li>
-    <li><a href="#testing-the-bot-using-bot-framework-emulator">LeetCode Daily Problems</a></li>
-    <li><a href="#deploy-the-bot-to-azure">Codeforces Questions</a></li>
-    <li><a href="#flow-chart">Contributing</a></li>
-    <li><a href="#presentation">License</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#leetcode-daily-problems">LeetCode Daily Problems</a></li>
+    <li><a href="#codeforces-questions">Codeforces Questions</a></li>
+    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
   </ol>
 </details>
 
@@ -20,7 +20,7 @@ In this repository, you will find my solutions to various LeetCode daily problem
 
 The solutions are written in Python, providing clear and concise implementations of the algorithms and data structures required to solve the given problems. You can use these solutions as a reference to understand different approaches and techniques for problem-solving in Python.
 
-LeetCode Daily Problems
+## LeetCode Daily Problems
 The LeetCode Daily Problems section contains a collection of solutions to the daily coding challenges provided by LeetCode. Each problem is categorized under its respective difficulty level (Easy, Medium, or Hard) and includes the problem description, my solution, and the corresponding runtime and memory usage analysis.
 
 Feel free to explore the different folders and examine the solutions. If you find any issues or have alternative solutions that you would like to contribute, please follow the contributing guidelines.
@@ -38,6 +38,17 @@ The solutions are implemented in Python and showcase different algorithmic techn
 Contributions are welcome and encouraged! If you have alternative solutions, improved approaches, or additional problems that you would like to add to this repository, please follow the guidelines outlined in the contributing guidelines.
 
 Your contributions can help enhance the quality and diversity of problem-solving solutions available to other developers who are using this repository as a learning resource.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+## Contact
+
+Mayank Gupta - [@MayankGuptaCse1](https://twitter.com/MayankGuptacse1) - mayank.guptacse1@gmail.com
+
+Profile Link:  
+- [LeetCode](https://leetcode.com/mayank-gupta/)
+- [CodeForces](https://codeforces.com/profile/mayank.guptacse1)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
