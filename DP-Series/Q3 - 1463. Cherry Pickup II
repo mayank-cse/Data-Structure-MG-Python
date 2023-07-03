@@ -1,0 +1,82 @@
+https://leetcode.com/problems/cherry-pickup-ii/description/
+***********************************************
+class Solution:
+    def cherryPickup(self, grid: List[List[int]]) -> int:
+        nRow = len(grid)
+        nCol = len(grid[0])
+        def helper(row,col1, col2):
+            if row>=nRow or col1>=nCol or col2>=nCol:
+                return float('-inf')
+            if col1 == col2:
+                return max(helper(row,col1+1,col2), helper(row,col1-1,col2), helper(row,col1, col2-1), helper(row,col1, col2+1))
+            if row== nRow-1:
+                # print(row,col1,row,col2, nRow,nCol)
+                return grid[row][col1]+grid[row][col2]
+            ans = float('-inf')
+            # three Options
+            return grid[row][col1]+grid[row][col2] + max(helper(row+1,col1,col2),helper(row+1,col1,col2+1),helper(row+1,col1,col2-1),helper(row+1,col1+1,col2),helper(row+1,col1-1,col2),helper(row+1,col1+1,col2+1),helper(row+1,col1-1,col2-1),helper(row+1,col1+1,col2-1),helper(row+1,col1-1,col2+1))
+            
+        return helper(0,0,nCol-1)
+*********************************************
+class Solution:
+    def cherryPickup(self, grid: List[List[int]]) -> int:
+        nRow = len(grid)
+        nCol = len(grid[0])
+        dp = {}
+        def helper(row,col1, col2):
+            if row>=nRow or col1>=nCol or col2>=nCol:
+                return float('-inf')
+            if (row,col1,col2) in dp:
+                return dp[(row,col1,col2)]
+            if col1 == col2:
+                return max(helper(row,col1+1,col2), helper(row,col1-1,col2), helper(row,col1, col2-1), helper(row,col1, col2+1))
+            if row== nRow-1:
+                # print(row,col1,row,col2, nRow,nCol)
+                return grid[row][col1]+grid[row][col2]
+            ans = float('-inf')
+            # three Options
+            if row+1<nRow and 0<=col1<nCol and 0<=col2<nCol and col1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1,col2))
+            if row+1<nRow and 0<=col1<nCol and 0<=col2+1<nCol and col1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1,col2+1))
+            if row+1<nRow and 0<=col1<nCol and 0<=col2-1<nCol and col1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1,col2-1))
+            # if row+1<nRow and col1<nCol and col2<nCol and col1!=col2:
+            #     ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1,col2))
+            if row+1<nRow and 0<=col1+1<nCol and 0<=col2<nCol and col1+1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1+1,col2))
+            if row+1<nRow and 0<=col1-1<nCol and 0<=col2<nCol and col1-1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1-1,col2))
+            if row+1<nRow and 0<=col1+1<nCol and 0<=col2+1<nCol and col1+1!=col2+1:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1+1,col2+1))
+            if row+1<nRow and 0<=col1-1<nCol and 0<=col2-1<nCol and col1-1!=col2-1:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1-1,col2-1))
+            if row+1<nRow and 0<=col1+1<nCol and 0<=col2-1<nCol and col1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1+1,col2-1))
+            if row+1<nRow and 0<=col1-1<nCol and 0<=col2+1<nCol and col1-1!=col2:
+                ans = max(ans, grid[row][col1]+grid[row][col2]+helper(row+1,col1-1,col2+1))
+            dp[(row,col1,col2)] = ans
+            return ans
+        return helper(0,0,nCol-1)
+******************************
+class Solution:
+    def cherryPickup(self, grid: List[List[int]]) -> int:
+        @lru_cache(None)
+        def recurse(i,j1,j2):
+            if i == len(grid):
+                return 0
+            if j1 < 0 or j1 >= len(grid[0]) or j2 < 0 or j2 >= len(grid[0]):
+                return float('-inf')
+            result = grid[i][j1]
+            if j1 != j2:
+                result += grid[i][j2]
+            t =  float('-inf')
+            
+
+            result += max(recurse(i+1,j1+c,j2+c1)  for c in [-1,0,1] for c1 in [-1,0,1])
+            return result 
+
+           
+        return recurse(0,0,len(grid[0])-1)
+
+        
