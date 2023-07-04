@@ -1,0 +1,39 @@
+https://leetcode.com/problems/single-number-ii/description/
+*************************************
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        totalSum = sum(nums)
+        distinctSum = sum(set(nums)) * 3
+        return (distinctSum-totalSum)//2
+***************************************
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        result = 0
+        # Iterate through each bit position
+        for i in range(32):
+            count = 0
+            mask = (1 << i) % 2**32  # Adjust the mask to handle negative numbers
+
+            # Count the number of set bits at the current position
+            for num in nums:
+                if num & mask:
+                    count += 1
+
+            # If the count is not a multiple of 3, set the bit in the result
+            if count % 3 != 0:
+                result |= mask
+
+        # If the most significant bit is set, convert the result to a negative number
+        if result & (1 << 31):
+            result = result - (1 << 32)
+
+        return result
+**************************        
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        one = 0
+        two = 0
+        for num in nums:
+            one = (one^num) & ~two
+            two = (two^num) & ~one
+        return one
