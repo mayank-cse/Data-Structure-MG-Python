@@ -1,0 +1,32 @@
+***********************************
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+def subsetSumToK(n, k, arr):
+
+    # Write your code here
+    # Return a boolean variable 'True' or 'False' denoting the answer
+    dp = {}
+    def helper(ind, k):
+        if k==0:
+            return True
+        if (ind,k) in dp:
+            return dp[(ind,k)]
+        if ind>=n or k<0:
+            return False
+        taken = helper(ind+1,k-arr[ind])
+        notTaken = helper(ind+1,k)
+        dp[(ind,k)] = taken or notTaken
+        return taken or notTaken
+
+    return helper(0,k)
+    pass
+recursion- T.C. - O(2^N) everynode has two option take or not Take 
+           S.C. - O(K) Path Length
+DP - T.C. O(N*K) 
+     S.C. O(N*K) + O(N)
+    
+    
+
