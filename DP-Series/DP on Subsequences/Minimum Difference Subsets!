@@ -1,0 +1,98 @@
+Minimum Difference Subsets! --- AMAZING QUESTION
+Programming
+Dynamic Programming
+Medium
+58.8% Success
+
+238
+
+4
+
+Bookmark
+Asked In:
+Problem Description
+
+Given an integer array A containing N integers.
+
+You need to divide the array A into two subsets S1 and S2 such that the absolute difference between their sums is minimum.
+
+Find and return this minimum possible absolute difference.
+
+NOTE:
+
+Subsets can contain elements from A in any order (not necessary to be contiguous).
+Each element of A should belong to any one subset S1 or S2, not both.
+It may be possible that one subset remains empty.
+
+
+Problem Constraints
+1 <= N <= 100
+
+1 <= A[i] <= 100
+
+
+
+Input Format
+First and only argument is an integer array A.
+
+
+
+Output Format
+Return an integer denoting the minimum possible difference among the sums of two subsets.
+
+
+
+Example Input
+Input 1:
+
+ A = [1, 6, 11, 5]
+
+
+Example Output
+Output 1:
+
+ 1
+
+
+Example Explanation
+Explanation 1:
+
+ Subset1 = {1, 5, 6}, sum of Subset1 = 12
+ Subset2 = {11}, sum of Subset2 = 11
+
+***********************************
+class Solution:
+    # @param A : list of integers
+    # @return an integer
+    def solve(self, A):
+        n = len(A)
+        dp = {}
+        def helper(ind, target,dp):
+            if ind==n:
+                if target == 0:
+                    return True
+                else:
+                    return False
+            if dp[ind][target] != -1:
+                return dp[ind][target]
+            take = False
+            if A[ind]<=target:
+                take = helper(ind+1,target-A[ind],dp)
+            notTake = helper(ind+1, target,dp)
+            dp[ind][target] = take or notTake
+            return dp[ind][target]
+        temp = sum(A)
+        for target in range(temp//2,-1,-1):
+            dp = [[-1 for _ in range(target+1)] for _ in range(101)]
+            if helper(0,target,dp):
+                return abs(temp-2*target)
+            
+The minimum absolute difference is: 0
+
+Time Complexity: O(N*totSum) +O(N) +O(N)
+
+Reason: There are two nested loops that account for O(N*totSum), at starting we are running a for loop to calculate totSum and at last a for loop to traverse the last row.
+
+Space Complexity: O(N*totSum) + O(N)
+
+Reason: We are using an external array of size ‘N * totSum’ and a stack space of O(N).
