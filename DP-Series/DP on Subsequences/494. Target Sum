@@ -1,0 +1,24 @@
+https://leetcode.com/problems/target-sum/description/
+*****************************
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        dp = {}
+        def helper(ind,val):
+            if ind == n:
+                if val == target:
+                    return 1
+                else:
+                    return 0
+            if (ind,val) in dp:
+                return dp[(ind,val)]
+            # plus
+            plus = helper(ind+1,val+nums[ind])
+            # minus
+            minus = helper(ind+1,val-nums[ind])
+            dp[(ind,val)] = plus+minus
+            return plus + minus
+        return helper(0,0)
+**************************Complexity
+T.C. - O(N*val)
+S.C. - O(N*val) + O(N)
