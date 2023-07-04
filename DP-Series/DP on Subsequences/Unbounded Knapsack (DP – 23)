@@ -1,0 +1,39 @@
+#User function Template for python3
+
+class Solution:
+    def knapSack(self, n, W, val, wt):
+        # code here
+        dp = [[-1 for _ in range(W+1)] for _ in range(n)]
+        def helper(ind, W):
+            if W == 0:
+                return 0
+            if ind >= n:
+                return 0
+            
+            if dp[ind][W] != -1:
+                return dp[ind][W]
+            take = float('-inf')
+            if wt[ind]<=W:
+                take = val[ind]+helper(ind, W-wt[ind])
+            notTake = helper(ind+1,W)
+            dp[ind][W] = max(take,notTake)
+            return dp[ind][W]
+        return max(0,helper(0,W))
+*********************
+class Solution:
+    def knapSack(self, n, W, val, wt):
+        t = [[-1 for _ in range(W+1)]for _ in range(n+1)]
+        
+        #  Initialization
+        for i in range(n+1):
+            for j in range(W+1):
+                if i==0 or j==0:
+                    t[i][j] = 0
+                    
+        # recursive to iterative 
+        #  coding choice diagram:
+                elif wt[i-1] <= j:
+                    t[i][j] = max(val[i-1]+t[i][j-wt[i-1]],t[i-1][j])
+                else:
+                    t[i][j] = t[i-1][j]
+        return t[n][W]
