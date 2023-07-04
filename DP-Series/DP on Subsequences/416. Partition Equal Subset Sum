@@ -1,0 +1,141 @@
+*************************************Recursion
+def canPartition(arr, n):
+    # Write your code here.
+    def helper(ind,sum1, sum2):
+        if ind==n:
+            if sum1==sum2:
+                return True
+            else:
+                return False
+        takeLeft = helper(ind+1, sum1+arr[ind], sum2)
+        takeRight = helper(ind+1, sum1, sum2+arr[ind])
+        return takeLeft or takeRight
+    return helper(0,0,0)
+    pass
+***********************************DP
+def canPartition(arr, n):
+    # Write your code here.
+    dp = {}
+    def helper(ind,sum1, sum2):
+        if ind==n:
+            if sum1==sum2:
+                return True
+            else:
+                return False
+        if (ind,sum1,sum2) in dp:
+            return dp[(ind,sum1,sum2)]
+        takeLeft = helper(ind+1, sum1+arr[ind], sum2)
+        takeRight = helper(ind+1, sum1, sum2+arr[ind])
+        dp[(ind,sum1,sum2)] = takeLeft or takeRight
+        return takeLeft or takeRight
+    return helper(0,0,0)
+    pass
+*******************************Memory Optimization
+class Solution:
+    def canPartition(self, arr: List[int]) -> bool:
+        n = len(arr)
+        dp = {}
+        def helper(ind,diff):
+            if ind==n:
+                if diff == 0:
+                    return True
+                else:
+                    return False
+            if (ind,diff) in dp:
+                return dp[(ind,diff)]
+            takeLeft = helper(ind+1, diff+arr[ind])
+            takeRight = helper(ind+1, diff-arr[ind])
+            dp[(ind,diff)] = takeLeft or takeRight
+            return takeLeft or takeRight
+        return helper(0,0)
+**************************************Condition Optimization 
+class Solution:
+    def canPartition(self, arr: List[int]) -> bool:
+        n = len(arr)
+        dp = {}
+        def helper(ind,diff):
+            if ind==n:
+                if diff == 0:
+                    return True
+                else:
+                    return False
+            if (ind,diff) in dp:
+                return dp[(ind,diff)]
+            takeLeft = helper(ind+1, diff+arr[ind])
+            takeRight = helper(ind+1, diff-arr[ind])
+            dp[(ind,diff)] = takeLeft or takeRight
+            return takeLeft or takeRight
+        if sum(arr)%2!=0:
+            return False
+        return helper(0,0)
+********************************Changing Technique
+class Solution:
+    def canPartition(self, arr: List[int]) -> bool:
+        n = len(arr)
+        dp = {}
+        def helper(ind,target):
+            if ind==n:
+                if target == 0:
+                    return True
+                else:
+                    return False
+            if (ind,target) in dp:
+                return dp[(ind,target)]
+            takeLeft = helper(ind+1, target)
+            takeRight = helper(ind+1, target-arr[ind])
+            dp[(ind,target)] = takeLeft or takeRight
+            return takeLeft or takeRight
+        temp = sum(arr)
+        if temp%2!=0:
+            return False
+        target = temp//2
+        return helper(0,target)
+********************************Condition Optimization
+class Solution:
+    def canPartition(self, arr: List[int]) -> bool:
+        n = len(arr)
+        dp = {}
+        def helper(ind,target):
+            if ind==n:
+                if target == 0:
+                    return True
+                else:
+                    return False
+            if target<0:
+                return False
+            if (ind,target) in dp:
+                return dp[(ind,target)]
+            takeLeft = helper(ind+1, target)
+            takeRight = helper(ind+1, target-arr[ind])
+            dp[(ind,target)] = takeLeft or takeRight
+            return takeLeft or takeRight
+        temp = sum(arr)
+        if temp%2!=0:
+            return False
+        target = temp//2
+        return helper(0,target)
+********************************(ACCEPTED)
+class Solution:
+    def canPartition(self, arr: List[int]) -> bool:
+        temp = sum(arr)
+        if temp%2!=0:
+            return False
+        target = temp//2
+        n = len(arr)
+        dp = [[-1]*(target+1) for _ in range(n)]
+        def helper(ind,target):
+            if ind==n:
+                if target == 0:
+                    return True
+                else:
+                    return False
+            if dp[ind][target]!=-1:
+                return dp[ind][target]
+            takeLeft = helper(ind+1, target)
+            if arr[ind]<=target:
+                takeRight = helper(ind+1, target-arr[ind])
+            else:
+                takeRight = False
+            dp[ind][target] = takeLeft or takeRight
+            return dp[ind][target]
+        return helper(0,target)
