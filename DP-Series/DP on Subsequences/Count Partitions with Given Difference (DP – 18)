@@ -1,0 +1,65 @@
+https://www.codingninjas.com/studio/problems/partitions-with-given-difference_3751628?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=1
+***************************Recursion
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+from typing import List
+
+
+def countPartitions(n: int, d: int, arr: List[int]) -> int:
+    # write your code here
+    totalSum = sum(arr)
+    if totalSum-d<0:
+        return 0
+    if (totalSum-d) %2 != 0:
+        return 0 
+    def helper(ind,target):
+        if ind == n:
+            if target == 0 :
+                return 1
+            else:
+                return 0
+        take = 0
+        if arr[ind]<=target:
+            take = helper(ind+1, target-arr[ind])
+        notTake = helper(ind+1,target)
+        return take + notTake
+    return helper(0, (totalSum-d)//2)
+    pass
+********************************Dynamic Programming 
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+from typing import List
+
+
+def countPartitions(n: int, d: int, arr: List[int]) -> int:
+    # write your code here
+    mod = 1e9+7
+    totalSum = sum(arr)
+    if totalSum-d<0:
+        return 0
+    if (totalSum-d) %2 != 0:
+        return 0 
+    dp = [[-1 for _ in range(((totalSum-d)//2+1))] for _ in range(n)]
+    def helper(ind,target):
+        if ind == n:
+            if target == 0 :
+                return 1
+            else:
+                return 0
+        if dp[ind][target] != -1:
+            return dp[ind][target]
+        take = 0
+        if arr[ind]<=target:
+            take = helper(ind+1, target-arr[ind])
+        notTake = helper(ind+1,target)
+        dp[ind][target] = take + notTake
+        return (take + notTake)%mod
+    a = helper(0, (totalSum-d)//2)
+    return int(a)
+    pass
