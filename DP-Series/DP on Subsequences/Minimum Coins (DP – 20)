@@ -1,0 +1,19 @@
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [[-1 for _ in range(amount+1)] for _ in range(len(coins))]
+        def helper(ind, amount):
+            n = len(coins)
+            if amount == 0:
+                return 0
+            if ind == n:
+                return 1e9
+            if dp[ind][amount] != -1:
+                return dp[ind][amount]
+            take = 1e9
+            if amount >=coins[ind]:
+                take = 1+helper(ind,amount-coins[ind])
+            notTake = helper(ind+1, amount)
+            dp[ind][amount] = min(take,notTake)
+            return min(take,notTake)
+        temp = helper(0,amount)
+        return (temp if temp != 1e9 else -1) 
