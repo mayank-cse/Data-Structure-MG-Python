@@ -1,0 +1,49 @@
+*******************************Greedy
+class Solution:
+    def cutRod(self, price, n):
+        #code here
+        temp = price
+        if len(temp)==0:
+            return 0
+        profitRatio = []
+        for i in range(n):
+            profitRatio.append((price[i]/(i+1),price[i],i+1))
+        # print(profitRatio)
+        temp = max(profitRatio)
+        count = n//temp[2]
+        rem = n%temp[2]
+        ans = temp[1]*count + self.cutRod(price[:rem],rem)
+        return ans
+*******************************Recursion + DP
+#User function Template for python3
+
+class Solution:
+    def cutRod(self, price, n):
+        #code here
+        dp = [-1 for _ in range(1001)]
+        def helper(n):
+            if n == 0:
+                return 0
+            if dp[n]!=-1:
+                return dp[n]
+            ans = 0
+            for ind in range(n):
+                if ind+1<=n:
+                    ans = max(ans,price[ind] + helper(n-ind-1))
+            dp[n] = ans
+            return ans
+        return helper(n)
+*******************************Iteration
+
+class Solution:
+    def cutRod(self, price, n):
+    # Initialize the dp array with 0
+        dp = [0] * (n + 1)
+        
+        for i in range(1, n + 1):
+            max_val = float('-inf')
+            for j in range(i):
+                max_val = max(max_val, price[j] + dp[i - j - 1])
+            dp[i] = max_val
+        
+        return dp[n]
