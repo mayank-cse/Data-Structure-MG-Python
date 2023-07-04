@@ -37,3 +37,37 @@ class Solution:
             one = (one^num) & ~two
             two = (two^num) & ~one
         return one
+Apologies for the confusion. I made an error in my previous response. Let's correct the explanation for the testcase [2, 3, 2, 2].
+
+Processing the first number, 2:
+
+ones = (0 ^ 2) & ~0 = 2 & ~0 = 2
+twos = (0 ^ 2) & ~2 = 2 & -2 = 0
+Processing the second number, 3:
+
+ones = (2 ^ 3) & ~0 = 1 & ~0 = 1
+twos = (0 ^ 3) & ~1 = 3 & -2 = 2
+Processing the third number, 2:
+
+ones = (1 ^ 2) & ~2 = 3 & -3 = 1
+twos = (2 ^ 2) & ~1 = 0 & -2 = 0
+Processing the fourth number, 2:
+
+ones = (1 ^ 2) & ~0 = 3 & ~0 = 3
+twos = (0 ^ 2) & ~3 = 2 & -4 = 0
+
+The solution uses a bitwise operation called XOR (exclusive OR) to find the single element that appears exactly once in an array where all other elements appear three times.
+
+We maintain two variables: ones and twos. The ones variable keeps track of the bits where the single element has a set bit (appeared once), and the twos variable keeps track of the bits where the single element has a set bit (appeared twice).
+
+We iterate through the array, and for each number, we update ones and twos as follows:
+
+Updating ones: We XOR the current number with ones, which toggles the bits that have appeared once. Then, we apply a bitwise AND with the complement of twos to ensure that the bits that have appeared twice are not considered in the count.
+
+Updating twos: We XOR the current number with twos, which toggles the bits that have appeared twice. Then, we apply a bitwise AND with the complement of ones to ensure that the bits that have appeared once are not considered in the count.
+
+Finally, after processing all the numbers, the value of ones will represent the bits where the single element has a set bit (appeared once). This is because the bits that appeared three times are canceled out, and only the bits of the single element remain.
+
+Therefore, the value of ones identifies the single element in the array, and that is the result returned by the function.
+
+This solution has a linear runtime complexity, as we iterate through the array once, and it uses constant extra space since we only use a few integer variables (ones and twos).
