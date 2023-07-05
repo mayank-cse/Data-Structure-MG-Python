@@ -1,0 +1,42 @@
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+def canYouMake(s: str, p: str) -> int:
+    # Write your code here.
+    dp = [[-1 for _ in range(len(p)+1)] for _ in range(len(s))]
+    def helper(ind1,ind2):
+        if ind1 == len(s):
+            return len(p)-ind2 # all add
+        if ind2 == len(p):
+            return len(s)-ind1 #all delete
+        if dp[ind1][ind2]!=-1:
+            return dp[ind1][ind2]
+        take = 1e9
+        if s[ind1] == p[ind2]:
+            take = helper(ind1+1, ind2+1)
+        notTake = 1+ min(helper(ind1+1,ind2), helper(ind1,ind2+1))
+        dp[ind1][ind2] = min(take,notTake)
+        return min(take, notTake)
+    return helper(0,0)
+    pass
+************************Tabulation
+from os import *
+from sys import *
+from collections import *
+from math import *
+
+def canYouMake(s: str, p: str) -> int:
+    # Write your code here.
+    dp = [[0 for _ in range(len(p)+1)] for _ in range(len(s)+1)]
+    
+    for ind1 in range(1,len(s)+1):
+        for ind2 in range(1,len(p)+1):
+            if s[ind1-1] == p[ind2-1]:
+                dp[ind1][ind2] = 1+dp[ind1-1][ind2-1]
+            else:
+                dp[ind1][ind2] = max(dp[ind1-1][ind2], dp[ind1][ind2-1])
+    # print(dp)
+    return (len(s)-dp[len(s)][len(p)]) + (len(p)-dp[len(s)][len(p)])
+    pass
