@@ -1,0 +1,36 @@
+https://leetcode.com/problems/edit-distance/
+***********************
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        if len(word1)==0: return len(word2)
+        if len(word2)==0: return len(word1)
+        # @lru_cache(None)
+        def helper(ind1, ind2 , word1, word2,dp):
+            if ind1<0 and ind2<0:
+                return 0
+            if ind1<0:
+                return ind2+1
+            if ind2<0:
+                return ind1+1
+            if (ind1, ind2) in dp:
+                return dp[(ind1,ind2)]
+            if word1[ind1]==word2[ind2]:
+                return helper(ind1-1,ind2-1,word1, word2,dp)
+            length = 1+helper(ind1-1,ind2, word1,word2,dp) #Deletion
+            length = min(length, 1+helper(ind1,ind2-1, word1, word2, dp)) #insertion
+            length = min(length, 1+helper(ind1-1,ind2-1,word1, word2, dp)) #Replace
+            dp[(ind1, ind2)] = length
+            return length
+        dp = {}#[[-1 for _ in range(len(word1)+1)] for _ in range(len(word2)+1)]
+        return helper(len(word1)-1, len(word2)-1, word1, word2,dp)
+*****************************Complexity
+Output: The minimum number of operations required is: 3
+
+Time Complexity: O(N*M)
+
+Reason: There are N*M states therefore at max ‘N*M’ new problems will be solved.
+
+Space Complexity: O(N*M) + O(N+M)
+
+Reason: We are using a recursion stack space(O(N+M)) and a 2D array ( O(N*M)).
+
