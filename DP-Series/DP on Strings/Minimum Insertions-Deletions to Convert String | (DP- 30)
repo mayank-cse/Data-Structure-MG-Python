@@ -21,7 +21,8 @@ def canYouMake(s: str, p: str) -> int:
         return min(take, notTake)
     return helper(0,0)
     pass
-************************Tabulation
+************************Tabulation or LCS -> len(s)+len(p)-2*(LCS)
+https://www.youtube.com/watch?v=yMnH0jrir0Q&ab_channel=takeUforward
 from os import *
 from sys import *
 from collections import *
@@ -40,3 +41,4 @@ def canYouMake(s: str, p: str) -> int:
     # print(dp)
     return (len(s)-dp[len(s)][len(p)]) + (len(p)-dp[len(s)][len(p)])
     pass
+********************************
