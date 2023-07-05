@@ -1,0 +1,48 @@
+class Solution:
+    def shortestCommonSupersequence(self, text1: str, text2: str) -> str:
+        lengthText1 = len(text1)
+        lengthText2 = len(text2)
+        dp = [[0 for _ in range(lengthText2+1)] for _ in range(lengthText1+1)]
+        for ind1 in range(1,lengthText1+1):
+            for ind2 in range(1,lengthText2+1):
+                if text1[ind1-1] == text2[ind2-1]:
+                    dp[ind1][ind2] = 1 + dp[ind1-1][ind2-1]
+                else:
+                    notTake1 = dp[ind1-1][ind2]
+                    notTake2 = dp[ind1][ind2-1]
+                    dp[ind1][ind2] = max(notTake1,notTake2)
+        # print(dp)
+        self.ans = ""
+        x = lengthText1
+        y = lengthText2
+        while x>0 and y>0:
+            temp = dp[x][y]
+            above = dp[x-1][y]
+            left = dp[x][y-1]
+            if text1[x-1]==text2[y-1]:
+                self.ans += text1[x-1]
+                x-=1
+                y-=1
+            if temp == above:
+                x-=1
+                self.ans += text1[x]
+            elif temp == left:
+                y-=1
+                self.ans += text2[y]
+        if x!=0:
+            self.ans += text1[:x][::-1]
+        if y!=0:
+            self.ans += text2[:y][::-1]
+        
+        return self.ans[::-1]
+***********************************
+The Longest Common Supersequence is bgruoote
+
+Time Complexity: O(N*M)
+
+Reason: There are two nested loops
+
+Space Complexity: O(N*M)
+
+Reason: We are using an external array of size (N*M).
+
