@@ -1,0 +1,39 @@
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        if len(s)==0:
+            return (True if p=='*'*len(p) else False)
+        dp = [[-1 for _ in range(len(p))] for _ in range(len(s))]
+        def helper(ind1, ind2):
+            if ind1==len(s) and ind2==len(p):
+                return True
+            if ind2 == len(p):
+                return False
+            if ind1==len(s):
+                return (True if p[ind2:]=='*'*(len(p)-ind2) else False)
+            if dp[ind1][ind2]!=-1:
+                return dp[ind1][ind2]
+            if p[ind2]=="?" or s[ind1]==p[ind2]:
+                if helper(ind1+1,ind2+1):
+                    dp[ind1][ind2] = 1
+                    return True
+            if p[ind2] == '*':
+                if helper(ind1+1,ind2):
+                    dp[ind1][ind2] = 1
+                    return True
+                if helper(ind1,ind2+1):
+                    dp[ind1][ind2] = 1
+                    return True
+            dp[ind1][ind2] = 0
+            return False
+        return helper(0,0)
+***************************
+String S1 and S2 do match
+
+Time Complexity: O(N*M)
+
+Reason: There are N*M states therefore at max ‘N*M’ new problems will be solved.
+
+Space Complexity: O(N*M) + O(N+M)
+
+Reason: We are using a recursion stack space(O(N+M)) and a 2D array ( O(N*M)).
+
