@@ -1,0 +1,45 @@
+# Intuition
+<!-- Describe your first thoughts on how to solve this problem. -->
+We can store all the indices where 1 is not present, as we have the option to delete only one among them. We'll loop and find the diff with left and right. One with max difference(i.e. maximum number of series of ones) is considered to be deleted and the difference is returned
+# Approach
+<!-- Describe your approach to solving the problem. -->
+- Initialize an empty list called notOne to store the indices of elements in nums that are not equal to 1. This list will be used to identify the non-continuous subarrays in nums.
+
+- Check if the length of the notOne list is either 0 or 1. If it is, it means that either all elements in nums are 1 or there is only one non-1 element. In both cases, we can remove at most one element from nums to form a subarray consisting of all 1s. Therefore, we return the length of nums minus 1 as the result.
+
+If the length of notOne is greater than 1, Iterate over the indices in the notOne list using a for loop.
+
+- For each index i in the notOne list, calculate the left index (left) and the right index (right) of the subarray containing only 1s. The left index is set to -1 if i is the first index in the notOne list; otherwise, it is set to the previous index (notOne[i-1]). Similarly, the right index is set to the length of nums if i is the last index in the notOne list; otherwise, it is set to the next index (notOne[i+1]).
+
+- Calculate the length of the subarray by subtracting the indices: notOne[i] - left - 1 represents the number of 1s on the left side of the non-1 element, and right - notOne[i] - 1 represents the number of 1s on the right side.
+
+- Update the ans variable by taking the maximum between the current ans and the length of the subarray calculated in the previous step. This ensures that we keep track of the longest subarray found so far.
+
+- After iterating over all indices in the notOne list, return the final value of ans as the result, representing the length of the longest subarray with only one non-1 element.
+
+- In summary, the solution identifies the non-1 elements in the input array nums and then iterates over those elements to find the longest subarray with only one non-1 element. The approach involves calculating the lengths of all possible subarrays by considering the non-1 elements as dividers and updating the maximum length (ans) accordingly.
+# Complexity
+- Time complexity:
+<!-- Add your time complexity here, e.g. $$O(n)$$ -->
+$$O(n)$$
+- Space complexity:
+<!-- Add your space complexity here, e.g. $$O(n)$$ -->
+$$O(n)$$
+# Code
+```
+class Solution:
+    def longestSubarray(self, nums: List[int]) -> int:
+        notOne = []
+        for ind, ele in enumerate(nums):
+            if ele != 1:
+                notOne.append(ind)
+        if len(notOne)==0 or len(notOne)==1:
+            return len(nums)-1
+        # [0,4,7]
+        ans = 0
+        for i in range(len(notOne)):
+            left = (-1 if i==0 else notOne[i-1])
+            right = (len(nums) if i==len(notOne)-1 else notOne[i+1])
+            ans = max(ans, (notOne[i]-left-1) + (right-notOne[i]-1))
+        return ans
+```
