@@ -1,0 +1,17 @@
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        half = len(s)
+        dp = [[-1 for _ in range(half+1)] for _ in range(half+1)]
+        def helper(left, right):
+            if left>=right:
+                return 0
+            if dp[left][right]!=-1:
+                return dp[left][right]
+            take = 1e9
+            notTake = 1e9
+            if s[left]==s[right]:
+                take = 0 + helper(left+1,right-1)
+            notTake = 1 + min(helper(left+1, right), helper(left,right-1))
+            dp[left][right] = min(take,notTake)    
+            return min(take, notTake)
+        return helper(0,len(s)-1)
