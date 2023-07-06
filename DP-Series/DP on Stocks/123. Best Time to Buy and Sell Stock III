@@ -1,0 +1,51 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/
+****************Template
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        # base = float('inf')
+        def getAns( ind, buy, cap, dp):
+            if ind == n or cap == 0:
+                return 0
+
+            if dp[ind][buy][cap] != -1:
+                return dp[ind][buy][cap]
+
+            profit = 0
+            if buy == 0:  # We can buy the stock
+                profit = max(0 + getAns(Arr, n, ind + 1, 0, cap, dp),
+                            -Arr[ind] + getAns(Arr, n, ind + 1, 1, cap, dp))
+
+            if buy == 1:  # We can sell the stock
+                profit = max(0 + getAns(Arr, n, ind + 1, 1, cap, dp),
+                            Arr[ind] + getAns(Arr, n, ind + 1, 0, cap - 1, dp))
+            dp[ind][buy][cap] = profit
+            return profit
+        n = len(prices)
+        dp = [[[-1 for _ in range(3)] for _ in range(3)] for _ in range(n+1)]
+        return getAns(prices, n, 0, 0, 2, dp)
+*********************Template
+class Solution:
+    def maxProfit(self, Arr: List[int]) -> int:
+        # base = float('inf')
+        n = len(Arr)
+        dp = [[[-1 for _ in range(3)] for _ in range(3)] for _ in range(n+1)]
+        def getAns(ind, buy, cap):
+            if ind == n or cap == 0:
+                return 0
+
+            if dp[ind][buy][cap] != -1:
+                return dp[ind][buy][cap]
+
+            profit = 0
+            if buy == 0:  # We can buy the stock
+                profit = max(0 + getAns(ind + 1, 0, cap),
+                            -Arr[ind] + getAns(ind + 1, 1, cap))
+
+            if buy == 1:  # We can sell the stock
+                profit = max(0 + getAns(ind + 1, 1, cap),
+                            Arr[ind] + getAns( ind + 1, 0, cap - 1))
+            dp[ind][buy][cap] = profit
+            return profit
+        return getAns( 0, 0, 2)
+
+            
