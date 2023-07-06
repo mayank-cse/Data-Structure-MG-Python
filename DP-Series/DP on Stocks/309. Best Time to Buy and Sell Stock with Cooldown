@@ -1,0 +1,27 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+******************************
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        # base = float('inf')
+        def getAns(Arr, n, ind, buy, cap, dp):
+            if ind >= n or cap == 0:
+                return 0
+
+            if dp[ind][buy][cap] != -1:
+                return dp[ind][buy][cap]
+
+            profit = 0
+
+            if buy == 0:  # We can buy the stock
+                profit = max(0 + getAns(Arr, n, ind + 1, 0, cap, dp),
+                            -Arr[ind] + getAns(Arr, n, ind + 1, 1, cap, dp))
+
+            if buy == 1:  # We can sell the stock
+                profit = max(0 + getAns(Arr, n, ind + 1, 1, cap, dp),
+                            Arr[ind] + getAns(Arr, n, ind + 2, 0, cap - 1, dp))
+
+            dp[ind][buy][cap] = profit
+            return profit
+        n = len(prices)
+        dp = [[[-1 for _ in range(n+1)] for _ in range(2)] for _ in range(n+1)]
+        return getAns(prices, n, 0, 0, n, dp)
