@@ -1,0 +1,64 @@
+***********************************O(N^2)
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        sums = [0]
+        sumC = 0
+        if sum(nums)<target:
+            return 0
+        for ele in nums:
+            sumC += ele
+            sums.append(sumC)
+        ans = 1e9
+        for ind, ele in enumerate(sums):
+            i = ind-1
+            while i>=-1:
+                if sums[ind]-sums[i]>=target:
+                    ans = min(ans,ind-i)
+                    break
+                else:
+                    i-=1
+        return ans
+**********************************O(NLog(N)) - Accepted
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        sums = [0]
+        sumC = 0
+        if sum(nums)<target:
+            return 0
+        for ele in nums:
+            sumC += ele
+            sums.append(sumC)
+        ans = 1e9
+        for ind, ele in enumerate(sums):
+            if ele>=target:
+                # Binary Search
+                right = ind
+                left = 0
+                tar = sums[ind]-target
+                while left<=right:
+                    mid = left + (right-left)//2
+                    if sums[mid]>tar:
+                        # in left
+                        right = mid-1
+                    else:
+                        left = mid+1
+                i = right
+                ans = min(ans, ind-i)
+
+        return ans
+*********************************O(N)
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        if sum(nums)<target:
+            return 0
+        #Sliding Window
+        sumC = 0
+        ans = len(nums)
+        k = 0
+        for ind, ele in enumerate(nums):
+            sumC+=ele
+            while sumC>=target:
+                sumC-=nums[k]
+                ans = min(ans, ind-k+1)
+                k+=1
+        return ans
