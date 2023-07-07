@@ -1,0 +1,112 @@
+*******************************This one is very high time complexity
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        def maxConsecutive(nums):
+            change = [0]
+            temp = nums[0]
+            for i,ele in enumerate(nums):
+                if ele != temp:
+                    change.append(i)
+                    temp = ele
+            change.append(len(nums))
+            maxDiff = 0
+            for i in range(1,len(change)):
+                maxDiff = max(maxDiff, change[i]-change[i-1])
+            return maxDiff
+        dp = [[-1 for _ in range(k+1)] for _ in range(len(answerKey))]
+        def helper(ind, k, nums):
+            if ind == len(nums) or k == 0:
+                return maxConsecutive(nums)
+            if dp[ind][k] != -1:
+                return dp[ind][k]
+            #convert or not
+            nums[ind] = (1 if nums[ind]==0 else 0)
+            convert = helper(ind+1,k-1, nums)
+            nums[ind] = (1 if nums[ind]==0 else 0)
+
+            notConvert = helper(ind+1,k, nums)
+            dp[ind][k] = max(convert, notConvert)
+            return max(convert, notConvert)
+        num = []
+        for char in answerKey:
+            num.append((0 if char=="F" else 1))
+        return helper(0,k,num)
+********************************Again wrong
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        change = [0]
+        temp = answerKey[0]
+        for i,char in enumerate(answerKey):
+            if char != temp:
+                change.append(i)
+                temp = char
+        change.append(len(answerKey))
+        diff = []
+        for i in range(1,len(change)):
+            diff.append(change[i]-change[i-1])
+        ans = 0
+        for i in range(len(diff)):
+            j = i+1
+            count = diff[i]
+            tempk = k
+            while j<len(diff):
+                if diff[j]>tempk:
+                    count+= tempk
+                    break
+                tempk -= diff[j]
+                count += diff[j] +(diff[j+1] if j+1<len(diff) else 0)
+                j +=2
+                
+            ans = max(ans, count)
+        diff = diff[::-1]
+        for i in range(len(diff)):
+            j = i+1
+            count = diff[i]
+            tempk = k
+            while j<len(diff):
+                if diff[j]>tempk:
+                    count+= tempk
+                    break
+                tempk -= diff[j]
+                count += diff[j] +(diff[j+1] if j+1<len(diff) else 0)
+                j +=2
+                
+            ans = max(ans, count)
+
+        return ans
+
+***************************Sliding Window
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        l = 0
+        r = 0
+        ans = 0
+        tempk = k
+        #Checking for longest Consecutive "T"
+        while r<len(answerKey):
+            if answerKey[r]=='F':
+                tempk-=1
+            if tempk<0:
+                ans = max(ans, r-l)
+                while tempk<0:
+                    if answerKey[l]=='F':
+                        tempk+=1
+                    l+=1
+            r+=1
+        ans = max(ans,r-l)
+        l = 0
+        r = 0
+        tempk = k
+        #Checking for longest Consecutive "F"
+        while r<len(answerKey):
+            if answerKey[r]=='T':
+                tempk-=1
+            if tempk<0:
+                ans = max(ans, r-l)
+                while tempk<0:
+                    if answerKey[l]=='T':
+                        tempk+=1
+                    l+=1
+            r+=1
+        ans = max(ans,r-l)
+        return ans
