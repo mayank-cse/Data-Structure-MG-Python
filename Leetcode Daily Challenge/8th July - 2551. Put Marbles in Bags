@@ -1,0 +1,30 @@
+******************************After Memorizing the recursive solution 93 out of 103 got passed 
+class Solution:
+    def putMarbles(self, weights: List[int], ok: int) -> int:
+        @cache
+        def helperMax(start, end, k):
+            if end == len(weights):
+                return float('-inf')
+            if end == len(weights)-1 and k==0:
+                return (weights[start]+weights[end])
+            # 2 options
+            cut = weights[start]+weights[end]+helperMax(end+1,end+1,k-1)
+            cutLater = helperMax(start, end+1,k)
+            return max(cut, cutLater)
+        @cache
+        def helperMin(start, end, k):
+            if end == len(weights):
+                return float('inf')
+            if end == len(weights)-1 and k==0:
+                return (weights[start]+weights[end])
+            # 2 options
+            cut = weights[start]+weights[end]+helperMin(end+1,end+1,k-1)
+            cutLater = helperMin(start, end+1,k)
+            return min(cut, cutLater)
+        return (helperMax(0,0,ok-1)-helperMin(0,0,ok-1))
+**********************************
+class Solution:
+    def putMarbles(self, weights: List[int], k: int) -> int:
+        arr = sorted(map(sum,(pairwise(weights))))
+        return sum(arr[-k+1:]) - sum(arr[:k-1]) if k > 1 else 0
+        
