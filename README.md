@@ -26,6 +26,7 @@ The LeetCode Daily Problems section contains a collection of solutions to the da
 Feel free to explore the different folders and examine the solutions. If you find any issues or have alternative solutions that you would like to contribute, please follow the contributing guidelines.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+<img width="951" alt="image" src="https://github.com/mayank-cse/Data-Structure-MG-Python/assets/72187020/a35aa709-89a7-41fb-aa78-700fb3da1c1c">
 
 ## Codeforces Questions
 The Codeforces Questions section contains my solutions to various Codeforces programming problems. Similar to the LeetCode section, each problem has its own folder with the problem statement, my solution, and any relevant notes.
