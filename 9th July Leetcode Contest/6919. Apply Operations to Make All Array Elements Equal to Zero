@@ -35,6 +35,10 @@ Constraints:
 1 <= k <= nums.length <= 105
 0 <= nums[i] <= 106
 ******************************
+1021 / 1022 test cases passed.
+Status: Time Limit Exceeded
+Submitted: 3 minutes ago
+
 class Solution:
     def checkArray(self, nums: List[int], k: int) -> bool:
         n = len(nums)
