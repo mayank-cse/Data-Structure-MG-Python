@@ -1,0 +1,99 @@
+class Solution:
+    def largestVariance(self, s: str) -> int:
+        if len(s)==1:
+            return 0
+        def calcVar(s):
+            d = Counter(s)
+            if len(d)==len(s):
+                return 0
+            mini, maxi = float('inf'),float('-inf')
+            for key, val in d.items():
+                mini = min(mini, val)
+                maxi = max(maxi, val)
+            return maxi-mini
+        ans = float('-inf')
+        for i in range(len(s)-1):
+            for j in range(i+1, len(s)):
+                ans = max(ans, calcVar(s[i:j+1]))
+        return ans
+*************************
+class Solution:
+    def largestVariance(self, s: str) -> int:
+        if len(s)==1:
+            return 0
+        def calcVar(s):
+            d = Counter(s)
+            if len(d)==len(s):
+                return 0
+            mini, maxi = float('inf'),float('-inf')
+            for key, val in d.items():
+                mini = min(mini, val)
+                maxi = max(maxi, val)
+            return maxi-mini
+        ans = float('-inf')
+        for i in range(len(s)-1):
+            x = s[i]
+            for j in range(i+1, len(s)):
+                x += s[j]
+                ans = max(ans, calcVar(x))
+        return ans
+***************************
+class Solution:
+    def largestVariance(self, s: str) -> int:
+        count1 = 0
+        count2 = 0
+        max_variance = 0
+        
+        # create distinct list of character pairs
+        pairs = [(l1, l2) for l1 in set(s) for l2 in set(s) if l1 != l2]
+
+        # run once for original string order, then again for reverse string order
+        for runs in range(2):
+            for pair in pairs:
+                count1 = count2 = 0
+                for letter in s:
+                    # no reason to process letters that aren't part of the current pair
+                    if letter not in pair:
+                        continue
+                    if letter == pair[0]:
+                        count1 += 1
+                    elif letter == pair[1]:
+                        count2 += 1
+                    if count1 < count2:
+                        count1 = count2 = 0
+                    elif count1 > 0 and count2 > 0:
+                        max_variance = max(max_variance, count1 - count2)
+                
+            
+            # reverse the string for the second time around
+            s = s[::-1]
+                
+        return max_variance
+  ***********************************
+  class Solution:
+    def largestVariance(self, s: str) -> int:
+        ans = float('-inf')
+        d = Counter(s)
+        if len(d) == 1 or len(d)==len(s):
+            return 0
+        for _ in range(2):
+            for i in d:
+                for j in d:
+                    c1 = i
+                    c2 = j
+                    if c1==c2:
+                        continue
+                    countC1 = 0
+                    countC2 = 0
+                    for char in s:
+                        if char==c1:
+                            countC1+=1
+                        if char== c2:
+                            countC2+=1
+                        if countC1<countC2:
+                            countC1=0
+                            countC2=0
+                        elif countC1>0 and countC2>0:
+                            ans = max(ans,(countC1-countC2))
+            s = s[::-1]
+        return ans
