@@ -1,0 +1,39 @@
+Intuition
+Tree question so it can solve by different traversal here order of nots doesnot matter because we are only calculating depth so we can solve by BfS and DFS
+
+Why BFS is preffered over DFS
+The efficiency of breadth-first search (BFS) and depth-first search (DFS) depends on the structure and size of the tree or graph being traversed. In the given code, BFS is likely to be faster than DFS in finding the minimum depth of a binary tree for the following reasons:
+
+Early termination: In BFS, the traversal starts from the root and explores all the nodes level by level. By using a queue, it ensures that nodes at the same level are processed before moving to the next level. This means that when we encounter a leaf node (a node without any children), we can immediately return the current depth as the minimum depth. BFS has a higher chance of finding the minimum depth earlier in the traversal, leading to early termination.
+
+Reduced search space: In BFS, we explore all nodes at the current level before moving to the next level. This property makes BFS more suitable for finding the minimum depth because it reduces the search space at each level. In contrast, DFS explores one branch as deeply as possible before backtracking. If the tree is unbalanced or skewed, DFS may explore a long branch before finding a leaf node, resulting in unnecessary exploration of a larger portion of the tree.
+
+Space complexity: BFS uses a queue to store the nodes, and the space complexity is proportional to the maximum number of nodes at any level. In the worst case, this can be equal to the maximum width of the tree. On the other hand, DFS typically uses the call stack for recursive calls, which can grow linearly with the depth of the tree. If the tree is unbalanced and has a large depth, DFS may require more stack space, potentially causing stack overflow.
+
+However, it's important to note that the relative efficiency of BFS and DFS can vary depending on the specific characteristics of the tree or graph being traversed. In some cases, DFS may be more efficient, especially when the desired node or solution is likely to be found deeper in the search space. Both algorithms have their strengths and weaknesses, and the choice between them depends on the problem's requirements and the structure of the input data.
+
+
+*****************************************
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root: return 0
+        queue = [root]
+        count = 0
+        while queue:
+            n = len(queue)
+            count+=1
+            for _ in range(n):
+                curr = queue.pop(0)
+                if not curr.left and not curr.right:
+                    return count
+                if curr.left:
+                    queue.append(curr.left)
+                if curr.right:
+                    queue.append(curr.right)
+        return count
