@@ -1,0 +1,121 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        ans = []
+        if k==0: return [target.val]
+        d = {}
+        def parent(root):
+            queue = [root]
+            while queue:
+                n = len(queue)
+                for _ in range(n):
+                    curr = queue.pop(0)
+                    # if curr == target:
+
+                    if curr.left:
+                        d[curr.left] = curr
+                        queue.append(curr.left)
+                    if curr.right:
+                        d[curr.right] = curr
+                        queue.append(curr.right)
+            return
+        parent(root)
+        # print(d)
+        def addEle(root):
+            level = 0
+            queue = [root]
+            visited = {}
+            while queue:
+                n = len(queue)
+                level+=1
+                # print(queue[i].val for i in range(n))
+                if level==k+1:
+                    for _ in range(n):
+                        temp = queue.pop(0).val
+                        if temp!=target.val:
+                            ans.append(temp)
+                        
+
+                    break
+                for _ in range(n):
+                    curr = queue.pop(0)
+                    if curr.left and curr.left not in visited:
+                        visited[curr.left]=1
+                        queue.append(curr.left)
+                    if curr.right and curr.right not in visited:
+                        visited[curr.right]=1
+                        queue.append(curr.right)
+                    if curr in d and d[curr] not in visited:
+                        visited[d[curr]]=1
+                        queue.append(d[curr])
+            return 
+        addEle(target)
+        return ans
+*******************************************Optimized - We don't need parents for all only till target
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        ans = []
+        if k==0: return [target.val]
+        d = {}
+        def parent(root):
+            queue = [root]
+            while queue:
+                n = len(queue)
+                for _ in range(n):
+                    curr = queue.pop(0)
+                    if curr == target:
+                        # d[target] = curr
+                        break
+                    if curr.left:
+                        d[curr.left] = curr
+                        queue.append(curr.left)
+                    if curr.right:
+                        d[curr.right] = curr
+                        queue.append(curr.right)
+            return
+        parent(root)
+        # print(d)
+        def addEle(root):
+            level = 0
+            queue = [root]
+            visited = {}
+            while queue:
+                n = len(queue)
+                level+=1
+                # print(queue[i].val for i in range(n))
+                if level==k+1:
+                    for _ in range(n):
+                        temp = queue.pop(0).val
+                        if temp!=target.val:
+                            ans.append(temp)
+                        
+
+                    break
+                for _ in range(n):
+                    curr = queue.pop(0)
+                    if curr.left and curr.left not in visited:
+                        visited[curr.left]=1
+                        queue.append(curr.left)
+                    if curr.right and curr.right not in visited:
+                        visited[curr.right]=1
+                        queue.append(curr.right)
+                    if curr in d and d[curr] not in visited:
+                        visited[d[curr]]=1
+                        queue.append(d[curr])
+            return 
+        addEle(target)
+        return ans
+      
