@@ -1,0 +1,52 @@
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        terminal = []
+        for i in range(len(graph)):
+            if len(graph[i])==0:
+                terminal.append(i)
+        visited = {}
+        def helper(ind):
+            # print(ind, visited)
+            if ind in terminal:
+                return True
+            if ind in visited:
+                return False
+            visited[ind]=1
+            for i in graph[ind]:
+                if not helper(i):
+                    return False
+            del visited[ind]
+            return True
+        ans = []
+        for node in range(len(graph)):
+            if helper(node):
+                ans.append(node)
+            else:
+                visited[node]=1
+        return ans    
+*****************************
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        visited = {}
+        dp = {}
+        def helper(ind):
+            # print(ind, visited)
+            if len(graph[ind])==0:
+                return True
+            if ind in visited:
+                return False
+            if ind in dp:
+                return dp[ind]
+            visited[ind]=1
+            for i in graph[ind]:
+                if not helper(i):
+                    dp[ind]=False
+                    return False
+            dp[ind]=True
+            del visited[ind]
+            return True
+        ans = []
+        for node in range(len(graph)):
+            if helper(node):
+                ans.append(node)
+        return ans    
