@@ -1,0 +1,21 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for i in range(numCourses)]
+        for u,v in prerequisites:
+            adj[v].append(u)
+        visited = {}
+        def hasCycle(course, visited, adj):
+            if course in visited and visited[course]==0:
+                return False
+            if course in visited and visited[course] == 1:
+                return True
+            visited[course] = 1
+            for ele in adj[course]:
+                if hasCycle(ele, visited, adj):
+                    return True
+            visited[course] = 0
+            return False
+        for i in range(numCourses):
+            if hasCycle(i, visited, adj):
+                return False
+        return True
