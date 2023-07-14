@@ -1,0 +1,29 @@
+************************************
+class Solution:
+    def longestSubsequence(self, arr: List[int], difference: int) -> int:
+        dp = {}
+        def helper(ind, prev):
+            # print(ind, prev)
+            if ind == len(arr):
+                return 0
+            if (ind, prev) in dp:
+                return dp[(ind, prev)]
+            take = 0
+            if prev==float('-inf') or arr[ind]-prev== difference:
+                take = 1+helper(ind+1,arr[ind])
+            notTake = helper(ind+1, prev)
+            dp[(ind, prev)] = max(take, notTake)
+            return max(take, notTake)
+        return helper(0,float('-inf'))
+***********************************
+class Solution:
+    def longestSubsequence(self, arr: List[int], difference: int) -> int:
+        dp = {}
+        for num in arr:
+            if num-difference in dp:
+                dp[num] = 1 + dp[num-difference]
+            else:
+                dp[num]=1
+
+        return max(dp.values())
+        
