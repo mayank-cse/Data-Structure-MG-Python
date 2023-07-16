@@ -1,0 +1,87 @@
+class Solution:
+    def smallestSufficientTeam(self, req_skills: List[str], people: List[List[str]]) -> List[int]:
+        req_skill = set(req_skills)
+        dp = {}
+        def helper(currSet, ind):
+            # print(ind, currSet)
+            if currSet == req_skill:
+                # print(1)
+                return []
+            if ind==len(people):
+                return [-1]
+            if (ind, str(currSet)) in dp:
+                return dp[(ind, str(currSet))]
+            notTake = helper(currSet, ind+1)
+            # print(notTake)
+            take = [-1]
+            temp = currSet.union(set(people[ind]))
+            take = helper(temp, ind+1)+[ind]
+            # print(take)
+            if take[0]==-1:
+                return notTake
+            if notTake[0]==-1:
+                return take
+            dp[(ind, str(currSet))] = (notTake if min(len(take),len(notTake))==len(notTake) else take)
+            return dp[(ind, str(currSet))]
+        return helper(set(), 0)
+**************************************** As we have to return an array DP is not sufficient -> bitmap used
+class Solution:
+    def smallestSufficientTeam(self, req_skills: List[str], people: List[List[str]]) -> List[int]:
+        req_skill = set(req_skills)
+        dp = {}
+        bit_skills = {}
+        for i, skill in enumerate(req_skills):
+            bit_skills[skill] = 1<<i
+        targetSkills = (1<<len(req_skills))-1
+        @cache
+        def helper(currSkills, ind):
+            # print(ind, bin(currSkills))
+            if currSkills == targetSkills:
+                return []
+            if ind==len(people):
+                return [-1]
+            notTake = helper(currSkills, ind+1)
+            # print(notTake)
+            personSkills = sum(bit_skills[skill] for skill in people[ind])
+            temp = currSkills | personSkills
+            take = helper(temp, ind+1)+[ind]
+            # print(take)
+            if take[0]==-1:
+                return notTake
+            if notTake[0]==-1:
+                return take
+            # dp[currSkills][ind] = (notTake if min(len(take),len(notTake))==len(notTake) else take)
+            return (notTake if min(len(take),len(notTake))==len(notTake) else take)
+        return helper(0, 0)
+*****************************************
+class Solution:
+    def smallestSufficientTeam(self, req_skills: List[str], people: List[List[str]]) -> List[int]:
+        req_skill = set(req_skills)
+        dp = {}
+        bit_skills = {}
+        for i, skill in enumerate(req_skills):
+            bit_skills[skill] = 1<<i
+        targetSkills = (1<<len(req_skills))-1
+
+        def helper(currSkills, ind):
+            if currSkills == targetSkills:
+                return []
+            if ind==len(people):
+                return [-1]
+            if (currSkills, ind) in dp:
+                return dp[(currSkills, ind)]
+            notTake = helper(currSkills, ind+1)
+            # print(notTake)
+            personSkills = sum(bit_skills[skill] for skill in people[ind])
+            temp = currSkills | personSkills
+            take = helper(temp, ind+1)+[ind]
+            # print(take)
+            if take[0]==-1:
+                dp[(currSkills, ind)] = notTake
+                return notTake
+            if notTake[0]==-1:
+                dp[(currSkills, ind)] = take
+                return take
+            dp[(currSkills, ind)] = (notTake if min(len(take),len(notTake))==len(notTake) else take)
+            return dp[(currSkills, ind)]
+        return helper(0, 0)
