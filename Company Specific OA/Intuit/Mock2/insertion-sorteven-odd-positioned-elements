@@ -1,0 +1,3 @@
+Kate is given a task to arrange the student marksheet based upon their total score however the teacher has asked to do it in such a way that odd number roll numbers have to be arranged in descending order and even number roll numbers in ascending order write a program that helps Gate complete this task using insertions or technique.
+
+https://www.geeksforgeeks.org/insertion-sorteven-odd-positioned-elements/
