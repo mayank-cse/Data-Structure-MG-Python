@@ -1,0 +1,34 @@
+Sort on the basis of second - kyonki jo uske (1,2) aur (1,3) mein 2 pe clash kr rha h wo 3 pe bhi krega
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key = lambda x :  x[1])
+        # print(intervals)
+        dp = {}
+        def helper(ind, prevEnd):
+            if ind == len(intervals):
+                return 0
+            if (ind, prevEnd) in dp:
+                return dp[(inf, prevEnd)]
+            clash1, clash2 = float('inf'), float('inf')
+            noClash = float('inf')
+            if intervals[ind][0]>=prevEnd:
+                noClash = 0+helper(ind+1, intervals[ind][1])
+            else:
+                clash1 = 1 + helper(ind+1, prevEnd) #skip the current
+            dp[(ind, prevEnd)] = min(noClash, clash1,clash2)
+            return min(noClash, clash1,clash2)
+
+        return helper(0,float('-inf'))
+**************************
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key = lambda x :  x[1])
+        # print(intervals)
+        count = 0
+        prev = intervals[0][1]
+        for i in range(1, len(intervals)):
+            if prev>intervals[i][0]:
+                count+=1
+            else:
+                prev = intervals[i][1]
+        return count
