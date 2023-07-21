@@ -1,0 +1,30 @@
+from sys import stdin
+import sys 
+sys.setrecursionlimit(10**7)
+def longestIncreasingSubsequence(nums, n) :
+    dp = [1 for _ in range(len(nums))]
+    for ind in range(len(nums)):
+        for prev in range(ind):
+            if nums[prev]<nums[ind]:
+                dp[ind] = max(dp[ind],1+ dp[prev])
+            
+    return max(dp)
+******************************* O(n^2) with dp and count
+class Solution:
+    def findNumberOfLIS(self, nums: List[int]) -> int:
+        dp = [1 for _ in range(len(nums))]
+        count = [1 for _ in range(len(nums))]
+        for ind in range(len(nums)):
+            for prev in range(ind):
+                if nums[prev]< nums[ind]:
+                    if dp[ind]==dp[prev]+1:
+                        count[ind] += count[prev]
+                    elif dp[ind]<dp[prev]+1:
+                        count[ind] = count[prev]
+                        dp[ind] = max(dp[ind], dp[prev]+1)
+
+        nos = 0
+        for i in range(len(dp)):
+            if dp[i] == max(dp):
+                nos += count[i]
+        return nos
