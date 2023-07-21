@@ -1,3 +1,6 @@
+*************EDGE CASE
+if the nodes are adjescent + if the prevX or prevY is head + currX or currY doesn't exist
+*************************
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
