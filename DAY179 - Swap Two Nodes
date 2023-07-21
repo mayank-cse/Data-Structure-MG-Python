@@ -1,0 +1,53 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def swapNodes(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        curr = head 
+        count = 0
+        while curr!=None:
+            curr = curr.next
+            count+=1
+        curr = head
+        tempK = k-1
+        currX = None
+        prevX = None
+        while curr!=None:
+            if tempK == 0:
+                currX = curr
+                break
+            prevX = curr
+            curr = curr.next
+            tempK-=1
+        curr = head
+        tempK = count-k
+        currY = None
+        prevY = None
+        while curr!= None:
+            if tempK == 0:
+                currY = curr
+                break
+            prevY = curr
+            curr = curr.next
+            tempK -=1
+        curr = head
+        # print(currX.val, currY.val)
+        if currX ==None or currY == None:
+            return head
+        if prevX != None:
+            prevX.next = currY
+        else:
+            curr = currY
+        
+        if prevY != None:
+            prevY.next = currX
+        else:
+            curr = currX
+        
+        #swap the nodes
+        temp = currX.next
+        currX.next = currY.next
+        currY.next = temp
+        return curr
