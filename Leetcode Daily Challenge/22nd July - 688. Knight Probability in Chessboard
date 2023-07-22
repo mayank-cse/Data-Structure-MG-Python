@@ -1,0 +1,18 @@
+class Solution:
+    def knightProbability(self, n: int, k: int, row: int, column: int) -> float:
+        if k == 0 and 0<=(row)<n and 0<=(column)<n:
+            return 1
+        dp = [[[-1 for _ in range(k+1)] for _ in range(n+1)] for _ in range(n)]
+        def helper(row, col, k):
+            if k==0 and 0<=(row)<n and 0<=(col)<n:
+                return 1
+            if dp[row][col][k] != -1:
+                return dp[row][col][k]
+            opt = [(-1,-2),(1,-2),(-2,-1),(2,-1),(-2,1),(2,1),(-1,2),(1,2)]
+            ans = 0
+            for x,y in opt:
+                if 0<=(row+x)<n and 0<=(col+y)<n:
+                    ans += helper(row+x, col+y,k-1)*1/8
+            dp[row][col][k] = ans
+            return ans
+        return helper(row,column,k)    
