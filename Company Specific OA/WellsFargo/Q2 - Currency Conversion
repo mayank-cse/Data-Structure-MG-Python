@@ -16,7 +16,7 @@ Find the rate for the 'To/From' curency. In this case, the correct result is 1.8
 ****************
 https://leetcode.com/problems/evaluate-division/
 ****************
-  class Solution:
+class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         mp = {}
         adj = {}
@@ -29,21 +29,22 @@ https://leetcode.com/problems/evaluate-division/
             adj[equations[i][1]] += [(equations[i][0], 1/values[i])]
         # print(adj)
         def dfs(node, target, visited):
-            print(node, target)
             if node == target :
                 return 1
             if node in visited:
                 return float('-inf')
             ans = float('-inf')
-            print(adj[node])
+            visited[node] = 1
             for ele, val in adj[node]:
-                visited[ele] = 1
                 ans = max(ans, dfs(ele, target, visited)*val)
-                visited[ele] = 0
+            visited[node] = 0
             return ans
         ans = []
         for start, end in queries:
             visited = {}
-            temp = dfs(start, end, visited)
+            if start in adj:
+                temp = dfs(start, end, visited)
+            else:
+                temp = float('-inf')
             ans.append(temp if temp!= float('-inf') else -1)
         return ans
