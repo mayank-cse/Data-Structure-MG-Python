@@ -1,0 +1,31 @@
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    lst = []
+    maxHeight = float('-inf')
+    maxRadius = float('-inf')
+    for _ in range(n):
+        r,h = list(map(int, input().split()))
+        maxHeight = max(maxHeight, h)
+        maxRadius = max(maxRadius, r)
+        lst.append((r,h))
+
+    lst.sort()
+    # dp = [[[-1 for _ in range(maxHeight+1)] for _ in range(maxRadius+1)] for _ in range(len(lst))]
+    dp = {}
+    def helper(ind, prevR, prevH):
+        # print(ind, prevR, prevH)
+        if ind == len(lst):
+            return 0
+        # if dp[ind][prevR][prevH] != -1:
+        #     return dp[ind][prevR][prevH]
+        if (ind, prevR, prevH) in dp:
+            return dp[(ind, prevR, prevH)]
+        take = float('-inf')
+        if (prevR == -1 and prevH == -1) or (lst[ind][0]>prevR and lst[ind][1]>prevH):
+            take = helper(ind+1, lst[ind][0], lst[ind][1]) + lst[ind][1]
+        notTake = helper(ind+1, prevR, prevH)
+        # dp[ind][prevR][prevH] = max(take, notTake)
+        dp[(ind, prevR, prevH)] = max(take, notTake)
+        return max(take, notTake)
+    print(helper(0,-1,-1))
