@@ -1,0 +1,21 @@
+T.C. O(2^n) and S.C. O(n)
+class Solution:
+    def PredictTheWinner(self, nums: List[int]) -> bool:
+        # diff = player 1 score - player 2 score
+
+        def helper(start, end, diff, flag):
+            if start > end:
+                return diff>=0
+            # 2 options - choose start or choose end
+            if flag == 1:
+                takeStart = helper(start+1, end, diff+nums[start],0)
+                takeEnd = helper(start, end-1, diff+nums[end],0)
+                return takeStart or takeEnd
+            else:
+                takeStart = helper(start+1, end, diff-nums[start],1)
+                takeEnd = helper(start, end-1, diff-nums[end],1)
+                return takeStart and takeEnd
+        return helper(0,len(nums)-1,0,1)
+*********************************
+introducing dp -> T.C. O(n^2) and S.C. O(n)
+                
