@@ -1,0 +1,17 @@
+class Solution:
+    def strangePrinter(self, s: str) -> int:
+        dp = [[-1 for _ in range(len(s))] for _ in range(len(s))]
+        def helper(i,j):
+            if i == j:
+                return 1
+            if dp[i][j] != -1:
+                return dp[i][j]
+            minTurns = float('inf')
+            for k in range(i,j):
+                turn = helper(i,k) + helper(k+1,j)
+                minTurns = min(minTurns, turn)
+            dp[i][j] = (minTurns if s[i]!= s[j] else minTurns-1)
+            return (minTurns if s[i]!= s[j] else minTurns-1)
+        temp =  helper(0,len(s)-1)
+        print(dp)
+        return temp
