@@ -1,0 +1,47 @@
+Intuition
+Dynamic Programming Approach:
+We create a 2D array dp of size (m+1) x (n+1), where m is the length of s1 and n is the length of s2. The dp[i][j] represents the maximum ASCII sum of common characters between the substrings of s1 and s2 up to indices i and j respectively.
+We initialize dp[0][0] to 0 since both strings are empty, and the maximum common ASCII sum at this point is 0.
+We iterate through the strings s1 and s2, and for each character s1[i-1] and s2[j-1] (considering 0-based indexing), we update dp[i][j] using the following rules:
+    If s1[i-1] is equal to s2[j-1], it means the characters match, and we can add the ASCII value of the character s1[i-1] to the current common ASCII sum. So, dp[i][j] is updated as dp[i - 1][j - 1] + ord(s1[i - 1]).
+    If s1[i-1] is not equal to s2[j-1], it means the characters do not match. In this case, we have two options: either delete s1[i-1] or delete s2[j-1]. We choose the option that gives us the maximum ASCII sum of common characters, which is either dp[i-1][j] or dp[i][j-1]. So, dp[i][j] is updated as max(dp[i - 1][j], dp[i][j - 1]).
+Calculating the Result:
+After filling the dp array, we can calculate the sum of ASCII values of the deleted characters by summing up the ASCII values of all characters in s1 and s2.
+Since dp[m][n] gives us the maximum ASCII sum of common characters, we double it to account for both strings and then subtract it from the total sum of ASCII values of characters from both strings.
+The final result will be the sum of deleted ASCII values.
+Time Complexity:
+The dynamic programming approach has a time complexity of O(m * n), where m and n are the lengths of strings s1 and s2 respectively. This is because we need to fill the dp array of size (m+1) x (n+1).
+Space Complexity:
+The space complexity is O(m * n) as we use a 2D array dp to store the maximum ASCII sum of common characters for each pair of substrings of s1 and s2.
+Code
+class Solution:
+    def minimumDeleteSum(self, s1: str, s2: str) -> int:
+        dp = [[-1 for _ in range(len(s2))] for _ in range(len(s1))]
+        def helper(start1, start2):
+            if start1 == len(s1) and start2 == len(s2):
+                return 0
+            if start1 == len(s1):
+                ind = start2
+                temp = 0
+                for i in range(ind, len(s2)):
+                    temp += ord(s2[i])
+                return temp
+            elif start2 == len(s2):
+                ind = start1
+                temp = 0
+                for i in range(ind, len(s1)):
+                    temp += ord(s1[i])
+                return temp
+            if dp[start1][start2] != -1:
+                return dp[start1][start2]
+            nodelete, leftdelete, rightdelete = float('inf'), float('inf'), float('inf')
+            if s1[start1] == s2[start2]:
+                nodelete = helper(start1+1, start2+1)
+            else:
+                #left delect
+                leftdelete = helper(start1+1, start2) + ord(s1[start1])
+                rightdelete = helper(start1, start2+1) + ord(s2[start2])
+            dp[start1][start2] = min(nodelete, leftdelete, rightdelete)
+            return min(nodelete, leftdelete, rightdelete)
+        return helper(0,0)
+        
