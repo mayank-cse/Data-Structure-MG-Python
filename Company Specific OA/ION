@@ -1,0 +1,15 @@
+Q1 - Based on 0/1 Knapsack 
+given future stock prices of 1 year and saving you have currently, find maximum profit.
+
+Step 1 = Find Value i.e. profit, by subtracting futureValue - currentValue
+Step 2 = Apply 0/1 Knapsack -> take or notTake 
+**********************************************
+Q2 - given an arr of size n and profits of size k. Do exactly k/2 Operations of choosing i and j such that 0<=i<j<|power|. 
+step 1 = find the consecutive subarray sum from start for all elements
+step 2 = apply 2 pointer 
+left = 0, right = k//2-1
+while l<r:
+    ans += pre[r] - (0 if pre[l]<0 else pre[l]-1)
+    r--
+    l++
+return ans
