@@ -1,0 +1,27 @@
+95. Unique Binary Search Trees II
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        def helper(start, end):
+            if start>end:
+                return [None,]
+
+            all_trees = []
+            for ind in range(start, end+1):
+                left_trees = helper(start, ind-1)
+                right_trees = helper(ind+1, end)
+                for l in left_trees:
+                    for r in right_trees:
+                        curr_tree = TreeNode(ind)
+                        curr_tree.left = l
+                        curr_tree.right = r
+                        all_trees.append(curr_tree)
+            return all_trees
+
+        return helper(1, n) if n else []
