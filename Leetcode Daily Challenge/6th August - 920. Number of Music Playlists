@@ -1,0 +1,54 @@
+For this problem, we have a music player containing n different songs, and you want to listen to goal songs during your trip. To avoid boredom, you need to create a playlist with the following conditions:
+
+Every song is played at least once
+
+A song can only be played again if k other songs have been played since it was last played
+
+You are required to find the number of possible playlists that you can create under these conditions.
+
+Since the answer can be very large, we should return it modulo 10^9 + 7.
+
+Explanation
+Since, we want to find the number of possible playlists we can create, we can use Bottom-up DP.
+
+Base case
+when goal is 0. In this case, there's only one possible playlist of an empty playlist. Therefore, our base case will be dp[0][0] = 1.
+
+Recurrence relation
+Using our 2D Array denoted as dp[i][j] as the number of possible playlists with i distinct songs chosen out of the n available songs, and the playlist length is j. We need to consider two options, when calculating dp[i][j]
+
+We can choose a new song
+
+To select a new song from the remaining n - i + 1 songs (since i songs are already chosen). Then, we need to update the playlist length to j - 1.
+If we choose a song that has already been played
+
+We can select a song from the i songs already chosen (since they are distinct). However, to satisfy the condition, we can only choose this song if j is greater than or equal to k + 1. In this case, we can update the playlist length to j - 1.
+Therefore, our recurrence relation is dp[i][j] = (dp[i-1][j-1] * (n - i + 1) + dp[i][j-1] * max(i-k, 0)) % MOD
+
+Bottom up
+Traverse and fill our DP array using nested loop
+
+The outer loop i iterates over the number of distinct songs chosen (from 1 to n)
+
+The inner loop j iterates over the playlist length (from 1 to goal).
+
+Using nested loop, we calculate the possible playlist with our recurrence relation
+
+Return dp[n][goal], which represents the number of possible playlists with n distinct songs and a playlist length of goal
+********************************************
+class Solution:
+    def numMusicPlaylists(self, n: int, goal: int, k: int) -> int:
+        dp = [[-1 for _ in range(goal+1)] for _ in range(n+1)]
+        def helper(n, g, k):
+            if n == 0 and g == 0:
+                return 1
+            if n == 0 or g==0:
+                return 0
+            if dp[n][g] != -1:
+                return dp[n][g]
+            oldSong = helper(n,g-1,k)*max(0, n-k)
+            newSong = helper(n-1,g-1, k)*n
+            dp[n][g] = (oldSong + newSong)%(1e9+7)
+            return (oldSong + newSong)%(1e9 + 7)
+
+        return int(helper(n,goal,k))
