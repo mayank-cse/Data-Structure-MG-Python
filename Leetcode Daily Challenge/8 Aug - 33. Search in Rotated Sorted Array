@@ -1,0 +1,33 @@
+33. Search in Rotated Sorted Array
+class Solution:
+    def binarySearch(self,nums, start, end, target):
+        print(nums, start, end, target)
+        if start>end:
+            return -1
+        mid = start+(end-start)//2
+        if target == nums[mid]:
+            return mid
+        elif target < nums[mid]:
+            return self.binarySearch(nums, start, mid-1, target)
+        else:
+            return self.binarySearch(nums, mid+1, end, target)    
+    def search(self, nums: List[int], target: int) -> int:
+        if len(nums)==1 and nums[0]==target: return 0
+        if len(nums)==1 and nums[0]!=target: return -1
+
+        i=1
+        flag = 0
+        while i<len(nums):
+            if nums[i]<nums[i-1]:
+                flag = 1
+                break
+            i+=1
+        if flag == 0:
+            # No rotation happened
+            return self.binarySearch(nums,0, len(nums)-1, target)
+        if i==0 or target>=nums[i] and target<nums[0]:
+            return self.binarySearch(nums, i, len(nums)-1, target)
+        elif i == len(nums) or target>=nums[0]:
+            return self.binarySearch(nums,0,i-1, target)
+        else:
+            return -1
