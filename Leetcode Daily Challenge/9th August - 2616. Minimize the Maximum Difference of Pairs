@@ -26,6 +26,18 @@ class Solution:
             return min(take, notTake)
         return helper(0, p, 0)
 *************************************Binary Search
+
+First, we sort the array nums.
+We define our search space with low being 0 and high being the difference between the maximum and minimum values in nums.
+During each iteration of the binary search, we calculate the mid-point and check if we can form the required pairs using our helper function can_form_pairs(mid).
+If we can form the required pairs, our current mid value is feasible, so we might be able to find an even smaller maximum difference. Therefore, we update high to mid.
+If not, our mid value is too small, so we update low to mid + 1.
+Finally, we return low, which will be the smallest maximum difference for which we can form the required number of pairs.
+
+Complexity
+Time Complexity: O(n log m), where nnn is the length of the array and mmm is the difference between the maximum and minimum values in the array. Sorting the array takes O(n log n) and the binary search process, combined with the greedy check, takes O(n log m).
+
+Space Complexity: O(1). We only use a constant amount of space for our variables.
 class Solution:
     def minimizeMax(self, nums: List[int], p: int) -> int:
         nums.sort()
