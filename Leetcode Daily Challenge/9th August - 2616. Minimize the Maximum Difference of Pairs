@@ -1,0 +1,51 @@
+2616. Minimize the Maximum Difference of Pairs
+*******************************Dynamic Programing
+class Solution:
+    def minimizeMax(self, nums: List[int], p: int) -> int:
+        nums.sort()
+        if len(nums)//2<p:
+            return -1
+        # dp = [[-1 for _ in range(p+1)] for _ in range(len(nums))]
+        dp = {}
+        @cache
+        def helper(ind, k, diff):
+            if k == 0:
+                return diff
+            if ind>=len(nums):
+                return float('inf')
+            # if dp[ind][k]!=-1:
+            #     return dp[ind][k]
+            if (ind, k, diff) in dp:
+                return dp[(ind, k, diff)]
+            take = float('inf')
+            if ind+1< len(nums):
+                take = helper(ind+2, k-1, max(diff, abs(nums[ind]-nums[ind+1])))
+            notTake = helper(ind+1,k, diff)
+            # dp[ind][k] = min(take, notTake)
+            dp[(ind, k, diff)] = min(take, notTake)
+            return min(take, notTake)
+        return helper(0, p, 0)
+*************************************Binary Search
+class Solution:
+    def minimizeMax(self, nums: List[int], p: int) -> int:
+        nums.sort()
+        def count(d):
+            i = 0
+            count = 0
+            while i<len(nums)-1:
+                if nums[i+1] - nums[i]<=d:
+                    count +=1
+                    i+=1
+                if count>=p:
+                    return True
+                i+=1
+            return False
+        left = 0
+        right = abs(nums[len(nums)-1] - nums[0])
+        while left < right:
+            mid = left + (right - left)//2
+            if count(mid):
+                right = mid
+            else:
+                left = mid+1
+        return left
