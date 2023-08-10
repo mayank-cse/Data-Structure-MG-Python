@@ -1,0 +1,49 @@
+*************************Using SET to remove duplicate
+class Solution:
+    def search(self, nums: List[int], target: int) -> bool:
+        left = 0
+        nums = list(set(nums))
+        right = len(nums)-1
+        while left <= right:
+            mid = left + (right - left)//2
+            if nums[mid] == target:
+                return True
+            #check if left sorted 
+            if nums[mid]>nums[left]:
+                if nums[mid]>target and nums[left]<=target:
+                    right = mid-1
+                else:
+                    left = mid+1
+            else:
+                #right is sorted
+                if target > nums[mid] and target<=nums[right]:
+                    left = mid+1
+                else:
+                    right = mid-1
+        return False
+**************************Condition to remove duplicates
+class Solution:
+    def search(self, nums: List[int], target: int) -> bool:
+        left = 0
+        right = len(nums)-1
+        while left <= right:
+            mid = left + (right - left)//2
+            if nums[mid] == target:
+                return True
+            if nums[mid] == nums[left] and nums[right] == nums[mid]:   
+                left += 1
+                right -=1
+
+            #check if left sorted 
+            elif nums[mid]>=nums[left]:
+                if nums[mid]>target and nums[left]<=target:
+                    right = mid-1
+                else:
+                    left = mid+1
+            else:
+                #right is sorted
+                if target > nums[mid] and target<=nums[right]:
+                    left = mid+1
+                else:
+                    right = mid-1
+        return False
