@@ -1,0 +1,26 @@
+class Solution:
+    def validPartition(self, nums: List[int]) -> bool:
+        dp = [-1 for _ in range(len(nums)+1)]
+        def helper(ind):
+            if ind == len(nums):
+                dp[ind] = 1
+                return True
+            if dp[ind] != -1:
+                return dp[ind]
+            if ind+1< len(nums) and nums[ind] == nums[ind+1]:
+                if helper(ind+2):
+                    dp[ind] = 1
+                    return True
+            if ind+2< len(nums) and nums[ind] == nums[ind+1] == nums[ind+2]:
+                if helper(ind+3):
+                    dp[ind] = 1
+                    return True
+            if ind+2<len(nums) and nums[ind]+2 == nums[ind+1]+1 == nums[ind+2]:
+                if helper(ind+3):
+                    dp[ind] = 1
+                    return True
+            dp[ind] = 0
+            return False
+
+        return helper(0)
+            
