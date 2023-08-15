@@ -1,0 +1,50 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        root = head
+        head1 = ListNode()
+        tail1 = head1
+        head2 = ListNode()
+        tail2 = head2
+        curr = head
+        while curr:
+            if curr.val<x:
+                newNode = ListNode()
+                newNode.val = curr.val
+                tail1.next = newNode
+                tail1 = tail1.next
+            else:
+                newNode = ListNode()
+                newNode.val = curr.val
+                tail2.next = newNode
+                tail2 = tail2.next
+            curr = curr.next
+        tail1.next = head2.next
+        return head1.next
+**********************************************
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
+        before, after = ListNode(), ListNode()
+        curr1, curr2 = before, after
+        curr = head
+        while curr:
+            if curr.val<x:
+                curr1.next = curr
+                curr1 = curr1.next
+            else:
+                curr2.next = curr
+                curr2 = curr2.next
+            curr = curr.next
+        curr2.next = None
+        curr1.next = after.next
+        return before.next
+        
