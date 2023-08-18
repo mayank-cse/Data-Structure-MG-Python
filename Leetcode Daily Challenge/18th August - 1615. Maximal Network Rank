@@ -1,0 +1,36 @@
+18th August -
+from itertools import combinations
+class Solution:
+    def maximalNetworkRank(self, n: int, roads: List[List[int]]) -> int:
+        adj = [[] for _ in range(n)]
+        for u,v in roads:
+            adj[u].append(v)
+            adj[v].append(u)
+        print(adj)
+        ans = float('-inf')
+        c = [i for i in range(n)]
+        comb = list(combinations(c, 2))
+        for u,v in comb:
+            if v in adj[u] or u in adj[v]:
+                ans = max(ans,len(adj[u])+len(adj[v])-1)
+            else:
+                ans = max(ans, len(adj[u])+len(adj[v]))
+
+        return ans
+******************************
+class Solution:
+    def maximalNetworkRank(self, n: int, roads: List[List[int]]) -> int:
+        graph = [[False]*n for _ in range(n)]
+        connections = [0 for _ in range(n)]
+        for a,b in roads:
+            connections[a] += 1
+            connections[b] += 1
+            graph[a][b] = graph[b][a] = True
+        ans = 0
+        for i in range(n):
+            for j in range(i+1,n):
+                rank = connections[i] + connections[j]
+                if graph[i][j]:
+                    rank -=1
+                ans = max(ans, rank)
+        return ans
