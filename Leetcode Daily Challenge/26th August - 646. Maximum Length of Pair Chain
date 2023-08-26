@@ -1,0 +1,41 @@
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        pairs.sort()
+        dp = [-1 for _ in range(len(pairs))]
+        def helper(ind):
+            if ind == len(pairs):
+                return 0
+            if dp[ind]!=-1:
+                return dp[ind]
+            ans = 0
+            for i in range(ind+1, len(pairs)):
+                if pairs[i][0]>pairs[ind][1]:
+                    ans = max(ans,1+helper(i))
+            dp[ind] = ans
+            return ans
+        ans = 0
+        for i in range(len(pairs)):
+            ans = max(ans, helper(i)+1)
+        return ans
+*****************************
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        pairs.sort(key=lambda x: x[0])
+        n = len(pairs)
+        dp = [1] * n
+        
+        for i in range(1, n):
+            dp[i] = max(dp[i], max(dp[j] + 1 if pairs[i][0] > pairs[j][1] else 1 for j in range(i)))
+        
+        return max(dp)
+*****************************
+class Solution:
+    def findLongestChain(self, pairs: List[List[int]]) -> int:
+        pairs.sort(key = lambda x : x[1])
+        curr, ans = float('-inf'), 0
+        for pair in pairs:
+            if curr<pair[0]:
+                curr = pair[1]
+                ans += 1
+        return ans
+        
