@@ -1,0 +1,35 @@
+class Solution:
+    def canCross(self, stones: List[int]) -> bool:
+        def search(ind,ele):
+            for i in range(ind, len(stones)):
+                if stones[i] == ele:
+                    return i
+            return -1
+        dp = {}
+        def helper(ind, jump):
+            # print(ind, jump)
+            if ind == len(stones)-1:
+                return True
+            if (ind, jump) in dp:
+                return dp[(ind, jump)]
+            target = jump-1
+            temp = search(ind+1, target+stones[ind])
+            if temp!=-1:
+                if helper(temp, jump-1):
+                    dp[(ind, jump)] = True
+                    return True
+            target = jump
+            temp = search(ind+1, target+stones[ind])
+            if temp!=-1:
+                if helper(temp, jump):
+                    dp[(ind, jump)] = True
+                    return True
+            target = jump+1
+            temp = search(ind+1, target+stones[ind])
+            if temp!=-1:
+                if helper(temp, jump+1):
+                    dp[(ind, jump)] = True
+                    return True
+            dp[(ind, jump)] = False
+            return False
+        return helper(0, 0)
