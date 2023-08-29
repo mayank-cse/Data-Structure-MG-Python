@@ -1,0 +1,54 @@
+class Solution:
+    def bestClosingTime(self, customers: str) -> int:
+        self.output = len(customers)
+        self.minPenalty = customers.count('N')
+        def helper(ind, flag,penalty, ans):
+            print(ind, flag, penalty, ans, self.minPenalty, self.output)
+            if ind == len(customers):
+                if penalty<self.minPenalty and ans!=-1:
+                    self.output = ans
+                    self.minPenalty = penalty
+                elif penalty == self.minPenalty:
+                    self.output = min(self.output, ans)
+                return
+            if flag == True: # already closed
+                if customers[ind] == "N":
+                    helper(ind+1, flag, penalty, ans)
+                else:
+                    helper(ind+1, flag, penalty+1, ans)
+            else:
+                if customers[ind] == 'Y':
+                    helper(ind+1, flag, penalty, ans)
+                    helper(ind+1, True, penalty, ind) #band kardo
+                else:
+                    helper(ind+1, True, penalty, ind) #band kardo
+                    helper(ind+1, flag, penalty+1, ans)
+        helper(0,False, 0, -1)
+        return (self.output if self.output!=-1 else len(customers))
+*************************************************
+class Solution:
+    def bestClosingTime(self, customers: str) -> int:
+        preN = [0]
+        postY = [0]
+        countY = 0
+        countN = 0
+        for ele in customers:
+            if ele == 'N':
+                countN += 1
+            preN.append(countN)
+        countY = 0
+        for ele in customers[::-1]:
+            if ele == 'Y':
+                countY += 1
+            postY.append(countY)
+        postY = postY[::-1]
+        ans = len(customers)
+        minPenalty = customers.count('N')
+        arr = [preN[i]+postY[i] for i in range(len(customers)+1)]
+        ans = 0
+        minVal = float('inf')
+        for i,val in enumerate(arr):
+            if val<minVal:
+                ans = i
+                minVal = val
+        return ans
