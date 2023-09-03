@@ -1,0 +1,12 @@
+***************************Python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        n = m+n-2 # As start and end are not counted
+        r = m-1
+        print(n,r)
+        # nCr
+        ans = 1
+        for i in range(r):
+            # print(n-i, i+1)
+            ans *= (n-i)/(i+1)
+        return round(ans)
