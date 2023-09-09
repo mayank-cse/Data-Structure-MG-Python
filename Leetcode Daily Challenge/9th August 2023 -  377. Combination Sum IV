@@ -1,0 +1,22 @@
+class Solution:
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        self.ans = 0
+        # nums.sort()
+        # @cache
+        dp = {}
+        def helper(currSum):
+            if currSum>target:
+                return 0
+            if currSum == target:
+                return 1
+            if currSum in dp:
+                return dp[currSum]
+            ans = 0
+            for ele in nums:
+                ans += helper(currSum + ele)
+            dp[currSum] = ans
+            return ans
+        ans = helper(0)
+        return ans
+
+             
