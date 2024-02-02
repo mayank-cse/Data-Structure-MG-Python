@@ -1,4 +1,6 @@
-KADANE's ALGORITHM
+Approach1 - Generate all the subarray find the sum and check max - 3 loops (n^3)
+Approach2 - Generate all the subarray and calculate the sum with increment - 2 loops (n^2)
+Approach3 - KADANE's ALGORITHM
 ****************************************
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
