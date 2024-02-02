@@ -1,0 +1,26 @@
+Approach1 - #find all the permutation in sorted order and the find the next
+*********************************
+Approach2 - find non increasing number from end, find the greater number from end and swap them + reverse the later
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        i =  j = len(nums)-1
+        # find the index with no increasing number
+        while i>0 and nums[i-1]>=nums[i]:
+            i -=1
+        # 2 cases: 1) if i == 0, return reverse 
+        if i == 0 :
+            nums[:] = nums[::-1]
+        else:
+            #find the just greater number from the end
+            while j >= 0:
+                if nums[j]>nums[i-1]:
+                    #swap i and j
+                    temp = nums[i-1]
+                    nums[i-1] = nums[j]
+                    nums[j] = temp
+                    nums[:] = nums[:i]+nums[i:][::-1]
+                    break
+                j-=1
