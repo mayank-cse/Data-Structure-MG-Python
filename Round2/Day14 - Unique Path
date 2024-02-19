@@ -1,0 +1,25 @@
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        def count(i, j):
+            if i == m-1 and j==n-1:
+                return 1
+            if i>m-1 or j>n-1:
+                return 0
+            return count(i+1, j) + count(i,j+1)
+        return count(0,0)
+
+**************************************
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        def countPath(i, j, dp):
+            if i == m-1 and j==n-1:
+                return 1
+            if i>m-1 or j>n-1:
+                return 0
+            if (i,j) in dp:
+                return dp[(i,j)]
+            
+            dp[(i,j)] = countPath(i+1, j,dp) + countPath(i,j+1,dp)
+            return dp[(i,j)]
+        dp = {}
+        return countPath(0,0,dp)
