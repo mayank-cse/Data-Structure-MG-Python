@@ -1,0 +1,19 @@
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        tmp = sorted(nums)
+        left = 0
+        right = len(nums)-1
+        while left<=right:
+            if tmp[left] + tmp[right] == target:
+                break
+            elif tmp[left]+tmp[right]<target:
+                left+=1
+            else:
+                right-=1
+        ans = []
+        for i,ele in enumerate(nums):
+            if ele == tmp[left]:
+                ans.append(i)
+            elif ele == tmp[right]:
+                ans.append(i)
+        return ans
