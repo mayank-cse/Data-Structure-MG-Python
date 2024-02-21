@@ -1,0 +1,19 @@
+def LongestSubsetWithZeroSum(arr):
+        #Code here
+        # we will traverse and keep a variable sum with a hash map 
+        # ans = max(ans, if the sum repeats || we get the sum 0)
+        # hashmap = {(sum, index)}
+        d = {}
+        ans = 0
+        currSum = 0
+        k = 0
+        for i,ele in enumerate(arr):
+            currSum += ele
+            if currSum-k in d:
+                ans = max(ans, i-d[currSum])
+            if currSum == k:
+                ans = max(ans,i+1)
+            if currSum not in d:
+                d[currSum] = i
+            # print(currSum, d,ans)
+        return ans
