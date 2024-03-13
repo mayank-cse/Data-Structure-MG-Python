@@ -1,0 +1,17 @@
+class Solution:
+    def pivotInteger(self, n: int) -> int:
+        start = 1
+        end = n
+        leftSum, rightSum = start,end
+        while start!=end:
+            if leftSum<=rightSum:
+                start+=1
+                leftSum += start
+            else:
+                end-=1
+                rightSum += end
+            
+        if leftSum == rightSum:
+            return start
+        else:
+            return -1
