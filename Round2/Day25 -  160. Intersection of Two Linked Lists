@@ -1,0 +1,67 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        curr1, curr2 = headA, headB
+        trig = 0
+        while True:
+            # print(curr1.val, curr2.val)
+            if curr1 == curr2:
+                return curr1
+            if curr1 == headB:
+                trig+=1
+                if trig == 2:
+                    return None
+            
+            if curr1 == None or curr2 == None:
+                if curr1 == None:
+                    curr1 = headB
+                    curr2 = curr2.next
+                if curr2 == None:
+                    curr2 = headA
+                    curr1 = curr1.next
+            else:
+                curr1 = curr1.next
+                curr2 = curr2.next
+                        
+            
+        
+*****************************************************
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+# class Solution:
+#     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+#         d = dict()
+#         while headA:
+#             if d.get(headA) is None:
+#                 d[headA] = 1
+#             else:
+#                 d[headA] += 1
+#             headA = headA.next
+
+#         while headB:
+#             if headB in d:
+#                 return headB
+#             headB = headB.next
+
+#         return None
+        
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        if headA and headB:
+            A, B = headA, headB
+            while A != B:
+                A = A.next if A else headB
+                B = B.next if B else headA
+                
+            return A
+
+        return None
