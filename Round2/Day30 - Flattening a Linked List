@@ -1,0 +1,32 @@
+def merge(root1, root2):
+        dummy = Node(None)
+        head = dummy
+        curr1 = root1
+        curr2 = root2
+        while curr1 and curr2:
+            if curr1.data <= curr2.data:
+                dummy.bottom = curr1
+                curr1 = curr1.bottom
+                dummy = dummy.bottom
+            elif curr2.data <curr1.data:
+                dummy.bottom = curr2
+                curr2 = curr2.bottom
+                dummy = dummy.bottom
+        while curr1:
+            dummy.bottom = curr1
+            curr1, dummy = curr1.bottom, dummy.bottom
+
+        while curr2:
+            dummy.bottom = curr2
+            curr2 = curr2.bottom
+            dummy = dummy.bottom
+        return head.bottom
+        
+def flatten(root):
+    #Your code here
+    curr = root.next
+    while curr:
+        root = merge(root, curr)
+        curr = curr.next
+    return root
+        
