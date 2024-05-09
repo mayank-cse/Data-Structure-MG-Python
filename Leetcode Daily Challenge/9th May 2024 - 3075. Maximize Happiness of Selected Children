@@ -54,3 +54,21 @@ class Solution:
             x+=1
         return ans
             
+*********************************************WITH COMMENTS
+class Solution:
+    def maximumHappinessSum(self, happiness: List[int], k: int) -> int:
+        #Sort in Ascending order
+        happiness.sort()
+        ans = 0 #total_happiness_sum
+        x = 0 # turns
+        #Calculate the maximum happiness sum
+        while x<k:
+            #apop out the last element
+            temp = happiness.pop()
+            #adjust the happiness
+            ans += temp-x if temp-x>0 else 0
+            #increment the turns
+            x+=1
+
+        return ans
+            
