@@ -1,0 +1,89 @@
+Problem Description 📜
+You are given two strings, s and t, both consisting of lowercase English letters. The task is to determine the minimum number of characters that need to be appended to the end of s so that t becomes a subsequence of s.
+
+A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+
+Solution 💡
+To solve this problem, we need to find out how many characters from t are already present in s in the correct order. Then, we can determine how many characters from t are missing in s and need to be appended to the end of s.
+
+Approach 📝
+Initialize a pointer start to 0: This pointer will keep track of the position in the string t that we are currently matching with characters in s. 🔍
+
+Iterate through each character in s: 🔄
+
+If the character in s matches the character in t at position start, increment the start pointer. ✔️
+If the start pointer reaches the length of t, it means all characters of t are already found in s in order, and no characters need to be appended. ✅
+Calculate the number of characters to be appended: ➕ If start has not reached the end of t, the remaining characters from t[start:] need to be appended to s.
+
+Solution Code 💻
+Here is the implementation of the solution in Python, Java, and C++ with comments and emojis for better visualization:
+
+Python 🐍
+class Solution:
+    def appendCharacters(self, s: str, t: str) -> int:
+        # Pointer to track the position in t 🔍
+        start = 0
+        # Iterate through each character in s 🔄
+        for char in s:
+            # If all characters in t are already matched, return 0 ✅
+            if start >= len(t):
+                return 0
+            # If the current character in s matches the current character in t ✔️
+            if char == t[start]:
+                start += 1
+        # The number of characters to append is the remaining length of t ➕
+        return len(t) - start
+Java ☕
+class Solution {
+    public int appendCharacters(String s, String t) {
+        int start = 0; // Pointer to track the position in t 🔍
+        for (char c : s.toCharArray()) { // Iterate through each character in s 🔄
+            if (start >= t.length()) { // If all characters in t are already matched, return 0 ✅
+                return 0;
+            }
+            if (c == t.charAt(start)) { // If the current character in s matches the current character in t ✔️
+                start++;
+            }
+        }
+        return t.length() - start; // The number of characters to append is the remaining length of t ➕
+    }
+}
+C++ 💻
+class Solution {
+public:
+    int appendCharacters(string s, string t) {
+        int start = 0; // Pointer to track the position in t 🔍
+        for (char c : s) { // Iterate through each character in s 🔄
+            if (start >= t.size()) { // If all characters in t are already matched, return 0 ✅
+                return 0;
+            }
+            if (c == t[start]) { // If the current character in s matches the current character in t ✔️
+                start++;
+            }
+        }
+        return t.size() - start; // The number of characters to append is the remaining length of t ➕
+    }
+};
+Explanation with Examples 📝
+Example 1:
+
+s = "coaching"
+t = "coding"
+The characters "c", "o", "i", "n" from t are present in s in the correct order.
+We need to append "ding" to s to make t a subsequence of s.
+Output: 4 ➕
+Example 2:
+
+s = "abcde"
+t = "a"
+The character "a" from t is already present in s.
+Output: 0 ✅
+Example 3:
+
+s = "z"
+t = "abcde"
+No characters from t are present in s.
+We need to append "abcde" to s.
+Output: 5 ➕
+This approach ensures an efficient solution with a time complexity of O(n), where n is the length of s. This is crucial given the constraints, where both s and t can have lengths up to (10^5).
+
