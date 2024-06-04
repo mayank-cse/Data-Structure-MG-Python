@@ -1,0 +1,114 @@
+## Problem Description 📝
+
+You are given a string `s` consisting of lowercase and uppercase letters. The task is to return the length of the longest palindrome that can be built using those letters. 
+
+**Key Points:**
+- Letters are case-sensitive (e.g., "Aa" is not a palindrome).
+- You need to figure out the maximum possible length of a palindrome that can be created using the given characters.
+
+### Example 🧩
+
+1. **Input:** `s = "abccccdd"`
+   - **Output:** `7`
+   - **Explanation:** One possible longest palindrome is `"dccaccd"`, which has a length of `7`.
+
+2. **Input:** `s = "a"`
+   - **Output:** `1`
+   - **Explanation:** The longest palindrome is `"a"`, with a length of `1`.
+
+### Constraints 📏
+
+- \(1 \leq s.length \leq 2000\)
+- `s` consists of lowercase and/or uppercase English letters only.
+
+## Solution Explanation 💡
+
+### Approach 🚀
+
+1. **Count Character Frequencies:**
+   - Use a dictionary to count the frequency of each character.
+   
+2. **Calculate the Palindrome Length:**
+   - Initialize a variable `ans` to store the length of the palindrome.
+   - Track if there is an odd frequency character with a boolean `odd`.
+   - Iterate through the character frequencies:
+     - Add even frequencies directly to the length.
+     - For odd frequencies, add the highest even number possible and use the remaining odd character in the middle if needed.
+
+3. **Return the Result:**
+   - The result stored in `ans` will be the length of the longest possible palindrome.
+
+## Solution Code in Three Languages 🌐
+
+### Python 🐍
+
+```python
+from collections import Counter
+
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        d = Counter(s)
+        odd = False
+        ans = 0
+        for value in d.values():
+            if value % 2 == 0:
+                ans += value
+            else:
+                ans += value - 1
+                odd = True
+        return ans + 1 if odd else ans
+```
+
+### Java ☕️
+
+```java
+import java.util.HashMap;
+
+public class Solution {
+    public int longestPalindrome(String s) {
+        HashMap<Character, Integer> count = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            count.put(c, count.getOrDefault(c, 0) + 1);
+        }
+        
+        int ans = 0;
+        boolean odd = false;
+        for (int value : count.values()) {
+            if (value % 2 == 0) {
+                ans += value;
+            } else {
+                ans += value - 1;
+                odd = true;
+            }
+        }
+        
+        return odd ? ans + 1 : ans;
+    }
+}
+```
+
+### JavaScript 🖥️
+
+```javascript
+var longestPalindrome = function(s) {
+    let count = {};
+    for (let c of s) {
+        count[c] = (count[c] || 0) + 1;
+    }
+    
+    let ans = 0;
+    let odd = false;
+    for (let key in count) {
+        if (count[key] % 2 == 0) {
+            ans += count[key];
+        } else {
+            ans += count[key] - 1;
+            odd = true;
+        }
+    }
+    
+    return odd ? ans + 1 : ans;
+};
+```
+
+Using these implementations, you can determine the length of the longest palindrome that can be constructed from any given string `s`. 🛠️💻
