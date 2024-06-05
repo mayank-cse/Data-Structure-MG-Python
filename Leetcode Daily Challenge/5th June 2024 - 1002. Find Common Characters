@@ -1,0 +1,139 @@
+## Problem Description 📝
+
+You are given a string array `words`. The task is to return an array of all characters that appear in every string within the `words` array, including duplicates. The order of characters in the output does not matter.
+
+### Example 🧩
+
+1. **Input:** `words = ["bella", "label", "roller"]`
+   - **Output:** `["e", "l", "l"]`
+
+2. **Input:** `words = ["cool", "lock", "cook"]`
+   - **Output:** `["c", "o"]`
+
+### Constraints 📏
+
+- \(1 \leq \text{words.length} \leq 100\)
+- \(1 \leq \text{words[i].length} \leq 100\)
+- `words[i]` consists of lowercase English letters only.
+
+## Solution Explanation 💡
+
+### Approach 🚀
+
+1. **Initialize Character Frequency Dictionary:**
+   - Use the first word to initialize a dictionary that counts the frequency of each character.
+
+2. **Update Frequencies:**
+   - For each subsequent word, update the dictionary to reflect the minimum frequency of each character across all words.
+
+3. **Construct Result:**
+   - Create a list of characters that appear in all words based on the final frequency dictionary.
+
+## Solution Code in Three Languages 🌐
+
+### Python 🐍
+
+```python
+from collections import Counter
+from typing import List
+
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        d = Counter(words[0])
+        for word in words[1:]:
+            for ele in d:
+                d[ele] = min(word.count(ele), d[ele])
+        ans = []
+        for key, value in d.items():
+            if value > 0:
+                ans += [key] * value
+        return ans
+```
+
+### Java ☕️
+
+```java
+import java.util.*;
+
+public class Solution {
+    public List<String> commonChars(String[] words) {
+        int[] d = new int[26];
+        Arrays.fill(d, Integer.MAX_VALUE);
+        
+        for (String word : words) {
+            int[] count = new int[26];
+            for (char c : word.toCharArray()) {
+                count[c - 'a']++;
+            }
+            for (int i = 0; i < 26; i++) {
+                d[i] = Math.min(d[i], count[i]);
+            }
+        }
+        
+        List<String> ans = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            while (d[i] > 0) {
+                ans.add("" + (char)(i + 'a'));
+                d[i]--;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+### JavaScript 🖥️
+
+```javascript
+var commonChars = function(words) {
+    let d = Array(26).fill(Infinity);
+    
+    for (let word of words) {
+        let count = Array(26).fill(0);
+        for (let c of word) {
+            count[c.charCodeAt(0) - 'a'.charCodeAt(0)]++;
+        }
+        for (let i = 0; i < 26; i++) {
+            d[i] = Math.min(d[i], count[i]);
+        }
+    }
+    
+    let ans = [];
+    for (let i = 0; i < 26; i++) {
+        while (d[i] > 0) {
+            ans.push(String.fromCharCode(i + 'a'.charCodeAt(0)));
+            d[i]--;
+        }
+    }
+    return ans;
+};
+```
+
+## Explanation with Emojis 😃
+
+### Problem Description 📜
+
+You have a list of words, and you need to find characters that appear in every word, including duplicates. The characters can be returned in any order.
+
+### Example 🎯
+
+1. **Input:** `words = ["bella", "label", "roller"]`
+   - **Output:** `["e", "l", "l"]`
+   - 💡 **Explanation:** Both `"e"` and `"l"` appear in all three words. The character `"l"` appears twice.
+
+2. **Input:** `words = ["cool", "lock", "cook"]`
+   - **Output:** `["c", "o"]`
+   - 💡 **Explanation:** Both `"c"` and `"o"` appear in all three words.
+
+### Approach 🚀
+
+1. **Initialize Dictionary 🗂️:**
+   - Use the first word to set up initial character counts.
+
+2. **Update Frequencies 📉:**
+   - For each following word, update the counts to reflect the minimum number of times each character appears.
+
+3. **Construct Result 🏗️:**
+   - Collect characters that appear in all words based on the final counts.
+
+This approach ensures we capture all common characters, including their frequencies, efficiently! 🚀
