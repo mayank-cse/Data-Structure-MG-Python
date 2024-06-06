@@ -1,0 +1,162 @@
+Beats 100% - Easy Solution with explanation - C++/Java/Python
+
+### Problem Description 🃏
+
+Alice has a deck of cards, and she wants to rearrange them into groups so that each group has a size of `groupSize` and consists of `groupSize` consecutive cards. Given an integer array `hand` where `hand[i]` is the value written on the `i`-th card and an integer `groupSize`, return `true` if she can rearrange the cards accordingly, or `false` otherwise.
+
+**Example 1:**
+- **Input:** `hand = [1, 2, 3, 6, 2, 3, 4, 7, 8]`, `groupSize = 3`
+- **Output:** `true`
+- **Explanation:** Alice's hand can be rearranged as `[1, 2, 3], [2, 3, 4], [6, 7, 8]`
+
+**Example 2:**
+- **Input:** `hand = [1, 2, 3, 4, 5]`, `groupSize = 4`
+- **Output:** `false`
+- **Explanation:** Alice's hand cannot be rearranged into groups of 4.
+
+**Constraints:**
+- `1 <= hand.length <= 10^4`
+- `0 <= hand[i] <= 10^9`
+- `1 <= groupSize <= hand.length`
+
+### Solution Explanation 💡
+
+To solve this problem, we need to check if we can split the `hand` into groups of consecutive numbers, each with a size of `groupSize`. We use the following approach:
+
+1. **Check Group Validity**: First, check if the total number of cards is divisible by `groupSize`. If not, return `false` immediately because it's impossible to split the cards evenly.
+
+2. **Count Frequencies**: Use a counter to count the frequency of each card in the hand.
+
+3. **Use Min-Heap**: Utilize a min-heap to always start forming groups from the smallest card available. This helps in efficiently managing and accessing the smallest card to form consecutive groups.
+
+4. **Form Groups**: Continuously form groups starting from the smallest card in the heap. If at any point a required card to complete a group is missing, return `false`.
+
+5. **Success**: If all cards are successfully grouped, return `true`.
+
+### Code Implementations 📝
+
+#### Python 🐍
+
+```python
+from typing import List
+from collections import Counter
+import heapq
+
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize != 0:
+            return False
+        
+        card_count = Counter(hand)
+        min_heap = list(card_count.keys())
+        heapq.heapify(min_heap)
+        
+        while min_heap:
+            current_card = min_heap[0]
+            for i in range(groupSize):
+                if card_count[current_card + i] == 0:
+                    return False
+                
+                card_count[current_card + i] -= 1
+                if card_count[current_card + i] == 0:
+                    if current_card + i != heapq.heappop(min_heap):
+                        return False
+        
+        return True
+```
+
+#### Java ☕
+
+```java
+import java.util.*;
+
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        if (hand.length % groupSize != 0) {
+            return false;
+        }
+        
+        Map<Integer, Integer> cardCount = new HashMap<>();
+        for (int card : hand) {
+            cardCount.put(card, cardCount.getOrDefault(card, 0) + 1);
+        }
+        
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(cardCount.keySet());
+        
+        while (!minHeap.isEmpty()) {
+            int currentCard = minHeap.peek();
+            for (int i = 0; i < groupSize; i++) {
+                if (cardCount.getOrDefault(currentCard + i, 0) == 0) {
+                    return false;
+                }
+                cardCount.put(currentCard + i, cardCount.get(currentCard + i) - 1);
+                if (cardCount.get(currentCard + i) == 0) {
+                    if (currentCard + i != minHeap.poll()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+}
+```
+
+#### C++ 🇨++
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        if (hand.size() % groupSize != 0) {
+            return false;
+        }
+        
+        unordered_map<int, int> cardCount;
+        for (int card : hand) {
+            cardCount[card]++;
+        }
+        
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+        for (auto& pair : cardCount) {
+            minHeap.push(pair.first);
+        }
+        
+        while (!minHeap.empty()) {
+            int currentCard = minHeap.top();
+            for (int i = 0; i < groupSize; i++) {
+                if (cardCount[currentCard + i] == 0) {
+                    return false;
+                }
+                cardCount[currentCard + i]--;
+                if (cardCount[currentCard + i] == 0) {
+                    if (currentCard + i != minHeap.top()) {
+                        return false;
+                    }
+                    minHeap.pop();
+                }
+            }
+        }
+        
+        return true;
+    }
+};
+```
+
+### Approaches 🛤️
+
+1. **Sorting and Counting**: Initially, sort the hand and use a counter to keep track of card frequencies. This is simple but may not be the most efficient for larger inputs.
+
+2. **Min-Heap**: Use a min-heap to efficiently manage and access the smallest card, ensuring that consecutive groups can be formed starting from the smallest available card.
+
+3. **Greedy Algorithm**: Use a greedy approach by always trying to form the smallest possible group and removing used cards progressively.
+
+Using these approaches ensures that the solution is both efficient and easy to understand, adhering to the constraints and requirements of the problem.
