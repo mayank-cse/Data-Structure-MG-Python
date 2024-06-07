@@ -1,0 +1,208 @@
+## Problem Description 📝
+
+You are given a dictionary of words and a sentence. Your task is to replace each word in the sentence with its shortest root from the dictionary. A root is a prefix of the word, and you need to find the shortest such prefix that appears in the dictionary. If a word in the sentence does not have any root in the dictionary, it remains unchanged.
+
+### Example 🧩
+
+1. **Input:** 
+   - `dictionary = ["cat", "bat", "rat"]`
+   - `sentence = "the cattle was rattled by the battery"`
+   - **Output:** `"the cat was rat by the bat"`
+
+2. **Input:** 
+   - `dictionary = ["a", "b", "c"]`
+   - `sentence = "aadsfasf absbs bbab cadsfafs"`
+   - **Output:** `"a a b c"`
+
+### Constraints 📏
+
+- \(1 \leq \text{dictionary.length} \leq 1000\)
+- \(1 \leq \text{dictionary[i].length} \leq 100\)
+- \(1 \leq \text{sentence.length} \leq 10^6\)
+- The `sentence` consists of lowercase English letters and spaces.
+
+## Solution Explanation 💡
+
+### Approach 1: Hash Set 🚀
+
+1. **Initialize Dictionary Set 📚:**
+   - Create a hash set from the dictionary for quick lookup.
+
+2. **Find Shortest Root 🔍:**
+   - For each word in the sentence, find the shortest root from the dictionary that matches a prefix of the word.
+
+3. **Replace Words ✏️:**
+   - Replace each word in the sentence with its shortest root.
+
+### Approach 2: Trie 🌳
+
+1. **Initialize Trie Structure 🌐:**
+   - Create a Trie to store all the roots from the dictionary.
+
+2. **Find Shortest Root in Trie 🔍:**
+   - For each word in the sentence, use the Trie to find the shortest root efficiently.
+
+3. **Replace Words ✏️:**
+   - Replace each word in the sentence with its shortest root.
+
+## Solution Code in Three Languages 🌐
+
+### Python 🐍
+
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isEnd = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.isEnd = True
+    
+    def shortestRoot(self, word):
+        node = self.root
+        for i, char in enumerate(word):
+            if char not in node.children:
+                return word
+            node = node.children[char]
+            if node.isEnd:
+                return word[:i+1]
+        return word
+
+class Solution:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        trie = Trie()
+        for root in dictionary:
+            trie.insert(root)
+        return ' '.join(trie.shortestRoot(word) for word in sentence.split())
+```
+
+### Java ☕️
+
+```java
+import java.util.*;
+
+class TrieNode {
+    TrieNode[] children;
+    boolean isEnd;
+    
+    TrieNode() {
+        children = new TrieNode[26];
+        isEnd = false;
+    }
+}
+
+class Trie {
+    TrieNode root;
+    
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                node.children[index] = new TrieNode();
+            }
+            node = node.children[index];
+        }
+        node.isEnd = true;
+    }
+    
+    String shortestRoot(String word) {
+        TrieNode node = root;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                return word;
+            }
+            node = node.children[index];
+            if (node.isEnd) {
+                return word.substring(0, i + 1);
+            }
+        }
+        return word;
+    }
+}
+
+class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Trie trie = new Trie();
+        for (String root : dictionary) {
+            trie.insert(root);
+        }
+        StringBuilder result = new StringBuilder();
+        String[] words = sentence.split(" ");
+        for (String word : words) {
+            if (result.length() > 0) {
+                result.append(" ");
+            }
+            result.append(trie.shortestRoot(word));
+        }
+        return result.toString();
+    }
+}
+```
+
+### JavaScript 🖥️
+
+```javascript
+class TrieNode {
+    constructor() {
+        this.children = {};
+        this.isEnd = false;
+    }
+}
+
+class Trie {
+    constructor() {
+        this.root = new TrieNode();
+    }
+    
+    insert(word) {
+        let node = this.root;
+        for (const char of word) {
+            if (!node.children[char]) {
+                node.children[char] = new TrieNode();
+            }
+            node = node.children[char];
+        }
+        node.isEnd = true;
+    }
+    
+    shortestRoot(word) {
+        let node = this.root;
+        for (let i = 0; i < word.length; i++) {
+            const char = word[i];
+            if (!node.children[char]) {
+                return word;
+            }
+            node = node.children[char];
+            if (node.isEnd) {
+                return word.substring(0, i + 1);
+            }
+        }
+        return word;
+    }
+}
+
+var replaceWords = function(dictionary, sentence) {
+    const trie = new Trie();
+    for (const root of dictionary) {
+        trie.insert(root);
+    }
+    return sentence.split(' ').map(word => trie.shortestRoot(word)).join(' ');
+};
+```
+
