@@ -1,0 +1,133 @@
+### Problem Description
+
+🔍 **Problem:** Given an integer array `nums` and an integer `k`, return `true` if `nums` has a good subarray or `false` otherwise.
+
+A good subarray is a subarray where:
+1. Its length is at least two, and
+2. The sum of the elements of the subarray is a multiple of `k`.
+
+A subarray is a contiguous part of the array. An integer `x` is a multiple of `k` if there exists an integer `n` such that `x = n * k`. Note that `0` is always a multiple of `k`.
+
+### Example
+
+1. **Input:** `nums = [23,2,4,6,7]`, `k = 6`
+   **Output:** `true`
+   **Explanation:** `[2, 4]` is a continuous subarray of size 2 whose elements sum up to 6.
+
+2. **Input:** `nums = [23,2,6,4,7]`, `k = 6`
+   **Output:** `true`
+   **Explanation:** `[23, 2, 6, 4, 7]` is a continuous subarray of size 5 whose elements sum up to 42, which is a multiple of 6.
+
+3. **Input:** `nums = [23,2,6,4,7]`, `k = 13`
+   **Output:** `false`
+
+### Solution Explanation
+
+To solve this problem, we need to efficiently find subarrays whose sums are multiples of `k`. We can utilize the prefix sum approach with a hash map to track remainders when the prefix sum is divided by `k`. Here's the step-by-step approach:
+
+1. **Initialization:** 
+   - Use a hash map (`prefixSum`) to store remainders of prefix sums.
+   - Initialize `currSum` to 0.
+   - Store `prefixSum[0] = -1` to handle cases where the subarray starts from index 0.
+
+2. **Iterate Through Array:** 
+   - For each element, update the `currSum`.
+   - Compute the remainder (`currSum % k`).
+   - If this remainder has been seen before and the subarray length is at least 2, return `true`.
+   - Otherwise, store the index of this remainder in the hash map.
+
+3. **Edge Cases:** 
+   - If no such subarray is found, return `false`.
+
+### Code Implementation
+
+Here is the solution in Python, Java, and C++ with emojis in the explanation:
+
+#### Python
+
+```python
+def checkSubarraySum(nums, k):
+    prefixSum = {0: -1}  # 🗃️ Initialize the hash map
+    currSum = 0  # ➕ Initialize current sum
+
+    for i, num in enumerate(nums):  # 🔄 Iterate through array
+        currSum += num  # ➕ Add current element to current sum
+        currSum %= k  # ➗ Compute remainder
+
+        if currSum in prefixSum:  # 🔍 Check if remainder is already in the map
+            if i - prefixSum[currSum] > 1:  # 📏 Check subarray length
+                return True  # ✔️ Good subarray found
+        else:
+            prefixSum[currSum] = i  # 📝 Store index of remainder
+
+    return False  # ❌ No good subarray found
+```
+
+#### Java
+
+```java
+public class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        Map<Integer, Integer> prefixSum = new HashMap<>();  // 🗃️ Initialize the hash map
+        prefixSum.put(0, -1);  // 📝 Store base case
+        int currSum = 0;  // ➕ Initialize current sum
+
+        for (int i = 0; i < nums.length; i++) {  // 🔄 Iterate through array
+            currSum += nums[i];  // ➕ Add current element to current sum
+            currSum %= k;  // ➗ Compute remainder
+
+            if (prefixSum.containsKey(currSum)) {  // 🔍 Check if remainder is already in the map
+                if (i - prefixSum.get(currSum) > 1) {  // 📏 Check subarray length
+                    return true;  // ✔️ Good subarray found
+                }
+            } else {
+                prefixSum.put(currSum, i);  // 📝 Store index of remainder
+            }
+        }
+
+        return false;  // ❌ No good subarray found
+    }
+}
+```
+
+#### C++
+
+```cpp
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> prefixSum;  // 🗃️ Initialize the hash map
+        prefixSum[0] = -1;  // 📝 Store base case
+        int currSum = 0;  // ➕ Initialize current sum
+
+        for (int i = 0; i < nums.size(); i++) {  // 🔄 Iterate through array
+            currSum += nums[i];  // ➕ Add current element to current sum
+            currSum %= k;  // ➗ Compute remainder
+
+            if (prefixSum.find(currSum) != prefixSum.end()) {  // 🔍 Check if remainder is already in the map
+                if (i - prefixSum[currSum] > 1) {  // 📏 Check subarray length
+                    return true;  // ✔️ Good subarray found
+                }
+            } else {
+                prefixSum[currSum] = i;  // 📝 Store index of remainder
+            }
+        }
+
+        return false;  // ❌ No good subarray found
+    }
+};
+```
+
+### Explanation
+
+1. **Initialize Structures:** 🗃️ Use a hash map to store the remainders and their corresponding indices. 📝 Store a base case to handle subarrays starting from the beginning.
+
+2. **Iterate and Update:** 🔄 Iterate through the array, adding each element to the current sum. ➗ Compute the remainder when dividing the current sum by `k`.
+
+3. **Check Conditions:** 🔍 If the remainder is found in the map, check the subarray length. 📏 If the length is sufficient, return `true`. If not found, store the remainder and its index. ❌ If no valid subarray is found, return `false`.
+
+By using this approach, we efficiently check for subarrays with sums that are multiples of `k`, ensuring a linear time complexity.
