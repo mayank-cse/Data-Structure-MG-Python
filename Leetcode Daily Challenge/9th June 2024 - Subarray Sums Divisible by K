@@ -1,0 +1,127 @@
+### Problem Description
+
+🔍 **Problem:** Given an integer array `nums` and an integer `k`, return the number of non-empty subarrays that have a sum divisible by `k`.
+
+A subarray is a contiguous part of an array.
+
+### Example
+
+1. **Input:** `nums = [4,5,0,-2,-3,1]`, `k = 5`
+   **Output:** `7`
+   **Explanation:** There are 7 subarrays with a sum divisible by `k = 5`:
+   - `[4, 5, 0, -2, -3, 1]`
+   - `[5]`
+   - `[5, 0]`
+   - `[5, 0, -2, -3]`
+   - `[0]`
+   - `[0, -2, -3]`
+   - `[-2, -3]`
+
+2. **Input:** `nums = [5]`, `k = 9`
+   **Output:** `0`
+
+### Solution Explanation
+
+To solve this problem, we need to efficiently count subarrays whose sums are divisible by `k`. We can utilize the prefix sum approach with a hash map to track remainders when the prefix sum is divided by `k`. Here's the step-by-step approach:
+
+1. **Initialization:**
+   - Use a hash map (`prefixSum`) to store remainders of prefix sums and their frequencies.
+   - Initialize `currSum` to 0.
+   - Store `prefixSum[0] = 1` to handle cases where the subarray itself is divisible by `k`.
+
+2. **Iterate Through Array:**
+   - For each element, update the `currSum`.
+   - Compute the remainder (`currSum % k`).
+   - If this remainder has been seen before, it means we have found subarrays whose sums are divisible by `k`, so increase the count.
+   - Update the frequency of the remainder in the hash map.
+
+### Code Implementation
+
+Here is the solution in Python, Java, and C++ with emojis in the explanation:
+
+#### Python
+
+```python
+def subarraysDivByK(nums, k):
+    prefixSum = {0: 1}  # 🗃️ Initialize the hash map with base case
+    currSum = 0  # ➕ Initialize current sum
+    count = 0  # 🔢 Initialize count of subarrays
+
+    for num in nums:  # 🔄 Iterate through array
+        currSum += num  # ➕ Add current element to current sum
+        remainder = currSum % k  # ➗ Compute remainder
+
+        if remainder in prefixSum:  # 🔍 Check if remainder is already in the map
+            count += prefixSum[remainder]  # 📈 Increase count by frequency of remainder
+
+        prefixSum[remainder] = prefixSum.get(remainder, 0) + 1  # 📝 Update frequency of remainder
+
+    return count  # ✔️ Return count of subarrays
+```
+
+#### Java
+
+```java
+public class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+        Map<Integer, Integer> prefixSum = new HashMap<>();  // 🗃️ Initialize the hash map
+        prefixSum.put(0, 1);  // 📝 Store base case
+        int currSum = 0;  // ➕ Initialize current sum
+        int count = 0;  // 🔢 Initialize count of subarrays
+
+        for (int num : nums) {  // 🔄 Iterate through array
+            currSum += num;  // ➕ Add current element to current sum
+            int remainder = currSum % k;  // ➗ Compute remainder
+
+            if (prefixSum.containsKey(remainder)) {  // 🔍 Check if remainder is already in the map
+                count += prefixSum.get(remainder);  // 📈 Increase count by frequency of remainder
+            }
+
+            prefixSum.put(remainder, prefixSum.getOrDefault(remainder, 0) + 1);  // 📝 Update frequency of remainder
+        }
+
+        return count;  // ✔️ Return count of subarrays
+    }
+}
+```
+
+#### C++
+
+```cpp
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& nums, int k) {
+        unordered_map<int, int> prefixSum;  // 🗃️ Initialize the hash map
+        prefixSum[0] = 1;  // 📝 Store base case
+        int currSum = 0;  // ➕ Initialize current sum
+        int count = 0;  // 🔢 Initialize count of subarrays
+
+        for (int num : nums) {  // 🔄 Iterate through array
+            currSum += num;  // ➕ Add current element to current sum
+            int remainder = currSum % k;  // ➗ Compute remainder
+
+            if (prefixSum.find(remainder) != prefixSum.end()) {  // 🔍 Check if remainder is already in the map
+                count += prefixSum[remainder];  // 📈 Increase count by frequency of remainder
+            }
+
+            prefixSum[remainder]++;  // 📝 Update frequency of remainder
+        }
+
+        return count;  // ✔️ Return count of subarrays
+    }
+};
+```
+
+### Explanation
+
+1. **Initialize Structures:** 🗃️ Use a hash map to store the remainders and their frequencies. 📝 Store a base case to handle subarrays starting from the beginning.
+
+2. **Iterate and Update:** 🔄 Iterate through the array, adding each element to the current sum. ➗ Compute the remainder when dividing the current sum by `k`.
+
+3. **Check Conditions:** 🔍 If the remainder is found in the map, increase the count by the frequency of the remainder. 📈 Update the frequency of the remainder in the map.
+
+By using this approach, we efficiently count the number of subarrays with sums that are divisible by `k`, ensuring a linear time complexity.
