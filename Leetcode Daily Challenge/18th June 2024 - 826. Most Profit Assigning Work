@@ -1,1 +1,148 @@
+### Problem Description
 
+🔍 **Problem:** Given `n` jobs and `m` workers, each job has a certain `difficulty` and `profit`, and each worker has an `ability`. A worker can complete any job with difficulty less than or equal to their ability. Every worker can be assigned at most one job, but a job can be completed by multiple workers. The goal is to maximize the total profit by assigning jobs to workers.
+
+### Example
+
+1. **Input:** 
+   - `difficulty = [2, 4, 6, 8, 10]`
+   - `profit = [10, 20, 30, 40, 50]`
+   - `worker = [4, 5, 6, 7]`
+   **Output:** `100`
+   **Explanation:** Workers are assigned jobs of difficulty `[4, 4, 6, 6]` and get a profit of `[20, 20, 30, 30]` separately.
+
+2. **Input:** 
+   - `difficulty = [85, 47, 57]`
+   - `profit = [24, 66, 99]`
+   - `worker = [40, 25, 25]`
+   **Output:** `0`
+
+### Solution Explanation
+
+To solve this problem, we need to assign jobs to workers in such a way that maximizes the total profit. Here's the step-by-step approach:
+
+1. **Pairing Jobs:** 
+   - Pair each job's difficulty with its profit.
+   - Sort the jobs based on difficulty.
+
+2. **Sorting Workers:** 
+   - Sort the workers based on their ability.
+
+3. **Maximizing Profit:** 
+   - Use a two-pointer technique to assign the best possible job (highest profit) to each worker, ensuring the job's difficulty is less than or equal to the worker's ability.
+
+### Detailed Approach
+
+1. **Initialization:**
+   - Create pairs of difficulty and profit.
+   - Sort these pairs by difficulty.
+   - Sort the worker array.
+
+2. **Iterate Through Workers:**
+   - For each worker, find the highest profit job they can do.
+   - Use a pointer to traverse the sorted job list and keep track of the maximum profit job available up to the worker's ability.
+
+3. **Calculate Total Profit:**
+   - Accumulate the profit for each worker based on the best job they can do.
+
+### Code Implementation
+
+Here is the solution in Python, Java, and C++ with emojis in the explanation:
+
+#### Python
+
+```python
+def maxProfitAssignment(difficulty, profit, worker):
+    jobs = list(zip(difficulty, profit))  # 🔗 Pair difficulty and profit
+    jobs.sort()  # 🔀 Sort jobs by difficulty
+    worker.sort()  # 🔀 Sort workers by ability
+
+    max_profit = 0  # 💰 Initialize max profit
+    total_profit = 0  # 💵 Initialize total profit
+    i = 0  # 🔄 Initialize job pointer
+
+    for ability in worker:  # 🚶‍♂️ Iterate through each worker
+        while i < len(jobs) and ability >= jobs[i][0]:  # 🔍 Find the best job for the worker
+            max_profit = max(max_profit, jobs[i][1])  # 📈 Update max profit
+            i += 1  # ➡️ Move to next job
+        total_profit += max_profit  # ➕ Add max profit to total profit
+
+    return total_profit  # ✔️ Return total profit
+```
+
+#### Java
+
+```java
+import java.util.*;
+
+public class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        int n = difficulty.length;
+        List<int[]> jobs = new ArrayList<>();  // 🔗 Pair difficulty and profit
+        for (int i = 0; i < n; i++) {
+            jobs.add(new int[]{difficulty[i], profit[i]});
+        }
+        jobs.sort((a, b) -> a[0] - b[0]);  // 🔀 Sort jobs by difficulty
+        Arrays.sort(worker);  // 🔀 Sort workers by ability
+
+        int max_profit = 0;  // 💰 Initialize max profit
+        int total_profit = 0;  // 💵 Initialize total profit
+        int i = 0;  // 🔄 Initialize job pointer
+
+        for (int ability : worker) {  // 🚶‍♂️ Iterate through each worker
+            while (i < n && ability >= jobs.get(i)[0]) {  // 🔍 Find the best job for the worker
+                max_profit = Math.max(max_profit, jobs.get(i)[1]);  // 📈 Update max profit
+                i++;  // ➡️ Move to next job
+            }
+            total_profit += max_profit;  // ➕ Add max profit to total profit
+        }
+
+        return total_profit;  // ✔️ Return total profit
+    }
+}
+```
+
+#### C++
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        vector<pair<int, int>> jobs;  // 🔗 Pair difficulty and profit
+        for (int i = 0; i < difficulty.size(); i++) {
+            jobs.push_back({difficulty[i], profit[i]});
+        }
+        sort(jobs.begin(), jobs.end());  // 🔀 Sort jobs by difficulty
+        sort(worker.begin(), worker.end());  // 🔀 Sort workers by ability
+
+        int max_profit = 0;  // 💰 Initialize max profit
+        int total_profit = 0;  // 💵 Initialize total profit
+        int i = 0;  // 🔄 Initialize job pointer
+
+        for (int ability : worker) {  // 🚶‍♂️ Iterate through each worker
+            while (i < jobs.size() && ability >= jobs[i].first) {  // 🔍 Find the best job for the worker
+                max_profit = max(max_profit, jobs[i].second);  // 📈 Update max profit
+                i++;  // ➡️ Move to next job
+            }
+            total_profit += max_profit;  // ➕ Add max profit to total profit
+        }
+
+        return total_profit;  // ✔️ Return total profit
+    }
+};
+```
+
+### Explanation
+
+1. **Pairing and Sorting:** 🔗 Pair each job's difficulty and profit, then sort these pairs by difficulty. 🔀 Sort the worker array by ability.
+
+2. **Maximizing Profit:** 🚶‍♂️ Iterate through each worker and use a pointer to track the highest profit job they can complete based on their ability.
+
+3. **Calculating Total Profit:** 📈 Accumulate the total profit by adding the highest profit job each worker can do.
+
+By using this approach, we ensure that each worker is assigned the best possible job, maximizing the total profit efficiently.
