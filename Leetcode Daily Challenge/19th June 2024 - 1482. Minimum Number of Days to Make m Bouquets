@@ -1,0 +1,210 @@
+### Problem Description
+
+🔍 **Problem:** You are given an integer array `bloomDay`, an integer `m`, and an integer `k`. You want to make `m` bouquets, each requiring `k` adjacent flowers. Each flower blooms on the day specified in the `bloomDay` array. The task is to determine the minimum number of days needed to make `m` bouquets. If it is impossible, return -1.
+
+### Example
+
+1. **Input:**
+   - `bloomDay = [1, 10, 3, 10, 2]`
+   - `m = 3`
+   - `k = 1`
+   **Output:** `3`
+   **Explanation:** On day 3, the flowers blooming are `[x, _, x, _, x]`, which allows for 3 bouquets.
+
+2. **Input:**
+   - `bloomDay = [1, 10, 3, 10, 2]`
+   - `m = 3`
+   - `k = 2`
+   **Output:** `-1`
+   **Explanation:** It's impossible to get 3 bouquets of 2 flowers each.
+
+3. **Input:**
+   - `bloomDay = [7, 7, 7, 7, 12, 7, 7]`
+   - `m = 2`
+   - `k = 3`
+   **Output:** `12`
+   **Explanation:** On day 12, all flowers have bloomed, making it possible to form 2 bouquets of 3 flowers each.
+
+### Solution Explanation
+
+To solve this problem, we use a binary search approach combined with a greedy method to check if we can form the required number of bouquets by a certain day.
+
+### Detailed Approach
+
+1. **Initialization:**
+   - Check if it's possible to make `m` bouquets by ensuring `m * k <= n`.
+   - Set `start` to the minimum possible day (0) and `end` to the maximum day in `bloomDay`.
+
+2. **Binary Search:**
+   - Perform a binary search on the days, checking the middle day `mid` to see if we can form the required number of bouquets by that day.
+   - Use a greedy approach to count the bouquets that can be formed by `mid` day.
+
+3. **Greedy Counting:**
+   - Iterate through `bloomDay` and count consecutive flowers that can form a bouquet.
+   - If the count of bouquets meets or exceeds `m`, adjust the binary search range.
+
+4. **Return Result:**
+   - If we find a valid day, return it. If not, return -1.
+
+### Code Implementation
+
+Here is the solution in Python, Java, and C++ with emojis in the explanation:
+
+#### Python
+
+```python
+def minDays(bloomDay, m, k):
+    n = len(bloomDay)
+    if m * k > n:  # 🚫 Not enough flowers
+        return -1
+    
+    start, end = 0, max(bloomDay)  # ⏳ Initialize search range
+    ans = end  # 🏁 Initialize answer with the maximum day
+    
+    while start <= end:
+        mid = (start + end) // 2  # 🕒 Mid point of days
+        count = 0  # 🌸 Bouquet counter
+        flowers = 0  # 🌺 Flower counter in current bouquet
+        
+        for day in bloomDay:  # 🚶‍♂️ Iterate through each flower
+            if day <= mid:  # 🌼 Flower has bloomed
+                flowers += 1  # ➕ Add flower to current bouquet
+                if flowers == k:  # ✔️ Bouquet is complete
+                    count += 1  # ➕ Increment bouquet count
+                    flowers = 0  # 🔄 Reset flower counter
+            else:
+                flowers = 0  # ❌ Reset flower counter if not bloomed
+                
+            if count >= m:  # ✅ Required bouquets are made
+                break
+        
+        if count >= m:  # ✔️ Possible to make m bouquets by mid day
+            ans = mid  # 🔄 Update answer
+            end = mid - 1  # 🔄 Narrow search to earlier days
+        else:
+            start = mid + 1  # 🔄 Narrow search to later days
+    
+    return ans  # 🏆 Return the minimum number of days
+```
+
+#### Java
+
+```java
+import java.util.*;
+
+public class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        int n = bloomDay.length;
+        if (m * k > n) {  // 🚫 Not enough flowers
+            return -1;
+        }
+        
+        int start = 0, end = Arrays.stream(bloomDay).max().getAsInt();  // ⏳ Initialize search range
+        int ans = end;  // 🏁 Initialize answer with the maximum day
+        
+        while (start <= end) {
+            int mid = (start + end) / 2;  // 🕒 Mid point of days
+            int count = 0;  // 🌸 Bouquet counter
+            int flowers = 0;  // 🌺 Flower counter in current bouquet
+            
+            for (int day : bloomDay) {  // 🚶‍♂️ Iterate through each flower
+                if (day <= mid) {  // 🌼 Flower has bloomed
+                    flowers++;  // ➕ Add flower to current bouquet
+                    if (flowers == k) {  // ✔️ Bouquet is complete
+                        count++;  // ➕ Increment bouquet count
+                        flowers = 0;  // 🔄 Reset flower counter
+                    }
+                } else {
+                    flowers = 0;  // ❌ Reset flower counter if not bloomed
+                }
+                
+                if (count >= m) {  // ✅ Required bouquets are made
+                    break;
+                }
+            }
+            
+            if (count >= m) {  // ✔️ Possible to make m bouquets by mid day
+                ans = mid;  // 🔄 Update answer
+                end = mid - 1;  // 🔄 Narrow search to earlier days
+            } else {
+                start = mid + 1;  // 🔄 Narrow search to later days
+            }
+        }
+        
+        return ans;  // 🏆 Return the minimum number of days
+    }
+}
+```
+
+#### C++
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int n = bloomDay.size();
+        if (m * k > n) {  // 🚫 Not enough flowers
+            return -1;
+        }
+        
+        int start = 0, end = *max_element(bloomDay.begin(), bloomDay.end());  // ⏳ Initialize search range
+        int ans = end;  // 🏁 Initialize answer with the maximum day
+        
+        while (start <= end) {
+            int mid = (start + end) / 2;  // 🕒 Mid point of days
+            int count = 0;  // 🌸 Bouquet counter
+            int flowers = 0;  // 🌺 Flower counter in current bouquet
+            
+            for (int day : bloomDay) {  // 🚶‍♂️ Iterate through each flower
+                if (day <= mid) {  // 🌼 Flower has bloomed
+                    flowers++;  // ➕ Add flower to current bouquet
+                    if (flowers == k) {  // ✔️ Bouquet is complete
+                        count++;  // ➕ Increment bouquet count
+                        flowers = 0;  // 🔄 Reset flower counter
+                    }
+                } else {
+                    flowers = 0;  // ❌ Reset flower counter if not bloomed
+                }
+                
+                if (count >= m) {  // ✅ Required bouquets are made
+                    break;
+                }
+            }
+            
+            if (count >= m) {  // ✔️ Possible to make m bouquets by mid day
+                ans = mid;  // 🔄 Update answer
+                end = mid - 1;  // 🔄 Narrow search to earlier days
+            } else {
+                start = mid + 1;  // 🔄 Narrow search to later days
+            }
+        }
+        
+        return ans;  // 🏆 Return the minimum number of days
+    }
+};
+```
+
+### Explanation
+
+1. **Initialization:**
+   - 🚫 Check if there are enough flowers to make `m` bouquets.
+   - ⏳ Initialize the binary search range with `start` as 0 and `end` as the maximum bloom day.
+
+2. **Binary Search:**
+   - 🕒 Calculate the middle day `mid`.
+   - 🚶‍♂️ Iterate through `bloomDay` and count bouquets that can be made by `mid` day.
+   - 🌼 Check if a flower has bloomed by `mid` day and keep track of consecutive bloomed flowers.
+   - ✔️ If a bouquet is complete, increment the bouquet count.
+   - ❌ Reset the flower counter if a flower hasn't bloomed by `mid` day.
+
+3. **Adjusting Search Range:**
+   - 🔄 If the required number of bouquets can be made, update the answer and search for an earlier day.
+   - 🔄 If not, search for a later day.
+
+4. **Return Result:**
+   - 🏆 Return the minimum number of days required to make `m` bouquets, or -1 if it's impossible.
