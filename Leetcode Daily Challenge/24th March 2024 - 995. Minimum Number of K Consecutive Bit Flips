@@ -1,0 +1,111 @@
+### Problem Description 📜
+
+You are given a binary array `nums` and an integer `k`. A k-bit flip involves selecting a subarray of length `k` from `nums` and simultaneously changing every `0` to `1` and every `1` to `0`. The goal is to determine the minimum number of k-bit flips required so that there are no `0`s left in the array. If it is impossible, return `-1`.
+
+### Solution Explanation 💡
+
+1. **Initial Setup**: Start with an empty map to track the flips and initialize the number of flips to zero.
+2. **Iterate through the Array**: Traverse the array to check each element.
+3. **Adjust for Previous Flips**: Adjust the current value based on previous flips.
+4. **Determine Need for Flip**: If the current value is `0`, it indicates the need for a flip. Perform the flip if possible.
+5. **Check for Infeasibility**: If a flip is needed but not possible due to array boundaries, return `-1`.
+
+### Approach 🚀
+
+- **Brute Force Approach (O(n*k))**: Flip every `k` bits when encountering a `0`. This approach is straightforward but inefficient.
+- **Optimized Approach (O(n))**: Use a sliding window and a count of flips to efficiently track the number of flips required.
+
+### Optimized Approach Explanation 🧠
+
+1. **Sliding Window**: Maintain a sliding window of size `k` to keep track of flips.
+2. **Flips Map**: Use a map to keep track of the positions of flips.
+3. **Current Value Calculation**: Calculate the current value of each element based on the number of flips affecting it.
+4. **Performing Flips**: Perform flips only when necessary and ensure the array boundaries are respected.
+
+### Solution Code in Python, Java, and C++ 💻
+
+#### Python 🐍
+```python
+def minKBitFlips(nums, k):
+    flipsMap = {}
+    flipsCount = 0
+    n = len(nums)
+    for i in range(n):
+        if i - k in flipsMap:
+            flipsCount -= 1
+        currVal = (nums[i] + flipsCount) % 2
+        if currVal == 0:
+            if i + k > n:
+                return -1
+            flipsCount += 1
+            flipsMap[i] = 1
+    return len(flipsMap)
+```
+
+#### Java ☕
+```java
+import java.util.*;
+
+class Solution {
+    public int minKBitFlips(int[] nums, int k) {
+        Map<Integer, Integer> flipsMap = new HashMap<>();
+        int flipsCount = 0;
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            if (flipsMap.containsKey(i - k)) {
+                flipsCount--;
+            }
+            int currVal = (nums[i] + flipsCount) % 2;
+            if (currVal == 0) {
+                if (i + k > n) {
+                    return -1;
+                }
+                flipsCount++;
+                flipsMap.put(i, 1);
+            }
+        }
+        return flipsMap.size();
+    }
+}
+```
+
+#### C++ 💻
+```cpp
+#include <unordered_map>
+#include <vector>
+
+class Solution {
+public:
+    int minKBitFlips(std::vector<int>& nums, int k) {
+        std::unordered_map<int, int> flipsMap;
+        int flipsCount = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            if (flipsMap.count(i - k)) {
+                flipsCount--;
+            }
+            int currVal = (nums[i] + flipsCount) % 2;
+            if (currVal == 0) {
+                if (i + k > n) {
+                    return -1;
+                }
+                flipsCount++;
+                flipsMap[i] = 1;
+            }
+        }
+        return flipsMap.size();
+    }
+};
+```
+
+### Emoji Explanation 📝
+
+1. **Problem Statement**: 🤔 You have a binary array and need to flip subarrays of length `k` to make all elements `1`. If not possible, return `-1`.
+2. **Solution Steps**:
+   - 🛠 Initialize a flips map and flip count.
+   - ➡️ Iterate through the array.
+   - 🔄 Adjust current value based on previous flips.
+   - ✅ Perform a flip if the current value is `0`.
+   - 🚫 If a flip is needed but not possible, return `-1`.
+
+This solution efficiently tracks and performs flips using a sliding window and map, ensuring the minimum number of flips are performed.
