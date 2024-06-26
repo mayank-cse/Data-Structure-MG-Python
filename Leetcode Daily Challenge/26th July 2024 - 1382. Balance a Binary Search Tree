@@ -1,0 +1,173 @@
+### Problem Description 📜
+
+You are given the root of a binary search tree (BST). Your task is to return a balanced BST with the same node values. A binary search tree is balanced if the depth of the two subtrees of every node never differs by more than 1.
+
+### Example 📚
+
+**Example 1:**
+```
+Input: root = [1,null,2,null,3,null,4,null,null]
+Output: [2,1,3,null,null,null,4]
+Explanation: This is not the only correct answer, [3,1,4,null,2] is also correct.
+```
+
+**Example 2:**
+```
+Input: root = [2,1,3]
+Output: [2,1,3]
+```
+
+### Constraints
+- The number of nodes in the tree is in the range [1, 10^4].
+- 1 <= Node.val <= 10^5
+
+### Solution Explanation 💡
+
+To balance a BST, we can use the following approach:
+
+1. **In-order Traversal**: Perform an in-order traversal to get the nodes in a sorted array. This step ensures that we have all the elements of the tree in ascending order.
+2. **Reconstruct BST**: Use the sorted array to construct a balanced BST by recursively choosing the middle element as the root, and constructing left and right subtrees from the remaining elements.
+
+### Emoji Explanation 📝
+
+1. **Collect Nodes in Order**: 🔄 Perform an in-order traversal to get a sorted list of node values.
+2. **Reconstruct BST**: 🛠 Reconstruct the BST by recursively choosing the middle element as the root.
+3. **Balanced Tree**: 🌳 The resulting tree is balanced.
+
+### Solution Code in Python, Java, and C++ 💻
+
+#### Python 🐍
+```python
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        # Collect nodes in order 🔄
+        nodes = []
+        def inorder(node):
+            if node:
+                inorder(node.left)
+                nodes.append(node.val)
+                inorder(node.right)
+        inorder(root)
+        
+        # Reconstruct the balanced BST 🛠
+        def buildBST(nums):
+            if not nums:
+                return None
+            mid = len(nums) // 2
+            root = TreeNode(nums[mid])
+            root.left = buildBST(nums[:mid])
+            root.right = buildBST(nums[mid+1:])
+            return root
+        
+        return buildBST(nodes)
+```
+
+#### Java ☕
+```java
+// Definition for a binary tree node.
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class Solution {
+    public TreeNode balanceBST(TreeNode root) {
+        List<Integer> nodes = new ArrayList<>();
+        
+        // Collect nodes in order 🔄
+        inorder(root, nodes);
+        
+        // Reconstruct the balanced BST 🛠
+        return buildBST(nodes, 0, nodes.size() - 1);
+    }
+    
+    private void inorder(TreeNode node, List<Integer> nodes) {
+        if (node != null) {
+            inorder(node.left, nodes);
+            nodes.add(node.val);
+            inorder(node.right, nodes);
+        }
+    }
+    
+    private TreeNode buildBST(List<Integer> nodes, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode root = new TreeNode(nodes.get(mid));
+        root.left = buildBST(nodes, start, mid - 1);
+        root.right = buildBST(nodes, mid + 1, end);
+        return root;
+    }
+}
+```
+
+#### C++ 💻
+```cpp
+// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    TreeNode* balanceBST(TreeNode* root) {
+        vector<int> nodes;
+        
+        // Collect nodes in order 🔄
+        inorder(root, nodes);
+        
+        // Reconstruct the balanced BST 🛠
+        return buildBST(nodes, 0, nodes.size() - 1);
+    }
+
+private:
+    void inorder(TreeNode* node, vector<int>& nodes) {
+        if (node) {
+            inorder(node->left, nodes);
+            nodes.push_back(node->val);
+            inorder(node->right, nodes);
+        }
+    }
+
+    TreeNode* buildBST(vector<int>& nodes, int start, int end) {
+        if (start > end) {
+            return nullptr;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode* root = new TreeNode(nodes[mid]);
+        root->left = buildBST(nodes, start, mid - 1);
+        root->right = buildBST(nodes, mid + 1, end);
+        return root;
+    }
+};
+```
+
+### Summary 🌟
+
+- **Problem**: Given a BST, convert it to a balanced BST.
+- **Solution**: Use in-order traversal to collect nodes, then rebuild the BST using the middle element as the root recursively.
+- **Approaches**:
+  - **Python**: Use a list to store node values and recursive functions for traversal and construction.
+  - **Java**: Similar to Python, use ArrayList for node values and recursive methods for operations.
+  - **C++**: Use vector for node values and recursive functions to build the tree.
