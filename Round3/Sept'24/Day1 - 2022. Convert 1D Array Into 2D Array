@@ -1,56 +1,85 @@
-You are given a 0-indexed 1-dimensional (1D) integer array original, and two integers, m and n. You are tasked with creating a 2-dimensional (2D) array with  m rows and n columns using all the elements from original.
-The elements from indices 0 to n - 1 (inclusive) of original should form the first row of the constructed 2D array, the elements from indices n to 2 * n - 1 (inclusive) should form the second row of the constructed 2D array, and so on.
-Return an m x n 2D array constructed according to the above procedure, or an empty 2D array if it is impossible.
+### Problem Description 📜
 
- 
+You're given a 1D integer array `original` and two integers, `m` and `n`. Your task is to create a 2D array with `m` rows and `n` columns using all the elements from `original`. The elements from indices 0 to `n - 1` of `original` should form the first row of the 2D array, the elements from indices `n` to `2 * n - 1` should form the second row, and so on.
 
-Example 1:
+If it's not possible to form such a 2D array because the length of `original` isn't equal to `m * n`, return an empty 2D array.
+
+### Example Explanations 📚
+
+**Example 1:**
+```
 Input: original = [1,2,3,4], m = 2, n = 2
 Output: [[1,2],[3,4]]
-Explanation: The constructed 2D array should contain 2 rows and 2 columns.
-The first group of n=2 elements in original, [1,2], becomes the first row in the constructed 2D array.
-The second group of n=2 elements in original, [3,4], becomes the second row in the constructed 2D array.
+Explanation: The 2D array should have 2 rows and 2 columns:
+- First row: [1, 2]
+- Second row: [3, 4]
+```
 
-Example 2:
+**Example 2:**
+```
 Input: original = [1,2,3], m = 1, n = 3
 Output: [[1,2,3]]
-Explanation: The constructed 2D array should contain 1 row and 3 columns.
-Put all three elements in original into the first row of the constructed 2D array.
+Explanation: The 2D array should have 1 row and 3 columns:
+- First row: [1, 2, 3]
+```
 
-Example 3:
+**Example 3:**
+```
 Input: original = [1,2], m = 1, n = 1
 Output: []
-Explanation: There are 2 elements in original.
-It is impossible to fit 2 elements in a 1x1 2D array, so return an empty 2D array.
- 
-Constraints:
-1 <= original.length <= 5 * 104
-1 <= original[i] <= 105
-1 <= m, n <= 4 * 104
+Explanation: It's impossible to fit 2 elements in a 1x1 array, so return an empty array.
+```
 
-************************************
+### Solution Explanation 💡
+
+1. **Check Feasibility**: 🛑 First, verify if the length of the `original` array is equal to `m * n`. If not, return an empty array as it's impossible to form the desired 2D array.
+  
+2. **Construct the 2D Array**: 🧩 If feasible, use nested loops to fill the 2D array. The outer loop will iterate over the number of rows (`m`), and the inner loop will collect `n` elements for each row.
+
+3. **Alternative Using NumPy**: 🚀 You can also use NumPy for a more compact solution. Use the `reshape` method to transform the 1D array into the desired 2D shape. Handle errors using a try-except block.
+
+### Emoji Explanation 📝
+
+- **🛑 Check Feasibility**: Verify if the transformation is possible by checking if the length matches `m * n`.
+- **🧩 Construct the 2D Array**: Iterate through the original array to populate the rows of the 2D array.
+- **🚀 Alternative Using NumPy**: Use NumPy's `reshape` method for a more efficient implementation.
+
+### Solution Code in Python 🐍
+
+#### Python (Without NumPy)
+```python
 class Solution:
     def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
-        if m*n != len(original):
+        # 🛑 Check if the transformation is possible
+        if m * n != len(original):
             return []
+        
+        # 🧩 Construct the 2D array
         arr = []
         for i in range(m):
-            temp = []
+            row = []
             for j in range(n):
-                temp += [original[i*n + j]]
-            arr += [temp]
-        # print(arr)
+                row.append(original[i * n + j])
+            arr.append(row)
         return arr
+```
 
-********************************
-
+#### Python (With NumPy) 🚀
+```python
 import numpy as np
+
 class Solution:
     def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
         try:
-            numpyOriginal = np.array(original)
-            reshapedMatrix = numpyOriginal.reshape(m, n)
-
-            return reshapedMatrix
+            # 🚀 Use NumPy to reshape the array
+            return np.array(original).reshape(m, n).tolist()
         except:
             return []
+```
+
+### Summary 🌟
+
+- **Problem**: Convert a 1D array to a 2D array with specified dimensions.
+- **Solution**:
+  - Check if the transformation is feasible by comparing the lengths.
+  - Construct the 2D array manually or use NumPy's `reshape` method for a more efficient solution.
